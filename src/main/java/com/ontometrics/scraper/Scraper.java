@@ -3,7 +3,11 @@ package com.ontometrics.scraper;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
 import org.slf4j.Logger;
@@ -29,7 +33,6 @@ import com.ontometrics.scraper.util.ScraperUtil;
  */
 public class Scraper {
 
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
 
 	/**
@@ -71,7 +74,32 @@ public class Scraper {
 		if (tagToGet != null) {
 			result = extractTagContent(result);
 		}
+
 		return result;
+	}
+
+	public List<URL> getLinks() throws IOException {
+		List<URL> links = new ArrayList<URL>();
+		Source source = new Source(url);
+		source.fullSequentialParse();
+		List<Element> linkElements = source.getAllElements(HTMLElementName.A);
+		for (Element linkElement : linkElements) {
+			String href = linkElement.getAttributeValue("href");
+			if (href == null)
+				continue;
+			// A element can contain other tags so need to extract the text from
+			// it:
+			String label = linkElement.getContent().getTextExtractor().toString();
+			log.debug(label + " <" + href + '>');
+			URL currentUrl;
+			try {
+				currentUrl = new URL(href);
+				links.add(currentUrl);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+		return links;
 	}
 
 	public Scraper asHtml() {
