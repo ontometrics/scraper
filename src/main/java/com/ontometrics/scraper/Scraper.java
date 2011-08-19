@@ -3,7 +3,11 @@ package com.ontometrics.scraper;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
 import org.slf4j.Logger;
@@ -27,9 +31,12 @@ import com.ontometrics.scraper.util.ScraperUtil;
  * @author Rob
  * 
  */
+/**
+ * @author robwilliams
+ * 
+ */
 public class Scraper {
 
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
 
 	/**
@@ -57,6 +64,14 @@ public class Scraper {
 		outputFormat = OutputFormats.Html;
 	}
 
+	/**
+	 * Call this method to have the scrape performed and the extractions
+	 * returned in the desired format {@link #outputFormat}.
+	 * 
+	 * @return the items from the {@link #url} that were prescribed by the
+	 *         various manipulators
+	 * @throws IOException
+	 */
 	public String execute() throws IOException {
 		String result = "";
 		Source source = new Source(url);
@@ -71,14 +86,52 @@ public class Scraper {
 		if (tagToGet != null) {
 			result = extractTagContent(result);
 		}
+
 		return result;
 	}
 
+	/**
+	 * Provides a means of just extracting links.
+	 * 
+	 * @return a list of the links that were valid {@link URL}s.
+	 * @throws IOException
+	 */
+	public List<URL> getLinks() throws IOException {
+		List<URL> links = new ArrayList<URL>();
+		Source source = new Source(url);
+		source.fullSequentialParse();
+		List<Element> linkElements = source.getAllElements(HTMLElementName.A);
+		for (Element linkElement : linkElements) {
+			String href = linkElement.getAttributeValue("href");
+			if (href == null)
+				continue;
+			// A element can contain other tags so need to extract the text from
+			// it:
+			String label = linkElement.getContent().getTextExtractor().toString();
+			log.debug(label + " <" + href + '>');
+			URL currentUrl;
+			try {
+				currentUrl = new URL(href);
+				links.add(currentUrl);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+		return links;
+	}
+
+	/**
+	 * This is the default: scrape a page and get the html from the {@link #url}
+	 * .
+	 */
 	public Scraper asHtml() {
 		this.outputFormat = OutputFormats.Html;
 		return this;
 	}
 
+	/**
+	 * Provides means of asking that just the text of the page be extracted.
+	 */
 	public Scraper asText() {
 		this.outputFormat = OutputFormats.Text;
 		return this;
@@ -90,6 +143,13 @@ public class Scraper {
 		return this;
 	}
 
+	/**
+	 * Sometimes, just a certain tag is desired, for instance, a table.
+	 * 
+	 * @param tag
+	 *            the tag you want extracted
+	 * @see #occurrence
+	 */
 	public Scraper tag(String tag) {
 		this.tagToGet = tag;
 		return this;
@@ -99,6 +159,18 @@ public class Scraper {
 		return ScraperUtil.extract(htmlContent, tagToGet, occurrence);
 	}
 
+	/**
+	 * Provides a means of asking for the nth occurrence of a tag, so if the
+	 * desired content is located in the 3rd table on the page, you could do
+	 * tag("
+	 * <table>
+	 * ", 3).
+	 * 
+	 * @param tag
+	 *            the target tag to look for
+	 * @param occurrence
+	 *            the 0-based number of its occurrence in the page/feed.
+	 */
 	public Scraper tag(String tag, int occurrence) {
 		this.tagToGet = tag;
 		this.occurrence = occurrence;
