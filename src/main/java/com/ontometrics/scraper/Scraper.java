@@ -29,7 +29,6 @@ import com.ontometrics.scraper.util.ScraperUtil;
  * (perhaps something like a Chain of Responsibility Pattern).
  * 
  * @author Rob
- * 
  */
 public class Scraper {
 
@@ -139,6 +138,11 @@ public class Scraper {
 		return this;
 	}
 
+	public Scraper url(URL url) {
+		this.url = url;
+		return this;
+	}
+
 	/**
 	 * Sometimes, just a certain tag is desired, for instance, a table.
 	 * 
@@ -172,4 +176,5 @@ public class Scraper {
 		this.occurrence = occurrence;
 		return this;
 	}
+
 }
