@@ -7,29 +7,53 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.htmlparser.jericho.Source;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Scraper {
+	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
 
 	private URL url;
 
+	private OutputFormats outputFormat;
+
+	public String execute() throws IOException {
+		String result = "";
+		Source source = new Source(url);
+		source.fullSequentialParse();
+
+		if (outputFormat == OutputFormats.Text) {
+			result = source.getTextExtractor().toString();
+		} else if (outputFormat == OutputFormats.Html) {
+			result = source.toString();
+		}
+		return result;
+	}
+
+	public Scraper asHtml() {
+		this.outputFormat = OutputFormats.Html;
+		return this;
+	}
+
+	public Scraper asText() {
+		this.outputFormat = OutputFormats.Text;
+		return this;
+	}
+	
+	// ---- Builder-style Interface
 	public Scraper url(String url) throws MalformedURLException {
 		this.url = new URL(url);
 		return this;
 	}
 
-	public String execute() throws IOException {
-		InputStream is = (InputStream) url.getContent();
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		String line = null;
-		StringBuffer sb = new StringBuffer();
-		while ((line = br.readLine()) != null) {
-			sb.append(line);
-		}
-		String htmlContent = sb.toString();
-		return htmlContent;
+	// ---- Fundamental Stuff
+	public Scraper() {
+		outputFormat = OutputFormats.Html;
 	}
 
 	public URL getUrl() {
 		return url;
 	}
-
 }
