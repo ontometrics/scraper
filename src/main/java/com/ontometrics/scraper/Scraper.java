@@ -11,18 +11,51 @@ import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.util.ScraperUtil;
 
+/**
+ * Provides a mechanism for extracting items from pages or feeds.
+ * <p>
+ * Uses a fluent builder pattern in a fashion that does border on being a DSL.
+ * The idea is that a {@link #url} is provided, then through a set of
+ * manipulator methods, the operations to be performed are framed. All scrapings
+ * require a url call and then the execute thread at the end to perform the
+ * scraping.
+ * <p>
+ * Internally, the manipulators are triggered by basic conditions right now. We
+ * will need a more sophisticated architecture as more operations pile up
+ * (perhaps something like a Chain of Responsibility Pattern).
+ * 
+ * @author Rob
+ * 
+ */
 public class Scraper {
 
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
 
+	/**
+	 * Remote resource we will be extracting content from.
+	 */
 	private URL url;
 
+	/**
+	 * Sometimes we want to extract just part of the feed or page.
+	 */
 	private String tagToGet;
 
+	/**
+	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed
+	 * so 1st would be 0.
+	 */
 	private int occurrence = 0;
 
+	/**
+	 * The type of output we should return upon extraction.
+	 */
 	private OutputFormats outputFormat;
+
+	public Scraper() {
+		outputFormat = OutputFormats.Html;
+	}
 
 	public String execute() throws IOException {
 		String result = "";
@@ -34,8 +67,8 @@ public class Scraper {
 		} else if (outputFormat == OutputFormats.Html) {
 			result = source.toString();
 		}
-		
-		if (tagToGet != null){
+
+		if (tagToGet != null) {
 			result = extractTagContent(result);
 		}
 		return result;
@@ -50,7 +83,7 @@ public class Scraper {
 		this.outputFormat = OutputFormats.Text;
 		return this;
 	}
-	
+
 	// ---- Builder-style Interface
 	public Scraper url(String url) throws MalformedURLException {
 		this.url = new URL(url);
@@ -64,10 +97,6 @@ public class Scraper {
 
 	private String extractTagContent(String htmlContent) {
 		return ScraperUtil.extract(htmlContent, tagToGet, occurrence);
-	}
-
-	public Scraper() {
-		outputFormat = OutputFormats.Html;
 	}
 
 	public Scraper tag(String tag, int occurrence) {
