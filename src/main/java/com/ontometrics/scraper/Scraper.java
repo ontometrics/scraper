@@ -31,10 +31,6 @@ import com.ontometrics.scraper.util.ScraperUtil;
  * @author Rob
  * 
  */
-/**
- * @author robwilliams
- * 
- */
 public class Scraper {
 
 	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
