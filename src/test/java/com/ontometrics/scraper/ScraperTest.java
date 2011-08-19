@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -38,4 +40,13 @@ public class ScraperTest {
 		log.info(pageText);
 		
 	}
+	
+	@Test
+	public void extractLinksFromTableOnPage() throws Exception {
+		List<URL> urls = new Scraper().url(grantsTableUrl).tag("<table>", 3).getLinks();
+		
+		assertThat(urls.size(), is(greaterThan(0)));
+		
+	}
+	
 }
