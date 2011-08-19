@@ -55,6 +55,16 @@ public class Scraper {
 	 */
 	private OutputFormats outputFormat;
 
+	/**
+	 * Provides means of extracting just an element with a given id.
+	 */
+	private String idToGet;
+
+	/**
+	 * Provides means of extracting element(s) with a given class.
+	 */
+	private String classToGet;
+
 	public Scraper() {
 		outputFormat = OutputFormats.Html;
 	}
@@ -72,14 +82,28 @@ public class Scraper {
 		Source source = new Source(url);
 		source.fullSequentialParse();
 
-		if (outputFormat == OutputFormats.Text) {
-			result = source.getTextExtractor().toString();
-		} else if (outputFormat == OutputFormats.Html) {
-			result = source.toString();
-		}
+		if (idToGet != null) {
+			result = source.getElementById(idToGet).getTextExtractor().toString();
+		} else if (classToGet != null) {
+			List<Element> classElements = source.getAllElementsByClass(classToGet);
+			if (occurrence > 0) {
+				result = classElements.get(occurrence).getTextExtractor().toString();
+			} else {
+				for (Element element : classElements) {
+					result += element.getTextExtractor().toString();
+				}
+			}
+		} else {
 
-		if (tagToGet != null) {
-			result = extractTagContent(result);
+			if (outputFormat == OutputFormats.Text) {
+				result = source.getTextExtractor().toString();
+			} else if (outputFormat == OutputFormats.Html) {
+				result = source.toString();
+			}
+
+			if (tagToGet != null) {
+				result = extractTagContent(result);
+			}
 		}
 
 		return result;
@@ -173,6 +197,22 @@ public class Scraper {
 	 */
 	public Scraper tag(String tag, int occurrence) {
 		this.tagToGet = tag;
+		this.occurrence = occurrence;
+		return this;
+	}
+
+	public Scraper id(String id) {
+		this.idToGet = id;
+		return this;
+	}
+
+	public Scraper ofClass(String className) {
+		this.classToGet = className;
+		return this;
+	}
+
+	public Scraper ofClass(String className, int occurrence) {
+		this.classToGet = className;
 		this.occurrence = occurrence;
 		return this;
 	}
