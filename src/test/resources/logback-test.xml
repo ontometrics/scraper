@@ -18,11 +18,9 @@
 	<!-- Setup the Root category -->
 	<!-- ======================= -->
 
-	<!--
 	<logger name="com.ontometrics">
 		<level value="DEBUG"/>
 	</logger>
-	-->
 
 	<root>
 		<level value="info" />

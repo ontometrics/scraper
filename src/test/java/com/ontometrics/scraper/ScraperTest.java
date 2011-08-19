@@ -17,9 +17,18 @@ public class ScraperTest {
 	private String grantsTableUrl = "http://www.grants.gov/search/search.do?mode=CATSEARCH&fundActivity=*";
 
 	@Test
-	public void scrapeUrlReturnsText() throws IOException {
+	public void scrapeUrlReturnsHtml() throws IOException {
 		String pageText = new Scraper().url(grantsTableUrl).execute();
 		assertThat(pageText.length(), is(greaterThan(0)));
+		log.info(pageText);
+		
+	}
+	
+	@Test
+	public void extractTableFromPage() throws Exception {
+		String pageText = new Scraper().url(grantsTableUrl).tag("<table>", 3).execute();
+		log.debug("table extracted: {}", pageText);
+		assertThat(pageText.startsWith("<table"), is(true));
 		log.info(pageText);
 		
 	}
