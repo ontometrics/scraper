@@ -18,12 +18,15 @@ import com.ontometrics.scraper.util.ScraperUtil;
 /**
  * Provides a mechanism for extracting items from pages or feeds.
  * <p>
- * Uses a fluent builder pattern in a fashion that does border on being a DSL. The idea is that a {@link #url} is
- * provided, then through a set of manipulator methods, the operations to be performed are framed. All scrapings require
- * a url call and then the execute thread at the end to perform the scraping.
+ * Uses a fluent builder pattern in a fashion that does border on being a DSL.
+ * The idea is that a {@link #url} is provided, then through a set of
+ * manipulator methods, the operations to be performed are framed. All scrapings
+ * require a url call and then the execute thread at the end to perform the
+ * scraping.
  * <p>
- * Internally, the manipulators are triggered by basic conditions right now. We will need a more sophisticated
- * architecture as more operations pile up (perhaps something like a Chain of Responsibility Pattern).
+ * Internally, the manipulators are triggered by basic conditions right now. We
+ * will need a more sophisticated architecture as more operations pile up
+ * (perhaps something like a Chain of Responsibility Pattern).
  * 
  * @author Rob
  */
@@ -42,7 +45,8 @@ public class Scraper {
 	private String tagToGet;
 
 	/**
-	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed so 1st would be 0.
+	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed
+	 * so 1st would be 0.
 	 */
 	private int occurrence = 0;
 
@@ -61,17 +65,25 @@ public class Scraper {
 	 */
 	private String classToGet;
 
-	private String parameterToGet;
+	private Extractor extractor;
+
+	private List<String> results;
+
+	private Iterator iterator;
+
+	private int pages = 0;
 
 	public Scraper() {
 		outputFormat = OutputFormats.Html;
+		this.extractor = new Extractor();
 	}
 
 	/**
-	 * Call this method to have the scrape performed and the extractions returned in the desired format
-	 * {@link #outputFormat}.
+	 * Call this method to have the scrape performed and the extractions
+	 * returned in the desired format {@link #outputFormat}.
 	 * 
-	 * @return the items from the {@link #url} that were prescribed by the various manipulators
+	 * @return the items from the {@link #url} that were prescribed by the
+	 *         various manipulators
 	 * @throws IOException
 	 */
 	public String execute() throws IOException {
@@ -103,14 +115,6 @@ public class Scraper {
 		}
 
 		return result;
-	}
-	
-	public List<String> getResults() throws IOException{
-		List<String> results = new ArrayList<String>();
-		Source source = new Source(url);
-		source.fullSequentialParse();
-		
-		return results;
 	}
 
 	/**
@@ -144,7 +148,8 @@ public class Scraper {
 	}
 
 	/**
-	 * This is the default: scrape a page and get the html from the {@link #url} .
+	 * This is the default: scrape a page and get the html from the {@link #url}
+	 * .
 	 */
 	public Scraper asHtml() {
 		this.outputFormat = OutputFormats.Html;
@@ -167,6 +172,7 @@ public class Scraper {
 
 	public Scraper url(URL url) {
 		this.url = url;
+		extractor.url(url);
 		return this;
 	}
 
@@ -187,8 +193,9 @@ public class Scraper {
 	}
 
 	/**
-	 * Provides a means of asking for the nth occurrence of a tag, so if the desired content is located in the 3rd table
-	 * on the page, you could do tag("
+	 * Provides a means of asking for the nth occurrence of a tag, so if the
+	 * desired content is located in the 3rd table on the page, you could do
+	 * tag("
 	 * <table>
 	 * ", 3).
 	 * 
@@ -219,8 +226,35 @@ public class Scraper {
 		return this;
 	}
 
-	public Scraper parameter(String parameter) {
-		this.parameterToGet = parameter;
+	public Extractor extractor() {
+		return this.extractor;
+	}
+
+	public Scraper extract(List<String> results) throws IOException {
+		log.debug("inside extract, iterator is: " + iterator);
+		this.results = results;
+		if (iterator != null) {
+			log.debug("about to iterate..");
+			for (int i = 0; i < pages; i++){
+				extractor.url(iterator.build(i));
+				results.addAll(extractor.getResults());
+			}
+		}
+		return this;
+	}
+
+	public Scraper iterator(Iterator iterator) {
+		log.debug("setting iterator: {}", iterator);
+		this.iterator = iterator;
+		return this;
+	}
+
+	public List<String> getResults() {
+		return this.results;
+	}
+
+	public Scraper pages(int i) {
+		this.pages = i;
 		return this;
 	}
 
