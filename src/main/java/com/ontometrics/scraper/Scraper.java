@@ -69,6 +69,10 @@ public class Scraper {
 
 	private List<String> results;
 
+	private Iterator iterator;
+
+	private int pages = 0;
+
 	public Scraper() {
 		outputFormat = OutputFormats.Html;
 		this.extractor = new Extractor();
@@ -99,7 +103,6 @@ public class Scraper {
 				}
 			}
 		} else {
-
 			if (outputFormat == OutputFormats.Text) {
 				result = source.getTextExtractor().toString();
 			} else if (outputFormat == OutputFormats.Html) {
@@ -227,17 +230,32 @@ public class Scraper {
 		return this.extractor;
 	}
 
-	public Scraper extract(List<String> results) {
+	public Scraper extract(List<String> results) throws IOException {
+		log.debug("inside extract, iterator is: " + iterator);
 		this.results = results;
+		if (iterator != null) {
+			log.debug("about to iterate..");
+			for (int i = 0; i < pages; i++){
+				extractor.url(iterator.build(i));
+				results.addAll(extractor.getResults());
+			}
+		}
 		return this;
 	}
 
-	public Scraper iterator(String string) {
+	public Scraper iterator(Iterator iterator) {
+		log.debug("setting iterator: {}", iterator);
+		this.iterator = iterator;
 		return this;
 	}
 
 	public List<String> getResults() {
 		return this.results;
+	}
+
+	public Scraper pages(int i) {
+		this.pages = i;
+		return this;
 	}
 
 }

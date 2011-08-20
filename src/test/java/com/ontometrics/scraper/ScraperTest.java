@@ -2,10 +2,12 @@ package com.ontometrics.scraper;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.junit.Before;
@@ -88,12 +90,29 @@ public class ScraperTest {
 		List<String> ids = scraper
 				.url(testTableHtmlUrl)
 				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
-				.iterator("/search?mode=VIEW&pagenum=#")
 				.getResults();
-		
+
 		assertThat(ids.size(), is(greaterThan(0)));
 		log.info("ids found: {}", ids);
+		assertThat(ids, hasItems("40034", "40158", "40095", "40790", "40821", "40849", "40315"));
+		assertThat(ids, hasItems("40967", "41255", "41282", "40458", "41599", "41734", "40667", "41771"));
+		assertThat(ids, hasItems("41898", "41032", "41896", "42394", "42445"));
+	}
 
+	@Test
+	public void extractParameterFromLinksInIteratedTables() throws Exception {
+		Scraper scraper = new Scraper();
+		List<String> ids = scraper.url(testTableHtmlUrl).pages(1).iterator(new Iterator() {
+			@Override
+			public URL build(int i) {
+				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", i + 2);
+				log.debug("next page to iterate to: {}", nextPageUrl);
+				return TestUtil.getFileAsURL(nextPageUrl);
+			}
+		}).extract(scraper.extractor().table(3).links().parameter("oppId").getResults()).getResults();
+
+		assertThat(ids.size(), is(40));
+		log.info("ids {} found: {}", ids.size(), ids);
 	}
 
 }
