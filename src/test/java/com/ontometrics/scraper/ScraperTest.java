@@ -40,6 +40,7 @@ public class ScraperTest {
 		String pageText = new Scraper().url(testTableHtmlUrl).execute();
 		assertThat(pageText.length(), is(greaterThan(0)));
 		assertThat(pageText.contains("<html>"), is(true));
+		log.debug("pageText = {}", pageText);
 	}
 
 	@Test
