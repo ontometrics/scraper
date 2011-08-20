@@ -26,7 +26,7 @@ public class ScraperTest {
 	private URL testDetailPageUrl;
 
 	private String eligibilityCodeId = "dnf_class_values_cfda__applicant_eligibility__widget";
-	
+
 	private String eligibilityClassName = "fld_applicant_eligibility";
 
 	@Before
@@ -43,7 +43,7 @@ public class ScraperTest {
 	}
 
 	@Test
-	public void testAsText() throws IOException {
+	public void extractPageText() throws IOException {
 		String pageContent = new Scraper().url(testTableHtmlUrl).asText().execute();
 		assertThat(pageContent.contains("<html>"), is(false));
 		log.info("Content: {}", pageContent);
@@ -70,15 +70,29 @@ public class ScraperTest {
 	public void extractContentsOfElementWithId() throws Exception {
 		String tagText = new Scraper().url(testDetailPageUrl).id(eligibilityCodeId).execute();
 		log.info("tag text: {}", tagText);
+		assertThat(tagText.contains("nonprofit institutions of higher education"), is(true));
 	}
-	
+
 	@Test
 	public void extractContentsByClassAndOccurrence() throws Exception {
 		String tagText = new Scraper().url(testDetailPageUrl).ofClass(eligibilityClassName, 1).execute();
 		log.info("tag text: {}", tagText);
 		assertThat(tagText.contains("39"), is(true));
 		assertThat(tagText.contains("52"), is(true));
+	}
+
+	@Test
+	public void extractParameterFromLinksInTable() throws Exception {
+		Scraper scraper = new Scraper();
+		List<String> ids = scraper
+				.url(testTableHtmlUrl)
+				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
+				.iterator("/search?mode=VIEW&pagenum=#")
+				.getResults();
 		
+		assertThat(ids.size(), is(greaterThan(0)));
+		log.info("ids found: {}", ids);
+
 	}
 
 }

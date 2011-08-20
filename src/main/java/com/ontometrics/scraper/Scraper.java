@@ -65,8 +65,13 @@ public class Scraper {
 	 */
 	private String classToGet;
 
+	private Extractor extractor;
+
+	private List<String> results;
+
 	public Scraper() {
 		outputFormat = OutputFormats.Html;
+		this.extractor = new Extractor();
 	}
 
 	/**
@@ -164,6 +169,7 @@ public class Scraper {
 
 	public Scraper url(URL url) {
 		this.url = url;
+		extractor.url(url);
 		return this;
 	}
 
@@ -215,6 +221,23 @@ public class Scraper {
 		this.classToGet = className;
 		this.occurrence = occurrence;
 		return this;
+	}
+
+	public Extractor extractor() {
+		return this.extractor;
+	}
+
+	public Scraper extract(List<String> results) {
+		this.results = results;
+		return this;
+	}
+
+	public Scraper iterator(String string) {
+		return this;
+	}
+
+	public List<String> getResults() {
+		return this.results;
 	}
 
 }
