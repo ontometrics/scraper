@@ -26,7 +26,7 @@ public class ScraperTest {
 	private URL testDetailPageUrl;
 
 	private String eligibilityCodeId = "dnf_class_values_cfda__applicant_eligibility__widget";
-	
+
 	private String eligibilityClassName = "fld_applicant_eligibility";
 
 	@Before
@@ -40,6 +40,7 @@ public class ScraperTest {
 		String pageText = new Scraper().url(testTableHtmlUrl).execute();
 		assertThat(pageText.length(), is(greaterThan(0)));
 		assertThat(pageText.contains("<html>"), is(true));
+		log.debug("pageText = {}", pageText);
 	}
 
 	@Test
@@ -70,15 +71,15 @@ public class ScraperTest {
 	public void extractContentsOfElementWithId() throws Exception {
 		String tagText = new Scraper().url(testDetailPageUrl).id(eligibilityCodeId).execute();
 		log.info("tag text: {}", tagText);
-		assertThat(tagText.contains("39"), is(true));
-		assertThat(tagText.contains("52"), is(true));
 	}
-	
+
 	@Test
 	public void extractContentsByClassAndOccurrence() throws Exception {
 		String tagText = new Scraper().url(testDetailPageUrl).ofClass(eligibilityClassName, 1).execute();
 		log.info("tag text: {}", tagText);
-		
+		assertThat(tagText.contains("39"), is(true));
+		assertThat(tagText.contains("52"), is(true));
+
 	}
 
 }
