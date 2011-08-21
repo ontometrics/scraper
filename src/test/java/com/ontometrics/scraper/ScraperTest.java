@@ -19,6 +19,8 @@ public class ScraperTest {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperTest.class);
 
+	private Scraper scraper;
+
 	private String testTableFileLocation = "/testpages/grants-gov-table.html";
 
 	private String testDetailFileLocation = "/testpages/cfda-program.html";
@@ -33,13 +35,14 @@ public class ScraperTest {
 
 	@Before
 	public void setup() {
+		scraper = new Scraper();
 		testTableHtmlUrl = TestUtil.getFileAsURL(testTableFileLocation);
 		testDetailPageUrl = TestUtil.getFileAsURL(testDetailFileLocation);
 	}
 
 	@Test
 	public void scrapeUrlReturnsHtml() throws IOException {
-		String pageText = new Scraper().url(testTableHtmlUrl).execute();
+		String pageText = new Scraper().url(testTableHtmlUrl).getResult();
 		assertThat(pageText.length(), is(greaterThan(0)));
 		assertThat(pageText.contains("<html>"), is(true));
 		log.debug("pageText = {}", pageText);
@@ -47,14 +50,14 @@ public class ScraperTest {
 
 	@Test
 	public void extractPageText() throws IOException {
-		String pageContent = new Scraper().url(testTableHtmlUrl).asText().execute();
+		String pageContent = new Scraper().url(testTableHtmlUrl).asText().getResult();
 		assertThat(pageContent.contains("<html>"), is(false));
 		log.info("Content: {}", pageContent);
 	}
 
 	@Test
 	public void extractTableFromPage() throws Exception {
-		String pageText = new Scraper().url(testTableHtmlUrl).tag("<table>", 3).execute();
+		String pageText = scraper.url(testTableHtmlUrl).extract(scraper.extractor().table(3).execute()).getResult();
 		log.debug("table extracted: {}", pageText);
 		assertThat(pageText.startsWith("<table"), is(true));
 		log.info(pageText);
@@ -63,7 +66,10 @@ public class ScraperTest {
 
 	@Test
 	public void extractLinksFromTableOnPage() throws Exception {
-		List<URL> urls = new Scraper().url(testTableHtmlUrl).tag("<table>", 3).getLinks();
+		List<String> urls = scraper
+				.url(testTableHtmlUrl)
+				.extract(scraper.extractor().table(3).links().getResults())
+				.getResults();
 
 		assertThat(urls.size(), is(greaterThan(0)));
 
@@ -71,14 +77,20 @@ public class ScraperTest {
 
 	@Test
 	public void extractContentsOfElementWithId() throws Exception {
-		String tagText = new Scraper().url(testDetailPageUrl).id(eligibilityCodeId).execute();
+		String tagText = scraper
+				.url(testDetailPageUrl)
+				.extract(scraper.extractor().id(eligibilityCodeId).execute())
+				.getResult();
 		log.info("tag text: {}", tagText);
 		assertThat(tagText.contains("nonprofit institutions of higher education"), is(true));
 	}
 
 	@Test
 	public void extractContentsByClassAndOccurrence() throws Exception {
-		String tagText = new Scraper().url(testDetailPageUrl).ofClass(eligibilityClassName, 1).execute();
+		String tagText = scraper
+				.url(testDetailPageUrl)
+				.extract(scraper.extractor().ofClass(eligibilityClassName, 1).execute())
+				.getResult();
 		log.info("tag text: {}", tagText);
 		assertThat(tagText.contains("39"), is(true));
 		assertThat(tagText.contains("52"), is(true));
@@ -117,7 +129,7 @@ public class ScraperTest {
 				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
 				.getResults();
 
-		assertThat(ids.size(), is(40));
+		assertThat(ids.size(), is(86));
 		log.info("ids {} found: {}", ids.size(), ids);
 	}
 
