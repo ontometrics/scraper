@@ -13,8 +13,6 @@ import net.htmlparser.jericho.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ontometrics.scraper.util.ScraperUtil;
-
 /**
  * Provides a mechanism for extracting items from pages or feeds.
  * <p>
