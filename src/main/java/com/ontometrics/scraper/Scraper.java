@@ -13,8 +13,6 @@ import net.htmlparser.jericho.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ontometrics.scraper.util.ScraperUtil;
-
 /**
  * Provides a mechanism for extracting items from pages or feeds.
  * <p>
@@ -40,81 +38,27 @@ public class Scraper {
 	private URL url;
 
 	/**
-	 * Sometimes we want to extract just part of the feed or page.
+	 * Does the work of actually extracting the desired content. If there is an
+	 * {@link #iterator}, the scraper iterates through the {@link #url}s and
+	 * collects the results.
 	 */
-	private String tagToGet;
-
-	/**
-	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed
-	 * so 1st would be 0.
-	 */
-	private int occurrence = 0;
-
-	/**
-	 * The type of output we should return upon extraction.
-	 */
-	private OutputFormats outputFormat;
-
-	/**
-	 * Provides means of extracting just an element with a given id.
-	 */
-	private String idToGet;
-
-	/**
-	 * Provides means of extracting element(s) with a given class.
-	 */
-	private String classToGet;
-
 	private Extractor extractor;
 
+	/**
+	 * Usually Builders have a single product. We support two kinds of products:
+	 * a single string that represents a scrape and a set of extracted elements.
+	 */
 	private List<String> results;
 
+	/**
+	 * Scraper will call this to get the URL of the next page.
+	 */
 	private Iterator iterator;
 
 	private int pages = 0;
 
 	public Scraper() {
-		outputFormat = OutputFormats.Html;
 		this.extractor = new Extractor();
-	}
-
-	/**
-	 * Call this method to have the scrape performed and the extractions
-	 * returned in the desired format {@link #outputFormat}.
-	 * 
-	 * @return the items from the {@link #url} that were prescribed by the
-	 *         various manipulators
-	 * @throws IOException
-	 */
-	public String execute() throws IOException {
-		String result = "";
-		Source source = new Source(url);
-		source.fullSequentialParse();
-
-		if (idToGet != null) {
-			result = source.getElementById(idToGet).getTextExtractor().toString();
-		} else if (classToGet != null) {
-			List<Element> classElements = source.getAllElementsByClass(classToGet);
-			if (occurrence > 0) {
-				result = classElements.get(occurrence).getTextExtractor().toString();
-			} else {
-				for (Element element : classElements) {
-					result += element.getTextExtractor().toString();
-				}
-			}
-		} else {
-			if (outputFormat == OutputFormats.Text) {
-				result = source.getTextExtractor().toString();
-			} else if (outputFormat == OutputFormats.Html) {
-				result = source.toString();
-			}
-
-			if (tagToGet != null) {
-				result = extractTagContent(result);
-			}
-		}
-
-		return result;
 	}
 
 	/**
@@ -148,19 +92,10 @@ public class Scraper {
 	}
 
 	/**
-	 * This is the default: scrape a page and get the html from the {@link #url}
-	 * .
-	 */
-	public Scraper asHtml() {
-		this.outputFormat = OutputFormats.Html;
-		return this;
-	}
-
-	/**
 	 * Provides means of asking that just the text of the page be extracted.
 	 */
 	public Scraper asText() {
-		this.outputFormat = OutputFormats.Text;
+		extractor.asText();
 		return this;
 	}
 
@@ -176,56 +111,6 @@ public class Scraper {
 		return this;
 	}
 
-	/**
-	 * Sometimes, just a certain tag is desired, for instance, a table.
-	 * 
-	 * @param tag
-	 *            the tag you want extracted
-	 * @see #occurrence
-	 */
-	public Scraper tag(String tag) {
-		this.tagToGet = tag;
-		return this;
-	}
-
-	private String extractTagContent(String htmlContent) {
-		return ScraperUtil.extract(htmlContent, tagToGet, occurrence);
-	}
-
-	/**
-	 * Provides a means of asking for the nth occurrence of a tag, so if the
-	 * desired content is located in the 3rd table on the page, you could do
-	 * tag("
-	 * <table>
-	 * ", 3).
-	 * 
-	 * @param tag
-	 *            the target tag to look for
-	 * @param occurrence
-	 *            the 0-based number of its occurrence in the page/feed.
-	 */
-	public Scraper tag(String tag, int occurrence) {
-		this.tagToGet = tag;
-		this.occurrence = occurrence;
-		return this;
-	}
-
-	public Scraper id(String id) {
-		this.idToGet = id;
-		return this;
-	}
-
-	public Scraper ofClass(String className) {
-		this.classToGet = className;
-		return this;
-	}
-
-	public Scraper ofClass(String className, int occurrence) {
-		this.classToGet = className;
-		this.occurrence = occurrence;
-		return this;
-	}
-
 	public Extractor extractor() {
 		return this.extractor;
 	}
@@ -234,8 +119,7 @@ public class Scraper {
 		log.debug("inside extract, iterator is: " + iterator);
 		this.results = results;
 		if (iterator != null) {
-			log.debug("about to iterate..");
-			for (int i = 0; i < pages; i++){
+			for (int i = 0; i < pages; i++) {
 				extractor.url(iterator.build(i));
 				results.addAll(extractor.getResults());
 			}
@@ -248,6 +132,10 @@ public class Scraper {
 		this.iterator = iterator;
 		return this;
 	}
+	
+	public String getResult() throws IOException{
+		return extractor.execute();
+	}
 
 	public List<String> getResults() {
 		return this.results;
@@ -255,6 +143,10 @@ public class Scraper {
 
 	public Scraper pages(int i) {
 		this.pages = i;
+		return this;
+	}
+
+	public Scraper extract(String extraction) {
 		return this;
 	}
 
