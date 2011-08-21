@@ -102,14 +102,20 @@ public class ScraperTest {
 	@Test
 	public void extractParameterFromLinksInIteratedTables() throws Exception {
 		Scraper scraper = new Scraper();
-		List<String> ids = scraper.url(testTableHtmlUrl).pages(1).iterator(new Iterator() {
+		Iterator pageIterator = new Iterator() {
 			@Override
 			public URL build(int i) {
 				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", i + 2);
 				log.debug("next page to iterate to: {}", nextPageUrl);
 				return TestUtil.getFileAsURL(nextPageUrl);
 			}
-		}).extract(scraper.extractor().table(3).links().parameter("oppId").getResults()).getResults();
+		};
+		List<String> ids = scraper
+				.url(testTableHtmlUrl)
+				.pages(1)
+				.iterator(pageIterator)
+				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
+				.getResults();
 
 		assertThat(ids.size(), is(40));
 		log.info("ids {} found: {}", ids.size(), ids);
