@@ -1,4 +1,4 @@
-#i scraper ##
+## scraper ##
 
 Project for scraping content out of pages and/or feeds. 
 
