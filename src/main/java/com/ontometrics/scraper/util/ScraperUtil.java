@@ -26,7 +26,7 @@ public class ScraperUtil {
 	public static String extract(String source, String tag, int occurrence) {
 		log.debug("extracting {} occurrence of tag: {} from source: {}", new Object[] { occurrence, tag, source });
 		tag = (tag.endsWith(">")) ? tag.substring(0, tag.length() - 1) : tag;
-		String endTag = "</" + tag.substring(1);
+		String endTag = "</" + tag.substring(1) + ">";
 		String[] tags = source.split(endTag);
 
 		for (int i = 0; i < tags.length; i++) {
