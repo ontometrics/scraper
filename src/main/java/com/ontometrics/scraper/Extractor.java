@@ -178,18 +178,20 @@ public class Extractor {
 			} else if (toGet.getTag().equals("href")) {
 				source = new Source(content);
 				currentElements = source.getAllElements(HTMLElementName.A);
-				for (Element element : currentElements){
+				for (Element element : currentElements) {
 					results.add(element.toString());
 				}
 			}
 		}
 		if (this.parameter != null) {
-			for (Element element : currentElements) {
-				String found = ScraperUtil.extractParameter(element.toString(), parameter);
+			List<String> foundIds = new ArrayList<String>();
+			for (String foundLink : results) {
+				String found = ScraperUtil.extractParameter(foundLink, parameter);
 				if (found != null) {
-					results.add(found);
+					foundIds.add(found);
 				}
 			}
+			results = foundIds;
 		}
 		return results;
 	}

@@ -129,7 +129,7 @@ public class ScraperTest {
 				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
 				.getResults();
 
-		assertThat(ids.size(), is(86));
+		assertThat(ids.size(), is(40));
 		log.info("ids {} found: {}", ids.size(), ids);
 	}
 
