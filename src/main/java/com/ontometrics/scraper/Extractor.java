@@ -80,13 +80,18 @@ public class Extractor {
 		addTagToGet("<table>", occurrence);
 		return this;
 	}
+	
 
-	private void addTagToGet(String tag) {
-		addTagToGet(tag, 0);
-	}
-
-	private void addTagToGet(String tag, int occurrence) {
-		tagsToGet.add(new TagOccurrence(tag, occurrence));
+	/**
+	 * Provides means of matching the table based on a string it contains.
+	 * 
+	 * @param string
+	 *            the string to match, case sensitive
+	 * @return the whole table tag with all its contents
+	 */
+	public Extractor table(String match) {
+		addTagToGet("<table>", match);
+		return this;
 	}
 
 	public Extractor url(URL url) {
@@ -179,13 +184,15 @@ public class Extractor {
 		for (TagOccurrence toGet : tagsToGet) {
 			if (toGet.getOccurrence() > 0) {
 				content = extractTagText(content, toGet);
+			} else if (toGet.getMatching() != null) {
+				content = extractTagMatching(source.toString(), toGet);
 			} else if (toGet.getTag().equals("href")) {
 				source = new Source(content);
 				currentElements = source.getAllElements(HTMLElementName.A);
 				for (Element element : currentElements) {
 					String href = element.getAttributeValue("href");
 					if (href != null) {
-						if (href.contains(matchingPattern)) {
+						if (matchingPattern==null || href.contains(matchingPattern)) {
 							results.add(href);
 						}
 					}
@@ -203,10 +210,6 @@ public class Extractor {
 			results = foundIds;
 		}
 		return results;
-	}
-
-	private String extractTagText(String html, TagOccurrence tagOccurrence) {
-		return ScraperUtil.extract(html, tagOccurrence.getTag(), tagOccurrence.getOccurrence());
 	}
 
 	public Extractor asText() {
@@ -243,5 +246,45 @@ public class Extractor {
 		this.matchingPattern = pattern;
 		return this;
 	}
+
+	private String extractTagText(String html, TagOccurrence tagOccurrence) {
+		return ScraperUtil.extract(html, tagOccurrence.getTag(), tagOccurrence.getOccurrence());
+	}
+
+	private String extractTagMatching(String html, TagOccurrence toGet) {
+		log.debug("looking for {} in tags: {}", toGet.getMatching(), toGet.getTag());
+		String found = null;
+		Source source = new Source(html);
+		source.fullSequentialParse();
+		List<Element> elements = source.getAllElements(HTMLElementName.TABLE);
+		for (Element element : elements){
+			String elementText = element.getTextExtractor().toString();
+			log.debug("element of type {}: {}", element.toString(), elementText);
+			if (elementText.contains(toGet.getMatching())){
+				log.debug("found our matching tag!");
+				found = element.toString();
+				break;
+			}
+		}
+		log.debug("returning matching tag: {}", found);
+		return found.toString();
+	}
+
+	private void addTagToGet(String tag, int i, String match) {
+		tagsToGet.add(new TagOccurrence(tag, occurrence, match));
+	}
+
+	private void addTagToGet(String tag) {
+		addTagToGet(tag, 0);
+	}
+	
+	private void addTagToGet(String tag, String match){
+		addTagToGet(tag, 0, match);
+	}
+
+	private void addTagToGet(String tag, int occurrence) {
+		addTagToGet(tag, occurrence, null);
+	}
+
 
 }
