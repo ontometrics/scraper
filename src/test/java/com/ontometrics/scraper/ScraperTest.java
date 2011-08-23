@@ -11,6 +11,8 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
+import net.htmlparser.jericho.HTMLElementName;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -64,10 +66,12 @@ public class ScraperTest {
 
 	@Test
 	public void extractTableFromPage() throws Exception {
+		log.info("HtmlElementName.TABLE: {}", HTMLElementName.TABLE);
 		String pageText = scraper.url(testTableHtmlUrl).extract(scraper.extractor().table(3).execute()).getResult();
 		log.debug("table extracted: {}", pageText);
 		assertThat(pageText.startsWith("<table"), is(true));
 		log.info(pageText);
+		
 
 	}
 
@@ -126,7 +130,7 @@ public class ScraperTest {
 				.extract(scraper.extractor().table("Grants Notice").execute())
 				.getResult();
 
-		log.debug("table.toString() = {}", table.toString());
+		log.info("table matching {} : {}", "Grants Notice", table);
 		assertThat(table.toString().contains("Grants Notice"), is(true));
 		
 	}
