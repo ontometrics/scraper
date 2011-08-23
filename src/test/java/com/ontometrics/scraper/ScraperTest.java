@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +27,13 @@ public class ScraperTest {
 
 	private String testDetailFileLocation = "/testpages/cfda-program.html";
 
+	private String testTableIntoMapUrlLocation = "/testpages/grants-gov-detail-page.html";
+
 	private URL testTableHtmlUrl;
 
 	private URL testDetailPageUrl;
+
+	private URL testTableIntoMapUrl;
 
 	private String eligibilityCodeId = "dnf_class_values_cfda__applicant_eligibility__widget";
 
@@ -38,6 +44,7 @@ public class ScraperTest {
 		scraper = new Scraper();
 		testTableHtmlUrl = TestUtil.getFileAsURL(testTableFileLocation);
 		testDetailPageUrl = TestUtil.getFileAsURL(testDetailFileLocation);
+		testTableIntoMapUrl = TestUtil.getFileAsURL(testTableIntoMapUrlLocation);
 	}
 
 	@Test
@@ -133,4 +140,42 @@ public class ScraperTest {
 		log.info("ids {} found: {}", ids.size(), ids);
 	}
 
+	@Test
+	public void extractTableIntoMapOfLabelsAndValues() throws IOException {
+		Scraper scraper = new Scraper();
+		Map<String, String> opportunities = scraper
+				.url(testTableIntoMapUrl)
+				.extract(scraper.extractor().table(4).getFields())
+				.getFields();
+
+		assertThat(opportunities.size(), is(greaterThan(0)));
+		log.debug("fields = {}", opportunities);
+
+	}
+	
+	@Ignore
+	@Test
+	public void useIteratedListingAndDetailInterface() throws IOException {
+		Scraper scraper = new Scraper();
+		Iterator pageIterator = new Iterator() {
+			@Override
+			public URL build(int i) {
+				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", i + 2);
+				log.debug("next page to iterate to: {}", nextPageUrl);
+				return TestUtil.getFileAsURL(nextPageUrl);
+			}
+		};
+		Scraper detailScraper = new Scraper();
+		List<Map<String, String>> records = scraper
+				.url(testTableHtmlUrl)
+				.pages(3)
+				.iterator(pageIterator)
+				.listing(scraper.extractor().table(3).links().getResults())
+				.detail(detailScraper)
+				.getRecords();
+
+		assertThat(records.size(), is(greaterThan(0)));
+		log.debug("fields = {}", records);
+
+	}
 }

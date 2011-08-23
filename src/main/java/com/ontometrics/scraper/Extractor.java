@@ -3,7 +3,9 @@ package com.ontometrics.scraper;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -67,6 +69,8 @@ public class Extractor {
 	 * want to make link extraction its own sub-DSL.
 	 */
 	private String parameter;
+
+	private String matchingPattern;
 
 	public Extractor() {
 		this.tagsToGet = new ArrayList<TagOccurrence>();
@@ -179,7 +183,12 @@ public class Extractor {
 				source = new Source(content);
 				currentElements = source.getAllElements(HTMLElementName.A);
 				for (Element element : currentElements) {
-					results.add(element.toString());
+					String href = element.getAttributeValue("href");
+					if (href != null) {
+						if (href.contains(matchingPattern)) {
+							results.add(href);
+						}
+					}
 				}
 			}
 		}
@@ -202,6 +211,36 @@ public class Extractor {
 
 	public Extractor asText() {
 		this.outputFormat = OutputFormats.Text;
+		return this;
+	}
+
+	public Map<String, String> getFields() throws IOException {
+		Map<String, String> extractedFields = new HashMap<String, String>();
+		// fill in from the already extracted HTML..
+		for (TagOccurrence tagOccurrence : this.tagsToGet) {
+			if (!tagOccurrence.getTag().contains("table")) {
+				throw new IllegalStateException("Only know how to extract fields from tables.");
+			} else {
+				Source source = new Source(url);
+				source.fullSequentialParse();
+				String tableText = extractTagText(source.toString(), tagOccurrence);
+				source = new Source(tableText);
+				source.fullSequentialParse();
+				log.debug("about to peel fields from this table: {}", source.toString());
+
+				List<Element> cells = source.getAllElements(HTMLElementName.TD);
+				for (int i = 0; i < cells.size(); i++) {
+					String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
+					String value = cells.get(++i).getTextExtractor().toString().trim();
+					extractedFields.put(label, value);
+				}
+			}
+		}
+		return extractedFields;
+	}
+
+	public Extractor matching(String pattern) {
+		this.matchingPattern = pattern;
 		return this;
 	}
 
