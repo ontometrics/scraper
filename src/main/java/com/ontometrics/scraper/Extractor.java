@@ -156,9 +156,7 @@ public class Extractor {
 				result = source.toString();
 			}
 			for (TagOccurrence toGet : tagsToGet) {
-				if (toGet.getOccurrence() > 0) {
-					result = extractTagText(source.toString(), toGet);
-				}
+				result = extractTagText(source.toString(), toGet);
 			}
 
 		}
