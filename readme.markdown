@@ -53,7 +53,7 @@ In a lot of cases, you want to scrape something from a page, but the same form i
 Notice that we are constraining the iteration with the pages method. We probably want to support an open-ended iteration where the scraper will keep trying to get more pages until it gets a 404 and then it will exit. This is necessary because we may not know how many pages there are and pages may be added at some point. (Implementing this is not very difficult: inside the scraper, it sets up the extractor, gets the results, then checks if there is an iterator and if there is, it calls it in a loop, collecting all the results.)
 
 
-## Listing and Detail: Following Links to a Detail Page ##
+### Listing and Detail: Following Links to a Detail Page ###
 
 Another common scenario is that you have a set of links that you have to follow to a detail page where the actual content is that you want to scrape. That's what this syntax is meant to support. Here is an example:
 
