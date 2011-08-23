@@ -7,6 +7,8 @@ import static org.hamcrest.Matchers.is;
 import java.io.IOException;
 import java.net.URL;
 
+import net.htmlparser.jericho.HTMLElementName;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -16,7 +18,6 @@ import com.ontometrics.scraper.TestUtil;
 
 public class ScraperUtilTest {
 
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtilTest.class);
 	
 	private String testPageSource = "/testpages/ids-page-2.html";
@@ -33,8 +34,8 @@ public class ScraperUtilTest {
 
 		String test = "<table>1</table><table>2</table><table>3</table><table>4</table><table>5</table>";
 
-		String table1 = ScraperUtil.extract(test, "<table>", 0);
-		String table3 = ScraperUtil.extract(test, "<table>", 2);
+		String table1 = ScraperUtil.extract(test, HTMLElementName.TABLE, 0);
+		String table3 = ScraperUtil.extract(test, HTMLElementName.TABLE, 2);
 
 		assertThat(table1, is(equalTo("<table>1</table>")));
 		assertThat(table3, is(equalTo("<table>3</table>")));
