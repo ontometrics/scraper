@@ -27,13 +27,13 @@ public class ScraperTest {
 
 	private String testDetailFileLocation = "/testpages/cfda-program.html";
 
-	private String testTableIntoMapUrlLocation = "/testpages/grants-gov-detail-page.html";
+	private String testGrantsDetailLocation = "/testpages/grants-gov-detail-page.html";
 
 	private URL testTableHtmlUrl;
 
 	private URL testDetailPageUrl;
 
-	private URL testTableIntoMapUrl;
+	private URL testGrantsDetailUrl;
 
 	private String eligibilityCodeId = "dnf_class_values_cfda__applicant_eligibility__widget";
 
@@ -44,7 +44,7 @@ public class ScraperTest {
 		scraper = new Scraper();
 		testTableHtmlUrl = TestUtil.getFileAsURL(testTableFileLocation);
 		testDetailPageUrl = TestUtil.getFileAsURL(testDetailFileLocation);
-		testTableIntoMapUrl = TestUtil.getFileAsURL(testTableIntoMapUrlLocation);
+		testGrantsDetailUrl = TestUtil.getFileAsURL(testGrantsDetailLocation);
 	}
 
 	@Test
@@ -117,6 +117,19 @@ public class ScraperTest {
 		assertThat(ids, hasItems("40967", "41255", "41282", "40458", "41599", "41734", "40667", "41771"));
 		assertThat(ids, hasItems("41898", "41032", "41896", "42394", "42445"));
 	}
+	
+	@Test
+	public void extractLinksFromTableContainingString() throws Exception {
+		Scraper scraper = new Scraper();
+		String table = scraper
+				.url(testGrantsDetailUrl)
+				.extract(scraper.extractor().table("Grants Notice").execute())
+				.getResult();
+
+		assertThat(table.toString().contains("Grants Notice"), is(true));
+		
+	}
+	
 
 	@Test
 	public void extractParameterFromLinksInIteratedTables() throws Exception {
@@ -144,7 +157,7 @@ public class ScraperTest {
 	public void extractTableIntoMapOfLabelsAndValues() throws IOException {
 		Scraper scraper = new Scraper();
 		Map<String, String> opportunities = scraper
-				.url(testTableIntoMapUrl)
+				.url(testGrantsDetailUrl)
 				.extract(scraper.extractor().table(4).getFields())
 				.getFields();
 
