@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -12,6 +14,8 @@ import net.htmlparser.jericho.Source;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ontometrics.scraper.util.ScraperUtil;
 
 /**
  * Provides a mechanism for extracting items from pages or feeds.
@@ -57,6 +61,17 @@ public class Scraper {
 
 	private int pages = 0;
 
+	private Map<String, String> extractedFields;
+
+	private ArrayList<Map<String, String>> records;
+
+	/**
+	 * Used for relative links. At the moment, this will be just the host name.
+	 */
+	private URL baseUrl;
+
+	private String sessionIDName;
+
 	public Scraper() {
 		this.extractor = new Extractor();
 	}
@@ -99,15 +114,42 @@ public class Scraper {
 		return this;
 	}
 
-	// ---- Builder-style Interface
-	public Scraper url(String url) throws MalformedURLException {
-		this.url = new URL(url);
+	public Scraper usesSessionId(String sessionIdName) {
+		this.sessionIDName = sessionIdName;
 		return this;
 	}
 
-	public Scraper url(URL url) {
+	// ---- Builder-style Interface
+	public Scraper sessionIDName(String sessionIDName) {
+		this.sessionIDName = sessionIDName;
+		return this;
+	}
+	
+	public Scraper url(String url) throws MalformedURLException {
+		return url(new URL(url));
+	}
+
+	/**
+	 * Sets the url to scrape.<br> If {@link sessionIDName} is set, we will extract
+	 * the session id from the page source based on the given keyword.
+	 * <br>A base url will be saved inside {@link baseUrl} to handle relative links.
+	 * 
+	 * @param url
+	 * @return
+	 * @throws MalformedURLException 
+	 */
+	public Scraper url(URL url) throws MalformedURLException {
 		this.url = url;
 		extractor.url(url);
+		if (this.sessionIDName != null) {
+			try {
+				this.sessionIDName = ScraperUtil.extractSessionId(this.url, sessionIDName);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		String hostName = new String().concat("http://").concat(url.getHost());
+		baseUrl = new URL(hostName);
 		return this;
 	}
 
@@ -132,14 +174,6 @@ public class Scraper {
 		this.iterator = iterator;
 		return this;
 	}
-	
-	public String getResult() throws IOException{
-		return extractor.execute();
-	}
-
-	public List<String> getResults() {
-		return this.results;
-	}
 
 	public Scraper pages(int i) {
 		this.pages = i;
@@ -150,4 +184,83 @@ public class Scraper {
 		return this;
 	}
 
+	public String getResult() throws IOException {
+		return extractor.execute();
+	}
+
+	public List<String> getResults() {
+		return this.results;
+	}
+
+	public Map<String, String> getFields() {
+		if (this.extractedFields==null){
+			this.extractedFields = new HashMap<String, String>();
+		}
+		try {
+			Map<String, String> fields = extractor.getFields();
+			this.extractedFields.putAll(fields);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return extractedFields;
+	}
+
+	public Scraper extract(Map<String, String> fields) {
+		this.extractedFields = fields;
+		return this;
+	}
+
+	public List<Map<String, String>> getRecords() {
+		return this.records;
+	}
+
+	public Scraper listing(List<String> results) {
+		// this method is going to get the list of strings and store them as
+		// links
+
+		// TODO: filter result list
+		this.results = results;
+		return this;
+	}
+
+	public Scraper detail(Scraper detailScraper) {
+		records = new ArrayList<Map<String, String>>();
+		// all we have to do here is loop through the links extracted in listing
+		// and perform the operations here, collecting all the fields into
+		// records..
+		for (String link : results) {
+			try {
+				if (isRelativeUrl(link)) {
+					link = convertToAbsoluteUrl(link);
+				}
+				log.debug("Using link = {}", link);
+				Map<String, String> fields = detailScraper.url(new URL(link)).getFields();
+				log.debug("returned fields = {}", fields);
+				records.add(fields);
+			} catch (MalformedURLException e) {
+				log.info("Bad URL in looping detail page for listing links: {}", e.toString());
+			}
+		}
+
+		log.debug("Number of records: {}", records.size());
+		log.debug("Records is: {}", records);
+		return this;
+	}
+
+	private boolean isRelativeUrl(String url) {
+		boolean result = false;
+		if (url != null && !url.startsWith("http://")) {
+			result = true;
+		}
+		return result;
+	}
+
+	private String convertToAbsoluteUrl(String link) {
+		String absoluteUrlString = (baseUrl.toString()).concat(link);
+		return absoluteUrlString;
+	}
+
+	public void setExtractor(Extractor extractor) {
+		this.extractor = extractor;
+	}
 }
