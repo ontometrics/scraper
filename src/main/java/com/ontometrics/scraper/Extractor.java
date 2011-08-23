@@ -77,10 +77,9 @@ public class Extractor {
 	}
 
 	public Extractor table(int occurrence) {
-		addTagToGet("<table>", occurrence);
+		addTagToGet(HTMLElementName.TABLE, occurrence);
 		return this;
 	}
-	
 
 	/**
 	 * Provides means of matching the table based on a string it contains.
@@ -90,7 +89,7 @@ public class Extractor {
 	 * @return the whole table tag with all its contents
 	 */
 	public Extractor table(String match) {
-		addTagToGet("<table>", match);
+		addTagToGet(HTMLElementName.TABLE, match);
 		return this;
 	}
 
@@ -156,7 +155,11 @@ public class Extractor {
 				result = source.toString();
 			}
 			for (TagOccurrence toGet : tagsToGet) {
-				result = extractTagText(source.toString(), toGet);
+				if (toGet.getMatching() != null) {
+					result = extractTagMatching(source.toString(), toGet);
+				} else {
+					result = extractTagText(source.toString(), toGet);
+				}
 			}
 
 		}
@@ -190,7 +193,7 @@ public class Extractor {
 				for (Element element : currentElements) {
 					String href = element.getAttributeValue("href");
 					if (href != null) {
-						if (matchingPattern==null || href.contains(matchingPattern)) {
+						if (matchingPattern == null || href.contains(matchingPattern)) {
 							results.add(href);
 						}
 					}
@@ -219,7 +222,7 @@ public class Extractor {
 		Map<String, String> extractedFields = new HashMap<String, String>();
 		// fill in from the already extracted HTML..
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
-			if (!tagOccurrence.getTag().contains("table")) {
+			if (!tagOccurrence.getTag().contains(HTMLElementName.TABLE)) {
 				throw new IllegalStateException("Only know how to extract fields from tables.");
 			} else {
 				Source source = new Source(url);
@@ -255,10 +258,10 @@ public class Extractor {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		List<Element> elements = source.getAllElements(HTMLElementName.TABLE);
-		for (Element element : elements){
+		for (Element element : elements) {
 			String elementText = element.getTextExtractor().toString();
 			log.debug("element of type {}: {}", element.toString(), elementText);
-			if (elementText.contains(toGet.getMatching())){
+			if (elementText.contains(toGet.getMatching())) {
 				log.debug("found our matching tag!");
 				found = element.toString();
 				break;
@@ -275,14 +278,13 @@ public class Extractor {
 	private void addTagToGet(String tag) {
 		addTagToGet(tag, 0);
 	}
-	
-	private void addTagToGet(String tag, String match){
+
+	private void addTagToGet(String tag, String match) {
 		addTagToGet(tag, 0, match);
 	}
 
 	private void addTagToGet(String tag, int occurrence) {
 		addTagToGet(tag, occurrence, null);
 	}
-
 
 }

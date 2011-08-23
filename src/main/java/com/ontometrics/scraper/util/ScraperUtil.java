@@ -34,8 +34,10 @@ public class ScraperUtil {
 
 	public static String extract(String source, String tag, int occurrence) {
 		log.debug("extracting {} occurrence of tag: {}", occurrence, tag);
+		tag = tag.startsWith("<") ? tag : "<" + tag;
 		tag = (tag.endsWith(">")) ? tag.substring(0, tag.length() - 1) : tag;
 		String endTag = "</" + tag.substring(1) + ">";
+		log.debug("extracting using tags: {} and {}", tag, endTag);
 		String[] tags = source.split(endTag);
 
 		for (int i = 0; i < tags.length; i++) {
