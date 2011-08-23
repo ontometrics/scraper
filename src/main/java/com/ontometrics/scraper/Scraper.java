@@ -217,8 +217,6 @@ public class Scraper {
 	public Scraper listing(List<String> results) {
 		// this method is going to get the list of strings and store them as
 		// links
-
-		// TODO: filter result list
 		this.results = results;
 		return this;
 	}

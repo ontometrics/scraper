@@ -126,6 +126,7 @@ public class ScraperTest {
 				.extract(scraper.extractor().table("Grants Notice").execute())
 				.getResult();
 
+		log.debug("table.toString() = {}", table.toString());
 		assertThat(table.toString().contains("Grants Notice"), is(true));
 		
 	}
