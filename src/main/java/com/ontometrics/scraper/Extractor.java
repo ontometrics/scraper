@@ -35,6 +35,8 @@ public class Extractor {
 	 */
 	private URL url;
 
+	private SourceContext sourceContext;
+
 	/**
 	 * The type of output we should return upon extraction.
 	 */
@@ -65,6 +67,21 @@ public class Extractor {
 	private List<TagOccurrence> tagsToGet;
 
 	/**
+	 * Provides a means of defining paired tags that contain fields.
+	 * <p>
+	 * For example, if you have a page where the labels are all wrapped with h4
+	 * and the fields with dd, you would add a pair like this:
+	 * <p>
+	 * <code>
+	 * scraper.extractor().pair(HTMLElementName.H4HTMLElementName.DD).getFields()
+	 * </code>
+	 * <p>
+	 * Note: The extractor will extract nothing if the pairs are not contiguous
+	 * and matching.
+	 */
+	private List<PairedTags> fieldPairs;
+
+	/**
 	 * If there is a parameter to be extracted from a link. Eventually, we might
 	 * want to make link extraction its own sub-DSL.
 	 */
@@ -72,8 +89,13 @@ public class Extractor {
 
 	private String matchingPattern;
 
+	private String afterTag;
+
+	private TagOccurrence afterTagOccurrence;
+
 	public Extractor() {
 		this.tagsToGet = new ArrayList<TagOccurrence>();
+		this.fieldPairs = new ArrayList<PairedTags>();
 	}
 
 	public Extractor table(int occurrence) {
@@ -213,6 +235,20 @@ public class Extractor {
 		return results;
 	}
 
+	private Source pruneFrom(Source source, TagOccurrence afterTagOccurrence) {
+		String sourceHtml = source.toString();
+		String endAfterTag = "</" + afterTagOccurrence.getTag() + ">";
+		for (int i = 0; i < afterTagOccurrence.getOccurrence(); i++) {
+			sourceHtml = sourceHtml.substring(sourceHtml.indexOf(endAfterTag) + 1);
+		}
+		log.debug("pruned after count {} of tag {}: {}", new Object[] { afterTagOccurrence.getOccurrence(),
+				afterTagOccurrence.getTag(), sourceHtml });
+		String afterSource = sourceHtml;
+		source = new Source(afterSource);
+		source.fullSequentialParse();
+		return source;
+	}
+
 	public Extractor asText() {
 		this.outputFormat = OutputFormats.Text;
 		return this;
@@ -225,6 +261,7 @@ public class Extractor {
 			if (!tagOccurrence.getTag().contains(HTMLElementName.TABLE)) {
 				throw new IllegalStateException("Only know how to extract fields from tables.");
 			} else {
+
 				Source source = new Source(url);
 				source.fullSequentialParse();
 				String tableText = extractTagText(source.toString(), tagOccurrence);
@@ -240,7 +277,42 @@ public class Extractor {
 				}
 			}
 		}
+		Source source = new Source(url);
+		source.fullSequentialParse();
+		if (this.afterTagOccurrence != null) {
+			source = pruneFrom(source, afterTagOccurrence);
+		}
+		for (PairedTags tagPair : this.fieldPairs) {
+			List<Element> labels = source.getAllElements(tagPair.getLabelTag());
+			List<Element> fields = source.getAllElements(tagPair.getFieldTag());
+
+			removeInvalidFields(fields);
+
+			int fieldCount = Math.min(labels.size(), fields.size());
+			for (int i = 0; i < fieldCount; i++) {
+				String label = labels.get(i).getTextExtractor().toString().trim();
+				String field = fields.get(i).getTextExtractor().toString().trim();
+				log.debug("outputting pair: {} : {}", label, field);
+				extractedFields.put(label, field);
+			}
+
+		}
 		return extractedFields;
+	}
+
+	private void removeInvalidFields(List<Element> fields) {
+		java.util.Iterator<Element> iterator = fields.iterator();
+		while (iterator.hasNext()) {
+			Element field = iterator.next();
+			if (!isAField(field.toString())) {
+				log.debug("pruning invalid field: {}", field);
+				iterator.remove();
+			}
+		}
+	}
+
+	private boolean isAField(String extract) {
+		return !extract.contains(HTMLElementName.TABLE);
 	}
 
 	public Extractor matching(String pattern) {
@@ -285,6 +357,40 @@ public class Extractor {
 
 	private void addTagToGet(String tag, int occurrence) {
 		addTagToGet(tag, occurrence, null);
+	}
+
+	public Extractor pair(String labelTag, String fieldTag) {
+		this.fieldPairs.add(new PairedTags(labelTag, fieldTag));
+		return this;
+	}
+
+	public Extractor after(String afterTag) {
+		this.afterTag = afterTag;
+		return this;
+	}
+
+	class SourceContext {
+
+		private String currentSource;
+
+		public String getCurrentSource() {
+			if (currentSource == null) {
+				try {
+					Source source = new Source(url);
+					source.fullSequentialParse();
+					currentSource = source.toString();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return currentSource;
+		}
+
+	}
+
+	public Extractor after(String tag, int occurrence) {
+		this.afterTagOccurrence = new TagOccurrence(tag, occurrence);
+		return this;
 	}
 
 }
