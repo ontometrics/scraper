@@ -20,15 +20,12 @@ import com.ontometrics.scraper.util.ScraperUtil;
 /**
  * Provides a mechanism for extracting items from pages or feeds.
  * <p>
- * Uses a fluent builder pattern in a fashion that does border on being a DSL.
- * The idea is that a {@link #url} is provided, then through a set of
- * manipulator methods, the operations to be performed are framed. All scrapings
- * require a url call and then the execute thread at the end to perform the
- * scraping.
+ * Uses a fluent builder pattern in a fashion that does border on being a DSL. The idea is that a {@link #url} is
+ * provided, then through a set of manipulator methods, the operations to be performed are framed. All scrapings require
+ * a url call and then the execute thread at the end to perform the scraping.
  * <p>
- * Internally, the manipulators are triggered by basic conditions right now. We
- * will need a more sophisticated architecture as more operations pile up
- * (perhaps something like a Chain of Responsibility Pattern).
+ * Internally, the manipulators are triggered by basic conditions right now. We will need a more sophisticated
+ * architecture as more operations pile up (perhaps something like a Chain of Responsibility Pattern).
  * 
  * @author Rob
  */
@@ -42,15 +39,14 @@ public class Scraper {
 	private URL url;
 
 	/**
-	 * Does the work of actually extracting the desired content. If there is an
-	 * {@link #iterator}, the scraper iterates through the {@link #url}s and
-	 * collects the results.
+	 * Does the work of actually extracting the desired content. If there is an {@link #iterator}, the scraper iterates
+	 * through the {@link #url}s and collects the results.
 	 */
 	private Extractor extractor;
 
 	/**
-	 * Usually Builders have a single product. We support two kinds of products:
-	 * a single string that represents a scrape and a set of extracted elements.
+	 * Usually Builders have a single product. We support two kinds of products: a single string that represents a
+	 * scrape and a set of extracted elements.
 	 */
 	private List<String> results;
 
@@ -124,19 +120,19 @@ public class Scraper {
 		this.sessionIDName = sessionIDName;
 		return this;
 	}
-	
+
 	public Scraper url(String url) throws MalformedURLException {
 		return url(new URL(url));
 	}
 
 	/**
-	 * Sets the url to scrape.<br> If {@link sessionIDName} is set, we will extract
-	 * the session id from the page source based on the given keyword.
-	 * <br>A base url will be saved inside {@link baseUrl} to handle relative links.
+	 * Sets the url to scrape.<br>
+	 * If {@link sessionIDName} is set, we will extract the session id from the page source based on the given keyword. <br>
+	 * A base url will be saved inside {@link baseUrl} to handle relative links.
 	 * 
 	 * @param url
 	 * @return
-	 * @throws MalformedURLException 
+	 * @throws MalformedURLException
 	 */
 	public Scraper url(URL url) throws MalformedURLException {
 		this.url = url;
@@ -193,7 +189,7 @@ public class Scraper {
 	}
 
 	public Map<String, String> getFields() {
-		if (this.extractedFields==null){
+		if (this.extractedFields == null) {
 			this.extractedFields = new HashMap<String, String>();
 		}
 		try {
@@ -232,7 +228,7 @@ public class Scraper {
 					link = convertToAbsoluteUrl(link);
 				}
 				log.debug("Using link = {}", link);
-				Map<String, String> fields = detailScraper.url(new URL(link)).getFields();
+				Map<String, String> fields = new HashMap<String, String>(detailScraper.url(new URL(link)).getFields());
 				log.debug("returned fields = {}", fields);
 				records.add(fields);
 			} catch (MalformedURLException e) {
@@ -240,8 +236,6 @@ public class Scraper {
 			}
 		}
 
-		log.debug("Number of records: {}", records.size());
-		log.debug("Records is: {}", records);
 		return this;
 	}
 
