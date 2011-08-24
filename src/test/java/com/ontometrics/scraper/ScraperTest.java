@@ -127,12 +127,12 @@ public class ScraperTest {
 		Scraper scraper = new Scraper();
 		String table = scraper
 				.url(testGrantsDetailUrl)
-				.extract(scraper.extractor().table("Grants Notice").execute())
+				.extract(scraper.extractor().table("Document Type").execute())
 				.getResult();
 
-		log.info("table matching {} : {}", "Grants Notice", table);
-		assertThat(table.toString().contains("Grants Notice"), is(true));
-
+		log.info("table matching {} : {}", "Document Type", table);
+		assertThat(table.toString().contains("Document Type"), is(true));
+		
 	}
 
 	@Test

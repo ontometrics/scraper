@@ -11,6 +11,7 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
+import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +20,8 @@ import com.ontometrics.scraper.util.ScraperUtil;
 /**
  * Does the work of iteratively extracting portions of the page.
  * <p>
- * Note that once the requested elements are specified, this class is held in
- * the scraper and can be successively invoked for jobs that involve iteration
- * (e.g. paging).
+ * Note that once the requested elements are specified, this class is held in the scraper and can be successively
+ * invoked for jobs that involve iteration (e.g. paging).
  * 
  * @author Rob
  * 
@@ -53,16 +53,14 @@ public class Extractor {
 	private String classToGet;
 
 	/**
-	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed
-	 * so 1st would be 0.
+	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed so 1st would be 0.
 	 */
 	private int occurrence = 0;
 
 	/**
-	 * We collect the desired tags, and whether there is some associate
-	 * occurrence, e.g. in the dsl we might want to support calls like:
-	 * table(3).row(2).cell(3) to get something out of the 3rd table on the
-	 * page, its second row and 3rd cell.
+	 * We collect the desired tags, and whether there is some associate occurrence, e.g. in the dsl we might want to
+	 * support calls like: table(3).row(2).cell(3) to get something out of the 3rd table on the page, its second row and
+	 * 3rd cell.
 	 */
 	private List<TagOccurrence> tagsToGet;
 
@@ -84,6 +82,8 @@ public class Extractor {
 	/**
 	 * If there is a parameter to be extracted from a link. Eventually, we might
 	 * want to make link extraction its own sub-DSL.
+	 * If there is a parameter to be extracted from a link. Eventually, we might want to make link extraction its own
+	 * sub-DSL.
 	 */
 	private String parameter;
 
@@ -147,11 +147,10 @@ public class Extractor {
 	}
 
 	/**
-	 * Call this method to have the scrape performed and the extractions
-	 * returned in the desired format {@link #outputFormat}.
+	 * Call this method to have the scrape performed and the extractions returned in the desired format
+	 * {@link #outputFormat}.
 	 * 
-	 * @return the items from the {@link #url} that were prescribed by the
-	 *         various manipulators
+	 * @return the items from the {@link #url} that were prescribed by the various manipulators
 	 * @throws IOException
 	 */
 	public String execute() throws IOException {
@@ -190,9 +189,8 @@ public class Extractor {
 	}
 
 	/**
-	 * Prunes the raw URL content down based on the manipulators that have been
-	 * used to specify subelements, then extracts links and potentially
-	 * parameters from them.
+	 * Prunes the raw URL content down based on the manipulators that have been used to specify subelements, then
+	 * extracts links and potentially parameters from them.
 	 * 
 	 * @return a set of extracted elements
 	 * @throws IOException
@@ -205,6 +203,7 @@ public class Extractor {
 		String content = source.toString();
 		List<Element> currentElements = null;
 		for (TagOccurrence toGet : tagsToGet) {
+			log.debug("toGet = {}", toGet);
 			if (toGet.getOccurrence() > 0) {
 				content = extractTagText(content, toGet);
 			} else if (toGet.getMatching() != null) {
@@ -261,7 +260,6 @@ public class Extractor {
 			if (!tagOccurrence.getTag().contains(HTMLElementName.TABLE)) {
 				throw new IllegalStateException("Only know how to extract fields from tables.");
 			} else {
-
 				Source source = new Source(url);
 				source.fullSequentialParse();
 				String tableText = extractTagText(source.toString(), tagOccurrence);
@@ -321,7 +319,15 @@ public class Extractor {
 	}
 
 	private String extractTagText(String html, TagOccurrence tagOccurrence) {
-		return ScraperUtil.extract(html, tagOccurrence.getTag(), tagOccurrence.getOccurrence());
+		String result = null;
+
+		if (StringUtil.isBlank(tagOccurrence.getMatching())) {
+			result = ScraperUtil.extract(html, tagOccurrence.getTag(), tagOccurrence.getOccurrence());
+		} else {
+			result = extractTagMatching(html, tagOccurrence);
+		}
+
+		return result;
 	}
 
 	private String extractTagMatching(String html, TagOccurrence toGet) {
@@ -332,18 +338,14 @@ public class Extractor {
 		List<Element> elements = source.getAllElements(HTMLElementName.TABLE);
 		for (Element element : elements) {
 			String elementText = element.getTextExtractor().toString();
-			log.debug("element of type {}: {}", element.toString(), elementText);
 			if (elementText.contains(toGet.getMatching())) {
-				log.debug("found our matching tag!");
 				found = element.toString();
-				break;
 			}
 		}
-		log.debug("returning matching tag: {}", found);
 		return found.toString();
 	}
 
-	private void addTagToGet(String tag, int i, String match) {
+	private void addTagToGet(String tag, int occurrence, String match) {
 		tagsToGet.add(new TagOccurrence(tag, occurrence, match));
 	}
 

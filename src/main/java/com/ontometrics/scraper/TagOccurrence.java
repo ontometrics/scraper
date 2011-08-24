@@ -33,4 +33,8 @@ public class TagOccurrence {
 		return matching;
 	}
 
+	@Override
+	public String toString() {
+		return "TagOccurrence [tag=" + tag + ", occurrence=" + occurrence + ", matching=" + matching + "]";
+	}
 }
