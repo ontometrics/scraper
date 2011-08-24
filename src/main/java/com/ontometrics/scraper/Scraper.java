@@ -55,6 +55,9 @@ public class Scraper {
 	 */
 	private Iterator iterator;
 
+	/**
+	 * This variable dictates how many total pages will be iterated.
+	 */
 	private int pages = 0;
 
 	private Map<String, String> extractedFields;
@@ -137,6 +140,9 @@ public class Scraper {
 	public Scraper url(URL url) throws MalformedURLException {
 		this.url = url;
 		extractor.url(url);
+		if (this.extractedFields != null) {
+			this.extractedFields.clear();
+		}
 		if (this.sessionIDName != null) {
 			try {
 				this.sessionIDName = ScraperUtil.extractSessionId(this.url, sessionIDName);
@@ -153,12 +159,28 @@ public class Scraper {
 		return this.extractor;
 	}
 
+	/**
+	 * Supports injecting session id into the URL.
+	 * We will search for a keyword and if it exists, it will replace it.
+	 * @param results
+	 * @return
+	 * @throws IOException
+	 */
 	public Scraper extract(List<String> results) throws IOException {
-		log.debug("inside extract, iterator is: " + iterator);
+		final String sessionIdKeyword = "$SESSION_ID$";
+		
 		this.results = results;
-		if (iterator != null) {
+		
+		if (iterator != null) { 
 			for (int i = 0; i < pages; i++) {
-				extractor.url(iterator.build(i));
+				URL nextUrl = iterator.build(i);
+				
+				if (nextUrl.toString().contains(sessionIdKeyword)) {
+					String urlString = nextUrl.toString().replace(sessionIdKeyword, sessionIDName);
+					nextUrl = new URL(urlString);
+				}
+				log.debug("next url = {}", nextUrl);
+				extractor.url(nextUrl);
 				results.addAll(extractor.getResults());
 			}
 		}
@@ -210,10 +232,11 @@ public class Scraper {
 		return this.records;
 	}
 
-	public Scraper listing(List<String> results) {
+	public Scraper listing(List<String> results) throws IOException {
 		// this method is going to get the list of strings and store them as
 		// links
-		this.results = results;
+		pages -= 1;	// when we get results, we will have parsed the first page already
+		extract(results);
 		return this;
 	}
 
