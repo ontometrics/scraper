@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
@@ -71,7 +72,6 @@ public class ScraperTest {
 		log.debug("table extracted: {}", pageText);
 		assertThat(pageText.startsWith("<table"), is(true));
 		log.info(pageText);
-		
 
 	}
 
@@ -121,7 +121,7 @@ public class ScraperTest {
 		assertThat(ids, hasItems("40967", "41255", "41282", "40458", "41599", "41734", "40667", "41771"));
 		assertThat(ids, hasItems("41898", "41032", "41896", "42394", "42445"));
 	}
-	
+
 	@Test
 	public void extractLinksFromTableContainingString() throws Exception {
 		Scraper scraper = new Scraper();
@@ -134,7 +134,6 @@ public class ScraperTest {
 		assertThat(table.toString().contains("Document Type"), is(true));
 		
 	}
-	
 
 	@Test
 	public void extractParameterFromLinksInIteratedTables() throws Exception {
@@ -159,7 +158,7 @@ public class ScraperTest {
 	}
 
 	@Test
-	public void extractTableIntoMapOfLabelsAndValues() throws IOException {
+	public void extractFieldsFromTable() throws IOException {
 		Scraper scraper = new Scraper();
 		Map<String, String> opportunities = scraper
 				.url(testGrantsDetailUrl)
@@ -170,7 +169,37 @@ public class ScraperTest {
 		log.debug("fields = {}", opportunities);
 
 	}
+
+	@Test
+	public void extractFieldsBasedOnPairedTags() throws MalformedURLException, IOException {
+		Scraper scraper = new Scraper();
+		Map<String, String> fields = scraper
+				.url(testGrantsDetailUrl)
+				.extract(scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields())
+				.getFields();
+
+		assertThat(fields.size(), is(greaterThan(0)));
+		// log.debug("fields = {}", fields);
+
+	}
 	
+	@Test
+	public void extractFieldsBasedOnPairedTagsAfterAnotherTag() throws MalformedURLException, IOException {
+		Scraper scraper = new Scraper();
+		Map<String, String> fields = scraper
+				.url(testGrantsDetailUrl)
+				.extract(
+						scraper.extractor()
+								.after(HTMLElementName.TABLE, 5)
+								.pair(HTMLElementName.H4, HTMLElementName.DD)
+								.getFields())
+				.getFields();
+
+		assertThat(fields.size(), is(greaterThan(0)));
+		assertThat(fields.keySet().contains("Eligible Applicants"), is(true));
+
+	}
+
 	@Ignore
 	@Test
 	public void useIteratedListingAndDetailInterface() throws IOException {
@@ -196,4 +225,5 @@ public class ScraperTest {
 		log.debug("fields = {}", records);
 
 	}
+
 }
