@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 
+import static com.ontometrics.scraper.HtmlSample.*;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,18 +28,6 @@ public class ScraperTest {
 
 	private Scraper scraper;
 
-	private String testTableFileLocation = "/testpages/grants-gov-table.html";
-
-	private String testDetailFileLocation = "/testpages/cfda-program.html";
-
-	private String testGrantsDetailLocation = "/testpages/grants-gov-detail-page.html";
-
-	private URL testTableHtmlUrl;
-
-	private URL testDetailPageUrl;
-
-	private URL testGrantsDetailUrl;
-
 	private String eligibilityCodeId = "dnf_class_values_cfda__applicant_eligibility__widget";
 
 	private String eligibilityClassName = "fld_applicant_eligibility";
@@ -45,14 +35,11 @@ public class ScraperTest {
 	@Before
 	public void setup() {
 		scraper = new Scraper();
-		testTableHtmlUrl = TestUtil.getFileAsURL(testTableFileLocation);
-		testDetailPageUrl = TestUtil.getFileAsURL(testDetailFileLocation);
-		testGrantsDetailUrl = TestUtil.getFileAsURL(testGrantsDetailLocation);
 	}
 
 	@Test
 	public void scrapeUrlReturnsHtml() throws IOException {
-		String pageText = new Scraper().url(testTableHtmlUrl).getResult();
+		String pageText = new Scraper().url(PagedListingTable.getUrl()).getResult();
 		assertThat(pageText.length(), is(greaterThan(0)));
 		assertThat(pageText.contains("<html>"), is(true));
 		log.debug("pageText = {}", pageText);
@@ -60,7 +47,7 @@ public class ScraperTest {
 
 	@Test
 	public void extractPageText() throws IOException {
-		String pageContent = new Scraper().url(testTableHtmlUrl).asText().getResult();
+		String pageContent = new Scraper().url(PagedListingTable.getUrl()).asText().getResult();
 		assertThat(pageContent.contains("<html>"), is(false));
 		log.info("Content: {}", pageContent);
 	}
@@ -68,7 +55,10 @@ public class ScraperTest {
 	@Test
 	public void extractTableFromPage() throws Exception {
 		log.info("HtmlElementName.TABLE: {}", HTMLElementName.TABLE);
-		String pageText = scraper.url(testTableHtmlUrl).extract(scraper.extractor().table(3).execute()).getResult();
+		String pageText = scraper
+				.url(PagedListingTable.getUrl())
+				.extract(scraper.extractor().table(3).execute())
+				.getResult();
 		log.debug("table extracted: {}", pageText);
 		assertThat(pageText.startsWith("<table"), is(true));
 		log.info(pageText);
@@ -78,7 +68,7 @@ public class ScraperTest {
 	@Test
 	public void extractLinksFromTableOnPage() throws Exception {
 		List<String> urls = scraper
-				.url(testTableHtmlUrl)
+				.url(PagedListingTable.getUrl())
 				.extract(scraper.extractor().table(3).links().getResults())
 				.getResults();
 
@@ -89,7 +79,7 @@ public class ScraperTest {
 	@Test
 	public void extractContentsOfElementWithId() throws Exception {
 		String tagText = scraper
-				.url(testDetailPageUrl)
+				.url(ProgramDetailPage.getUrl())
 				.extract(scraper.extractor().id(eligibilityCodeId).execute())
 				.getResult();
 		log.info("tag text: {}", tagText);
@@ -99,7 +89,7 @@ public class ScraperTest {
 	@Test
 	public void extractContentsByClassAndOccurrence() throws Exception {
 		String tagText = scraper
-				.url(testDetailPageUrl)
+				.url(ProgramDetailPage.getUrl())
 				.extract(scraper.extractor().ofClass(eligibilityClassName, 1).execute())
 				.getResult();
 		log.info("tag text: {}", tagText);
@@ -111,7 +101,7 @@ public class ScraperTest {
 	public void extractParameterFromLinksInTable() throws Exception {
 		Scraper scraper = new Scraper();
 		List<String> ids = scraper
-				.url(testTableHtmlUrl)
+				.url(PagedListingTable.getUrl())
 				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
 				.getResults();
 
@@ -126,13 +116,13 @@ public class ScraperTest {
 	public void extractLinksFromTableContainingString() throws Exception {
 		Scraper scraper = new Scraper();
 		String table = scraper
-				.url(testGrantsDetailUrl)
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().table("Document Type").execute())
 				.getResult();
 
 		log.info("table matching {} : {}", "Document Type", table);
 		assertThat(table.toString().contains("Document Type"), is(true));
-		
+
 	}
 
 	@Test
@@ -147,7 +137,7 @@ public class ScraperTest {
 			}
 		};
 		List<String> ids = scraper
-				.url(testTableHtmlUrl)
+				.url(PagedListingTable.getUrl())
 				.pages(1)
 				.iterator(pageIterator)
 				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
@@ -161,7 +151,7 @@ public class ScraperTest {
 	public void extractFieldsFromTable() throws IOException {
 		Scraper scraper = new Scraper();
 		Map<String, String> opportunities = scraper
-				.url(testGrantsDetailUrl)
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().table(4).getFields())
 				.getFields();
 
@@ -174,7 +164,7 @@ public class ScraperTest {
 	public void extractFieldsBasedOnPairedTags() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
 		Map<String, String> fields = scraper
-				.url(testGrantsDetailUrl)
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields())
 				.getFields();
 
@@ -182,12 +172,12 @@ public class ScraperTest {
 		// log.debug("fields = {}", fields);
 
 	}
-	
+
 	@Test
 	public void extractFieldsBasedOnPairedTagsAfterAnotherTag() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
 		Map<String, String> fields = scraper
-				.url(testGrantsDetailUrl)
+				.url(DetailPage.getUrl())
 				.extract(
 						scraper.extractor()
 								.after(HTMLElementName.TABLE, 5)
@@ -214,7 +204,7 @@ public class ScraperTest {
 		};
 		Scraper detailScraper = new Scraper();
 		List<Map<String, String>> records = scraper
-				.url(testTableHtmlUrl)
+				.url(PagedListingTable.getUrl())
 				.pages(3)
 				.iterator(pageIterator)
 				.listing(scraper.extractor().table(3).links().getResults())

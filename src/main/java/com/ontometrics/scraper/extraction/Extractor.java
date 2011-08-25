@@ -1,4 +1,4 @@
-package com.ontometrics.scraper;
+package com.ontometrics.scraper.extraction;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,13 +15,17 @@ import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.OutputFormats;
+import com.ontometrics.scraper.PairedTags;
+import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 /**
  * Does the work of iteratively extracting portions of the page.
  * <p>
- * Note that once the requested elements are specified, this class is held in the scraper and can be successively
- * invoked for jobs that involve iteration (e.g. paging).
+ * Note that once the requested elements are specified, this class is held in
+ * the scraper and can be successively invoked for jobs that involve iteration
+ * (e.g. paging).
  * 
  * @author Rob
  * 
@@ -34,8 +38,6 @@ public class Extractor {
 	 * Raw content source
 	 */
 	private URL url;
-
-	private SourceContext sourceContext;
 
 	/**
 	 * The type of output we should return upon extraction.
@@ -53,14 +55,16 @@ public class Extractor {
 	private String classToGet;
 
 	/**
-	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed so 1st would be 0.
+	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed
+	 * so 1st would be 0.
 	 */
 	private int occurrence = 0;
 
 	/**
-	 * We collect the desired tags, and whether there is some associate occurrence, e.g. in the dsl we might want to
-	 * support calls like: table(3).row(2).cell(3) to get something out of the 3rd table on the page, its second row and
-	 * 3rd cell.
+	 * We collect the desired tags, and whether there is some associate
+	 * occurrence, e.g. in the dsl we might want to support calls like:
+	 * table(3).row(2).cell(3) to get something out of the 3rd table on the
+	 * page, its second row and 3rd cell.
 	 */
 	private List<TagOccurrence> tagsToGet;
 
@@ -81,9 +85,9 @@ public class Extractor {
 
 	/**
 	 * If there is a parameter to be extracted from a link. Eventually, we might
-	 * want to make link extraction its own sub-DSL.
-	 * If there is a parameter to be extracted from a link. Eventually, we might want to make link extraction its own
-	 * sub-DSL.
+	 * want to make link extraction its own sub-DSL. If there is a parameter to
+	 * be extracted from a link. Eventually, we might want to make link
+	 * extraction its own sub-DSL.
 	 */
 	private String parameter;
 
@@ -147,16 +151,18 @@ public class Extractor {
 	}
 
 	/**
-	 * Call this method to have the scrape performed and the extractions returned in the desired format
-	 * {@link #outputFormat}.
+	 * Call this method to have the scrape performed and the extractions
+	 * returned in the desired format {@link #outputFormat}.
 	 * 
-	 * @return the items from the {@link #url} that were prescribed by the various manipulators
+	 * @return the items from the {@link #url} that were prescribed by the
+	 *         various manipulators
 	 * @throws IOException
 	 */
 	public String execute() throws IOException {
 		String result = "";
 		Source source = new Source(url);
 		source.fullSequentialParse();
+		log.debug("parsed source: {}", source.toString());
 
 		if (idToGet != null) {
 			result = source.getElementById(idToGet).getTextExtractor().toString();
@@ -189,8 +195,9 @@ public class Extractor {
 	}
 
 	/**
-	 * Prunes the raw URL content down based on the manipulators that have been used to specify subelements, then
-	 * extracts links and potentially parameters from them.
+	 * Prunes the raw URL content down based on the manipulators that have been
+	 * used to specify subelements, then extracts links and potentially
+	 * parameters from them.
 	 * 
 	 * @return a set of extracted elements
 	 * @throws IOException
@@ -369,25 +376,6 @@ public class Extractor {
 	public Extractor after(String afterTag) {
 		this.afterTag = afterTag;
 		return this;
-	}
-
-	class SourceContext {
-
-		private String currentSource;
-
-		public String getCurrentSource() {
-			if (currentSource == null) {
-				try {
-					Source source = new Source(url);
-					source.fullSequentialParse();
-					currentSource = source.toString();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return currentSource;
-		}
-
 	}
 
 	public Extractor after(String tag, int occurrence) {
