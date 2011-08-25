@@ -51,7 +51,8 @@ public class Scraper {
 	private List<String> results;
 
 	/**
-	 * Scraper will call this to get the URL of the next page.
+	 * Scraper will call this to get the URL of the next page.<br>
+	 * Supports injection of the session id stored in this class, see {@link extract()} for the syntax
 	 */
 	private Iterator iterator;
 
@@ -160,21 +161,21 @@ public class Scraper {
 	}
 
 	/**
-	 * Supports injecting session id into the URL.
-	 * We will search for a keyword and if it exists, it will replace it.
+	 * Supports injecting session id into the URL. We will search for a keyword and if it exists, it will replace it.
+	 * 
 	 * @param results
 	 * @return
 	 * @throws IOException
 	 */
 	public Scraper extract(List<String> results) throws IOException {
 		final String sessionIdKeyword = "$SESSION_ID$";
-		
+
 		this.results = results;
-		
-		if (iterator != null) { 
+
+		if (iterator != null) {
 			for (int i = 0; i < pages; i++) {
 				URL nextUrl = iterator.build(i);
-				
+
 				if (nextUrl.toString().contains(sessionIdKeyword)) {
 					String urlString = nextUrl.toString().replace(sessionIdKeyword, sessionIDName);
 					nextUrl = new URL(urlString);
@@ -235,7 +236,7 @@ public class Scraper {
 	public Scraper listing(List<String> results) throws IOException {
 		// this method is going to get the list of strings and store them as
 		// links
-		pages -= 1;	// when we get results, we will have parsed the first page already
+		pages -= 1; // when we get results, we will have parsed the first page already
 		extract(results);
 		return this;
 	}
