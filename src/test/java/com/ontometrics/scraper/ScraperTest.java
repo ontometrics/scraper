@@ -1,11 +1,13 @@
 package com.ontometrics.scraper;
 
+import static com.ontometrics.scraper.HtmlSample.DetailPage;
+import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
+import static com.ontometrics.scraper.HtmlSample.ProgramDetailPage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
-
-import static com.ontometrics.scraper.HtmlSample.*;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -152,10 +154,25 @@ public class ScraperTest {
 		Scraper scraper = new Scraper();
 		Map<String, String> opportunities = scraper
 				.url(DetailPage.getUrl())
+				.extract(scraper.extractor().field("title", HTMLElementName.H1).getFields())
+				.getFields();
+
+		assertThat(opportunities.size(), is(greaterThan(0)));
+		log.debug("fields = {}", opportunities);
+
+	}
+
+	@Test
+	public void extractFieldsFromTableAndTitleFromH1() throws IOException {
+		Scraper scraper = new Scraper();
+		Map<String, String> opportunities = scraper
+				.url(DetailPage.getUrl())
+				.extract(scraper.extractor().field("title", HTMLElementName.H1).getFields())
 				.extract(scraper.extractor().table(4).getFields())
 				.getFields();
 
 		assertThat(opportunities.size(), is(greaterThan(0)));
+		assertThat(opportunities.get("title"), is(notNullValue()) );
 		log.debug("fields = {}", opportunities);
 
 	}

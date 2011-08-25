@@ -97,6 +97,8 @@ public class Extractor {
 
 	private TagOccurrence afterTagOccurrence;
 
+	private List<FieldToGet> fieldsToGet = new ArrayList<FieldToGet>();
+
 	public Extractor() {
 		this.tagsToGet = new ArrayList<TagOccurrence>();
 		this.fieldPairs = new ArrayList<PairedTags>();
@@ -263,6 +265,7 @@ public class Extractor {
 	public Map<String, String> getFields() throws IOException {
 		Map<String, String> extractedFields = new HashMap<String, String>();
 		// fill in from the already extracted HTML..
+		
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
 			if (!tagOccurrence.getTag().contains(HTMLElementName.TABLE)) {
 				throw new IllegalStateException("Only know how to extract fields from tables.");
@@ -272,7 +275,8 @@ public class Extractor {
 				String tableText = extractTagText(source.toString(), tagOccurrence);
 				source = new Source(tableText);
 				source.fullSequentialParse();
-				//log.debug("about to peel fields from this table: {}", source.toString());
+				// log.debug("about to peel fields from this table: {}",
+				// source.toString());
 
 				List<Element> cells = source.getAllElements(HTMLElementName.TD);
 				for (int i = 0; i < cells.size(); i++) {
@@ -286,6 +290,10 @@ public class Extractor {
 		source.fullSequentialParse();
 		if (this.afterTagOccurrence != null) {
 			source = pruneFrom(source, afterTagOccurrence);
+		}
+		for (FieldToGet fieldToGet : fieldsToGet){
+			String value = source.getAllElements(fieldToGet.getTag()).get(0).getTextExtractor().toString();
+			extractedFields.put(fieldToGet.getFieldname(), value);
 		}
 		for (PairedTags tagPair : this.fieldPairs) {
 			List<Element> labels = source.getAllElements(tagPair.getLabelTag());
@@ -380,6 +388,12 @@ public class Extractor {
 
 	public Extractor after(String tag, int occurrence) {
 		this.afterTagOccurrence = new TagOccurrence(tag, occurrence);
+		return this;
+
+	}
+
+	public Extractor field(String fieldName, String tag) {
+		this.fieldsToGet.add(new FieldToGet(fieldName, tag));
 		return this;
 	}
 

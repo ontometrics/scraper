@@ -1,14 +1,22 @@
 package com.ontometrics.scraper.extraction;
 
-import net.htmlparser.jericho.Source;
+import com.ontometrics.scraper.TagOccurrence;
 
 public class SplicingExtractor extends ExtractionAgent {
-	
-	private SpliceOperation operation;
+
+	private SpliceOperation operation = SpliceOperation.After;
+
+	public SplicingExtractor(SpliceOperation operation, TagOccurrence tagOccurrence) {
+		this.operation = operation;
+	}
+
+	public SpliceOperation getOperation() {
+		return operation;
+	}
 
 	@Override
-	public void execute(Source source) {
-		
+	public void performExtraction() {
+
 	}
 
 }

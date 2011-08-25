@@ -27,11 +27,11 @@ public enum HtmlSample {
 		this.path = path;
 	}
 
-	URL getUrl() {
+	public URL getUrl() {
 		return TestUtil.getFileAsURL(path);
 	}
 
-	Source getSource() {
+	public Source getSource() {
 		Source source = null;
 		try {
 			source = new Source(getUrl());
