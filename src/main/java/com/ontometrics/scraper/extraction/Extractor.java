@@ -272,7 +272,7 @@ public class Extractor {
 				String tableText = extractTagText(source.toString(), tagOccurrence);
 				source = new Source(tableText);
 				source.fullSequentialParse();
-				log.debug("about to peel fields from this table: {}", source.toString());
+				//log.debug("about to peel fields from this table: {}", source.toString());
 
 				List<Element> cells = source.getAllElements(HTMLElementName.TD);
 				for (int i = 0; i < cells.size(); i++) {
