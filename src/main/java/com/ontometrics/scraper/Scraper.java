@@ -21,12 +21,15 @@ import com.ontometrics.scraper.util.ScraperUtil;
 /**
  * Provides a mechanism for extracting items from pages or feeds.
  * <p>
- * Uses a fluent builder pattern in a fashion that does border on being a DSL. The idea is that a {@link #url} is
- * provided, then through a set of manipulator methods, the operations to be performed are framed. All scrapings require
- * a url call and then the execute thread at the end to perform the scraping.
+ * Uses a fluent builder pattern in a fashion that does border on being a DSL.
+ * The idea is that a {@link #url} is provided, then through a set of
+ * manipulator methods, the operations to be performed are framed. All scrapings
+ * require a url call and then the execute thread at the end to perform the
+ * scraping.
  * <p>
- * Internally, the manipulators are triggered by basic conditions right now. We will need a more sophisticated
- * architecture as more operations pile up (perhaps something like a Chain of Responsibility Pattern).
+ * Internally, the manipulators are triggered by basic conditions right now. We
+ * will need a more sophisticated architecture as more operations pile up
+ * (perhaps something like a Chain of Responsibility Pattern).
  * 
  * @author Rob
  */
@@ -40,14 +43,15 @@ public class Scraper {
 	private URL url;
 
 	/**
-	 * Does the work of actually extracting the desired content. If there is an {@link #iterator}, the scraper iterates
-	 * through the {@link #url}s and collects the results.
+	 * Does the work of actually extracting the desired content. If there is an
+	 * {@link #iterator}, the scraper iterates through the {@link #url}s and
+	 * collects the results.
 	 */
 	private Extractor extractor;
 
 	/**
-	 * Usually Builders have a single product. We support two kinds of products: a single string that represents a
-	 * scrape and a set of extracted elements.
+	 * Usually Builders have a single product. We support two kinds of products:
+	 * a single string that represents a scrape and a set of extracted elements.
 	 */
 	private List<String> results;
 
@@ -131,7 +135,8 @@ public class Scraper {
 
 	/**
 	 * Sets the url to scrape.<br>
-	 * If {@link sessionIDName} is set, we will extract the session id from the page source based on the given keyword. <br>
+	 * If {@link sessionIDName} is set, we will extract the session id from the
+	 * page source based on the given keyword. <br>
 	 * A base url will be saved inside {@link baseUrl} to handle relative links.
 	 * 
 	 * @param url
@@ -161,21 +166,22 @@ public class Scraper {
 	}
 
 	/**
-	 * Supports injecting session id into the URL.
-	 * We will search for a keyword and if it exists, it will replace it.
+	 * Supports injecting session id into the URL. We will search for a keyword
+	 * and if it exists, it will replace it.
+	 * 
 	 * @param results
 	 * @return
 	 * @throws IOException
 	 */
 	public Scraper extract(List<String> results) throws IOException {
 		final String sessionIdKeyword = "$SESSION_ID$";
-		
+
 		this.results = results;
-		
-		if (iterator != null) { 
+
+		if (iterator != null) {
 			for (int i = 0; i < pages; i++) {
 				URL nextUrl = iterator.build(i);
-				
+
 				if (nextUrl.toString().contains(sessionIdKeyword)) {
 					String urlString = nextUrl.toString().replace(sessionIdKeyword, sessionIDName);
 					nextUrl = new URL(urlString);
@@ -236,7 +242,8 @@ public class Scraper {
 	public Scraper listing(List<String> results) throws IOException {
 		// this method is going to get the list of strings and store them as
 		// links
-		pages -= 1;	// when we get results, we will have parsed the first page already
+		pages -= 1; // when we get results, we will have parsed the first page
+					// already
 		extract(results);
 		return this;
 	}
@@ -259,7 +266,6 @@ public class Scraper {
 				log.info("Bad URL in looping detail page for listing links: {}", e.toString());
 			}
 		}
-
 		return this;
 	}
 

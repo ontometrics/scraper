@@ -93,8 +93,6 @@ public class Extractor {
 
 	private String matchingPattern;
 
-	private String afterTag;
-
 	private TagOccurrence afterTagOccurrence;
 
 	private List<FieldToGet> fieldsToGet = new ArrayList<FieldToGet>();
@@ -265,7 +263,7 @@ public class Extractor {
 	public Map<String, String> getFields() throws IOException {
 		Map<String, String> extractedFields = new HashMap<String, String>();
 		// fill in from the already extracted HTML..
-		
+
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
 			if (!tagOccurrence.getTag().contains(HTMLElementName.TABLE)) {
 				throw new IllegalStateException("Only know how to extract fields from tables.");
@@ -291,7 +289,7 @@ public class Extractor {
 		if (this.afterTagOccurrence != null) {
 			source = pruneFrom(source, afterTagOccurrence);
 		}
-		for (FieldToGet fieldToGet : fieldsToGet){
+		for (FieldToGet fieldToGet : fieldsToGet) {
 			String value = source.getAllElements(fieldToGet.getTag()).get(0).getTextExtractor().toString();
 			extractedFields.put(fieldToGet.getFieldname(), value);
 		}
@@ -304,13 +302,29 @@ public class Extractor {
 			int fieldCount = Math.min(labels.size(), fields.size());
 			for (int i = 0; i < fieldCount; i++) {
 				String label = labels.get(i).getTextExtractor().toString().trim();
-				String field = fields.get(i).getTextExtractor().toString().trim();
+				String field = "";
+				if (fieldHasMultipleValues(fields.get(i).toString())) {
+					field = delimitFieldValues(fields.get(i).toString());
+				} else {
+					field = fields.get(i).getTextExtractor().toString();
+				}
 				log.debug("outputting pair: {} : {}", label, field);
 				extractedFields.put(label, field);
 			}
 
 		}
 		return extractedFields;
+	}
+
+	private boolean fieldHasMultipleValues(String fieldValue) {
+		Source source = new Source(fieldValue);
+		source.fullSequentialParse();
+		return source.getAllElements(HTMLElementName.BR).size() > 1;
+	}
+
+	private String delimitFieldValues(String source) {
+		Source result = new Source(source.replace("<br>", ";"));
+		return result.getTextExtractor().toString();
 	}
 
 	private void removeInvalidFields(List<Element> fields) {
@@ -378,11 +392,6 @@ public class Extractor {
 
 	public Extractor pair(String labelTag, String fieldTag) {
 		this.fieldPairs.add(new PairedTags(labelTag, fieldTag));
-		return this;
-	}
-
-	public Extractor after(String afterTag) {
-		this.afterTag = afterTag;
 		return this;
 	}
 

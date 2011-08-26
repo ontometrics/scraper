@@ -172,7 +172,7 @@ public class ScraperTest {
 				.getFields();
 
 		assertThat(opportunities.size(), is(greaterThan(0)));
-		assertThat(opportunities.get("title"), is(notNullValue()) );
+		assertThat(opportunities.get("title"), is(notNullValue()));
 		log.debug("fields = {}", opportunities);
 
 	}
@@ -187,6 +187,25 @@ public class ScraperTest {
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		// log.debug("fields = {}", fields);
+
+	}
+
+	@Test
+	public void extractFieldWithMultipleValues() throws MalformedURLException, IOException {
+		Scraper scraper = new Scraper();
+		Map<String, String> fields = scraper
+				.url(DetailPage.getUrl())
+				.extract(scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields())
+				.getFields();
+
+		assertThat(fields.size(), is(greaterThan(0)));
+		
+		String[] eligibilityCodes = fields.get("Eligible Applicants").split(";");
+		assertThat(eligibilityCodes.length, is(greaterThan(1)));
+		for (int i = 0; i < eligibilityCodes.length; i++){
+			log.debug("eligibility code: {}", eligibilityCodes[i]);
+		}
+//		log.debug("eligibility = {}", fields.get("Eligible Applicants"));
 
 	}
 

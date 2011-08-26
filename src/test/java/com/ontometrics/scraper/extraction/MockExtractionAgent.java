@@ -9,7 +9,8 @@ public class MockExtractionAgent extends ExtractionAgent {
 	}
 
 	@Override
-	public void performExtraction() {
+	public String performExtraction() {
+		return null;
 	}
 
 }
