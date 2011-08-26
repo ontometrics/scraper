@@ -3,6 +3,8 @@ package com.ontometrics.scraper.extraction;
 import net.htmlparser.jericho.Source;
 
 public abstract class ExtractionAgent implements ExtractionCommand {
+	
+	protected OperationType type = OperationType.Unbound;
 
 	private Source source;
 
@@ -11,13 +13,17 @@ public abstract class ExtractionAgent implements ExtractionCommand {
 	@Override
 	public final void execute(Source source) {
 		this.source = source;
-		performExtraction();
+		String result = performExtraction();
+		if (type==OperationType.Manipulator){
+			source = new Source(result);
+			source.fullSequentialParse();
+		}
 		if (successor != null) {
 			successor.execute(source);
 		}
 	}
 
-	public abstract void performExtraction();
+	public abstract String performExtraction();
 	
 	public Source getSource() {
 		return source;
