@@ -41,5 +41,10 @@ public class ExtractionAgentTest {
 		assertThat(result.toString().startsWith("<table"), is(true));
 
 	}
+	
+	@Test
+	public void canChainTwoCommands(){
+		
+	}
 
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -28,7 +29,6 @@ import com.ontometrics.scraper.util.ScraperUtil;
  * (e.g. paging).
  * 
  * @author Rob
- * 
  */
 public class Extractor {
 
@@ -162,7 +162,7 @@ public class Extractor {
 		String result = "";
 		Source source = new Source(url);
 		source.fullSequentialParse();
-		log.debug("parsed source: {}", source.toString());
+//		log.debug("parsed source: {}", source.toString());
 
 		if (idToGet != null) {
 			result = source.getElementById(idToGet).getTextExtractor().toString();
@@ -174,6 +174,7 @@ public class Extractor {
 				for (Element element : classElements) {
 					result += element.getTextExtractor().toString();
 				}
+				log.debug("extracted: {} from class: {}", result, classToGet);
 			}
 		} else {
 			if (outputFormat == OutputFormats.Text) {
@@ -264,6 +265,22 @@ public class Extractor {
 		Map<String, String> extractedFields = new HashMap<String, String>();
 		// fill in from the already extracted HTML..
 
+		if (this.classToGet != null) {
+			Source source = new Source(url);
+			source.fullSequentialParse();
+			List<Element> elements = source.getAllElementsByClass(classToGet);
+			String text = elements.get(0).toString();
+			String[] fields = text.split("<br>");
+			log.debug("fields: {}", fields);
+			for (String field : fields){
+				Source fieldSource = new Source(field);
+				field = fieldSource.getTextExtractor().toString();
+				String[] fieldParts = field.split(":");
+				log.debug("{} : {}", fieldParts[0], fieldParts[1]);
+				extractedFields.put(fieldParts[0], fieldParts[1]);
+			}
+		}
+
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
 			if (!tagOccurrence.getTag().contains(HTMLElementName.TABLE)) {
 				throw new IllegalStateException("Only know how to extract fields from tables.");
@@ -290,7 +307,10 @@ public class Extractor {
 			source = pruneFrom(source, afterTagOccurrence);
 		}
 		for (FieldToGet fieldToGet : fieldsToGet) {
-			String value = source.getAllElements(fieldToGet.getTag()).get(0).getTextExtractor().toString();
+			String value = "";
+			if (fieldToGet.getSearchType() == FieldSearchType.Tag) {
+				value = source.getAllElements(fieldToGet.getLabel()).get(0).getTextExtractor().toString();
+			}
 			extractedFields.put(fieldToGet.getFieldname(), value);
 		}
 		for (PairedTags tagPair : this.fieldPairs) {
@@ -403,6 +423,10 @@ public class Extractor {
 
 	public Extractor field(String fieldName, String tag) {
 		this.fieldsToGet.add(new FieldToGet(fieldName, tag));
+		return this;
+	}
+
+	public Extractor getFieldFromLabel(String string) {
 		return this;
 	}
 
