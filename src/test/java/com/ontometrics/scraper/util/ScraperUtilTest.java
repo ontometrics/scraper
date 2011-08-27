@@ -1,13 +1,16 @@
 package com.ontometrics.scraper.util;
 
+import static com.ontometrics.scraper.HtmlSample.TableOfLinks;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Source;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.TestUtil;
+import com.ontometrics.scraper.extraction.Link;
 
 public class ScraperUtilTest {
 
@@ -27,6 +31,14 @@ public class ScraperUtilTest {
 	@Before
 	public void setup(){
 		testPageSourceURL = TestUtil.getFileAsURL(testPageSource);
+	}
+	
+	@Test
+	public void extractLinksWithText() throws IOException{
+		Source source = new Source(TableOfLinks.getUrl());
+		source.fullSequentialParse();
+		List<Link> links = ScraperUtil.extractLinks(source.toString());
+		log.info("found following links in table: {}", links);
 	}
 
 	@Test

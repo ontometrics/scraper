@@ -2,6 +2,7 @@ package com.ontometrics.scraper.util;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
@@ -11,9 +12,22 @@ import net.htmlparser.jericho.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.extraction.Link;
+
 public class ScraperUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
+	
+	public static List<Link> extractLinks(String sourceToParse){
+		Source source = new Source(sourceToParse);
+		source.fullSequentialParse();
+		List<Link> links = new ArrayList<Link>();
+		List<Element> as = source.getAllElements(HTMLElementName.A);
+		for (Element linkElement : as){
+			links.add(new Link(linkElement.getTextExtractor().toString(), linkElement.getAttributeValue("href")));
+		}
+		return links;
+	}
 
 	public static String extractParameter(String uri, String parameter) {
 		String paramDelimiter = (uri.contains("?")) ? "?" : ";";

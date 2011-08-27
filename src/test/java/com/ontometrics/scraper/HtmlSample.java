@@ -18,8 +18,17 @@ public enum HtmlSample {
 	 * table of values that can be turned into fields.
 	 */
 	DetailPage("/testpages/grants-gov-detail-page.html"),
-	
-	ProgramDetailPage("/testpages/cfda-program.html");
+
+	/**
+	 * Complex page with sidebar, lots of id-based components, fields with list
+	 * values, etc.
+	 */
+	ProgramDetailPage("/testpages/cfda-program.html"),
+
+	/**
+	 * Just a table with some html inside with links that have text and hrefs.
+	 */
+	TableOfLinks("/testpages/table-of-links.html");
 
 	private String path;
 

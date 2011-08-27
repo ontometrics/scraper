@@ -1,21 +1,28 @@
 package com.ontometrics.scraper.extraction;
 
 public class FieldToGet {
+
+	private FieldSearchType searchType = FieldSearchType.Tag;
+
 	private String fieldname;
 
-	private String tag;
+	private String label;
 
-	public FieldToGet(String name, String tag) {
+	public FieldToGet(String name, String label) {
 		this.fieldname = name;
-		this.tag = tag;
+		this.label = label;
+	}
+	
+	public FieldSearchType getSearchType() {
+		return searchType;
 	}
 
 	public String getFieldname() {
 		return fieldname;
 	}
 
-	public String getTag() {
-		return tag;
+	public String getLabel() {
+		return label;
 	}
 
 }
