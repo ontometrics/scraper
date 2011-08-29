@@ -199,13 +199,13 @@ public class ScraperTest {
 				.getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
-		
+
 		String[] eligibilityCodes = fields.get("Eligible Applicants").split(";");
 		assertThat(eligibilityCodes.length, is(greaterThan(1)));
-		for (int i = 0; i < eligibilityCodes.length; i++){
+		for (int i = 0; i < eligibilityCodes.length; i++) {
 			log.debug("eligibility code: {}", eligibilityCodes[i]);
 		}
-//		log.debug("eligibility = {}", fields.get("Eligible Applicants"));
+		// log.debug("eligibility = {}", fields.get("Eligible Applicants"));
 
 	}
 
@@ -252,4 +252,29 @@ public class ScraperTest {
 
 	}
 
+	@Test
+	public void extractBuyerAndOfficeInformation() throws MalformedURLException, IOException {
+		Scraper scraper = new Scraper();
+		Map<String, String> fields = scraper
+				.url(ProgramDetailPage.getUrl())
+				.extract(scraper.extractor().ofClass("agency-name").getFields())
+				.getFields();
+
+		assertThat(fields.keySet().contains("Agency"), is(true));
+		assertThat(fields.keySet().contains("Office"), is(true));
+	}
+
+	@Test
+	public void extractContactInfoFromClass() throws MalformedURLException, IOException {
+		String officeInfoID = "dnf_class_values_cfda__hq_office_info__widget";
+		String contactInfoFromPage = "Kathleen S. Townson, 5601 Sunnyside Ave, MS-5110, Betsville, Maryland 20705 Email: kathleen.townson@ars.usda.gov Phone: (301) 504-1702";
+		Scraper scraper = new Scraper();
+		String contactInfo = scraper
+				.url(ProgramDetailPage.getUrl())
+				.extract(scraper.extractor().id(officeInfoID).execute())
+				.getResult();
+
+		log.info("contactinfo: {}", contactInfo);
+		assertThat(contactInfo.contains(contactInfoFromPage), is(true));
+	}
 }
