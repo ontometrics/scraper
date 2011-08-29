@@ -1,6 +1,7 @@
 package com.ontometrics.scraper.grants;
 
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.Scraper;
+import com.ontometrics.scraper.extraction.Field;
 
 public class GrantsNetScraperTest {
 	
@@ -17,7 +19,7 @@ public class GrantsNetScraperTest {
 	public void defaultFieldExtractorWillFindTablesAndDLs() throws MalformedURLException {
 
 		Scraper scraper = new Scraper();
-		Map<String, String> fields = scraper.url(GrantHtmlSample.GrantsnetDetailPage.getUrl()).getFields();
+		List<Field> fields = scraper.url(GrantHtmlSample.GrantsnetDetailPage.getUrl()).getFields();
 		
 		log.info("fields: {}", fields);
 

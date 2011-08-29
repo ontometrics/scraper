@@ -1,6 +1,6 @@
 package com.ontometrics.scraper.extraction;
 
-public class Link {
+public class Link implements Field {
 
 	private String label;
 
@@ -21,8 +21,14 @@ public class Link {
 	}
 
 	@Override
+	public String getValue() {
+		return getHref();
+	}
+
+	@Override
 	public String toString() {
 		return "Link [label=" + label + ", href=" + href + "]";
 	}
+
 
 }

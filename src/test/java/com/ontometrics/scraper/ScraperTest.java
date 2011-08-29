@@ -24,6 +24,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.extraction.Field;
+import com.ontometrics.scraper.util.ScraperUtil;
+
 public class ScraperTest {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperTest.class);
@@ -69,10 +72,10 @@ public class ScraperTest {
 
 	@Test
 	public void extractLinksFromTableOnPage() throws Exception {
-		List<String> urls = scraper
+		List<Field> urls = scraper
 				.url(PagedListingTable.getUrl())
-				.extract(scraper.extractor().table(3).links().getResults())
-				.getResults();
+				.extract(scraper.extractor().table(3).links().getFields())
+				.getFields();
 
 		assertThat(urls.size(), is(greaterThan(0)));
 
@@ -104,7 +107,7 @@ public class ScraperTest {
 		Scraper scraper = new Scraper();
 		List<String> ids = scraper
 				.url(PagedListingTable.getUrl())
-				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
+				.extractStrings(scraper.extractor().table(3).links().parameter("oppId").getResults())
 				.getResults();
 
 		assertThat(ids.size(), is(greaterThan(0)));
@@ -142,7 +145,7 @@ public class ScraperTest {
 				.url(PagedListingTable.getUrl())
 				.pages(1)
 				.iterator(pageIterator)
-				.extract(scraper.extractor().table(3).links().parameter("oppId").getResults())
+				.extractStrings(scraper.extractor().table(3).links().parameter("oppId").getResults())
 				.getResults();
 
 		assertThat(ids.size(), is(40));
@@ -152,7 +155,7 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsFromTable() throws IOException {
 		Scraper scraper = new Scraper();
-		Map<String, String> opportunities = scraper
+		List<Field> opportunities = scraper
 				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().field("title", HTMLElementName.H1).getFields())
 				.getFields();
@@ -165,14 +168,14 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsFromTableAndTitleFromH1() throws IOException {
 		Scraper scraper = new Scraper();
-		Map<String, String> opportunities = scraper
+		List<Field> opportunities = scraper
 				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().field("title", HTMLElementName.H1).getFields())
 				.extract(scraper.extractor().table(4).getFields())
 				.getFields();
 
 		assertThat(opportunities.size(), is(greaterThan(0)));
-		assertThat(opportunities.get("title"), is(notNullValue()));
+		assertThat(opportunities.get(0), is(notNullValue()));
 		log.debug("fields = {}", opportunities);
 
 	}
@@ -180,7 +183,7 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsBasedOnPairedTags() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		Map<String, String> fields = scraper
+		List<Field> fields = scraper
 				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields())
 				.getFields();
@@ -193,14 +196,14 @@ public class ScraperTest {
 	@Test
 	public void extractFieldWithMultipleValues() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		Map<String, String> fields = scraper
+		List<Field> fields = scraper
 				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields())
 				.getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
 
-		String[] eligibilityCodes = fields.get("Eligible Applicants").split(";");
+		String[] eligibilityCodes = ScraperUtil.getFieldValue(fields, "Eligible Applicants").split(";");
 		assertThat(eligibilityCodes.length, is(greaterThan(1)));
 		for (int i = 0; i < eligibilityCodes.length; i++) {
 			log.debug("eligibility code: {}", eligibilityCodes[i]);
@@ -212,7 +215,7 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsBasedOnPairedTagsAfterAnotherTag() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		Map<String, String> fields = scraper
+		List<Field> fields = scraper
 				.url(DetailPage.getUrl())
 				.extract(
 						scraper.extractor()
@@ -222,7 +225,8 @@ public class ScraperTest {
 				.getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
-		assertThat(fields.keySet().contains("Eligible Applicants"), is(true));
+		log.debug("paired tags returned fields: {}", fields);
+		assertThat(ScraperUtil.getFieldValue(fields, "Eligible Applicants"), is(notNullValue()));
 
 	}
 
@@ -239,11 +243,11 @@ public class ScraperTest {
 			}
 		};
 		Scraper detailScraper = new Scraper();
-		List<Map<String, String>> records = scraper
+		List<Record> records = scraper
 				.url(PagedListingTable.getUrl())
 				.pages(3)
 				.iterator(pageIterator)
-				.listing(scraper.extractor().table(3).links().getResults())
+				.listing(scraper.extractor().table(3).links().getFields())
 				.detail(detailScraper)
 				.getRecords();
 
@@ -255,13 +259,13 @@ public class ScraperTest {
 	@Test
 	public void extractBuyerAndOfficeInformation() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		Map<String, String> fields = scraper
+		List<Field> fields = scraper
 				.url(ProgramDetailPage.getUrl())
 				.extract(scraper.extractor().ofClass("agency-name").getFields())
 				.getFields();
 
-		assertThat(fields.keySet().contains("Agency"), is(true));
-		assertThat(fields.keySet().contains("Office"), is(true));
+		assertThat(ScraperUtil.getFieldValue(fields, "Agency"), is(notNullValue()));
+		assertThat(ScraperUtil.getFieldValue(fields, "Office"), is(notNullValue()));
 	}
 
 	@Test
