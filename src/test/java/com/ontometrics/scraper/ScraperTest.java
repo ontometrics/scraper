@@ -266,15 +266,15 @@ public class ScraperTest {
 
 	@Test
 	public void extractContactInfoFromClass() throws MalformedURLException, IOException {
+		String officeInfoID = "dnf_class_values_cfda__hq_office_info__widget";
 		String contactInfoFromPage = "Kathleen S. Townson, 5601 Sunnyside Ave, MS-5110, Betsville, Maryland 20705 Email: kathleen.townson@ars.usda.gov Phone: (301) 504-1702";
 		Scraper scraper = new Scraper();
 		String contactInfo = scraper
 				.url(ProgramDetailPage.getUrl())
-				.extract(scraper.extractor().id("dnf_class_values_cfda__hq_office_info__widget").execute())
+				.extract(scraper.extractor().id(officeInfoID).execute())
 				.getResult();
 
 		log.info("contactinfo: {}", contactInfo);
 		assertThat(contactInfo.contains(contactInfoFromPage), is(true));
-
 	}
 }
