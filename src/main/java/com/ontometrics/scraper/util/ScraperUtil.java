@@ -3,7 +3,9 @@ package com.ontometrics.scraper.util;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -12,11 +14,25 @@ import net.htmlparser.jericho.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.extraction.Field;
 import com.ontometrics.scraper.extraction.Link;
 
 public class ScraperUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
+	
+	public static String getFieldValue(List<Field> fields, String label) {
+		Field found = null;
+		for (Field field : fields){
+			if (field.getLabel().equalsIgnoreCase(label)){
+				found = field;
+				break;
+			}
+		}
+		return found.getValue();
+	}
+
+
 	
 	public static List<Link> extractLinks(String sourceToParse){
 		Source source = new Source(sourceToParse);
@@ -80,5 +96,15 @@ public class ScraperUtil {
 			}
 		}
 		return sessionID;
+	}
+
+
+
+	public static Map<String, String> createFieldMap(List<Field> fields) {		
+		Map<String, String> fieldMap = new HashMap<String, String>();
+		for (Field field : fields){
+			fieldMap.put(field.getLabel(), field.getValue());
+		}
+		return fieldMap;
 	}
 }

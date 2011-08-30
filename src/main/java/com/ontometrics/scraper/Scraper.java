@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -16,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.extraction.Extractor;
+import com.ontometrics.scraper.extraction.Field;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 /**
@@ -36,6 +35,8 @@ import com.ontometrics.scraper.util.ScraperUtil;
 public class Scraper {
 
 	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
+	
+	public static final String sessionIdKeyword = "$SESSION_ID$";;
 
 	/**
 	 * Remote resource we will be extracting content from.
@@ -65,9 +66,9 @@ public class Scraper {
 	 */
 	private int pages = 0;
 
-	private Map<String, String> extractedFields;
+	private List<Field> extractedFields;
 
-	private ArrayList<Map<String, String>> records;
+	private List<Record> records;
 
 	/**
 	 * Used for relative links. At the moment, this will be just the host name.
@@ -164,36 +165,7 @@ public class Scraper {
 	public Extractor extractor() {
 		return this.extractor;
 	}
-
-	/**
-	 * Supports injecting session id into the URL. We will search for a keyword
-	 * and if it exists, it will replace it.
-	 * 
-	 * @param results
-	 * @return
-	 * @throws IOException
-	 */
-	public Scraper extract(List<String> results) throws IOException {
-		final String sessionIdKeyword = "$SESSION_ID$";
-
-		this.results = results;
-
-		if (iterator != null) {
-			for (int i = 0; i < pages; i++) {
-				URL nextUrl = iterator.build(i);
-
-				if (nextUrl.toString().contains(sessionIdKeyword)) {
-					String urlString = nextUrl.toString().replace(sessionIdKeyword, sessionIDName);
-					nextUrl = new URL(urlString);
-				}
-				log.debug("next url = {}", nextUrl);
-				extractor.url(nextUrl);
-				results.addAll(extractor.getResults());
-			}
-		}
-		return this;
-	}
-
+	
 	public Scraper iterator(Iterator iterator) {
 		log.debug("setting iterator: {}", iterator);
 		this.iterator = iterator;
@@ -217,39 +189,34 @@ public class Scraper {
 		return this.results;
 	}
 
-	public Map<String, String> getFields() {
+	public List<Field> getFields() {
 		if (this.extractedFields == null) {
-			this.extractedFields = new HashMap<String, String>();
+			this.extractedFields = new ArrayList<Field>();
 		}
 		try {
-			Map<String, String> fields = extractor.getFields();
-			this.extractedFields.putAll(fields);
+			List<Field> fields = extractor.getFields();
+			this.extractedFields.addAll(fields);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return extractedFields;
 	}
 
-	public Scraper extract(Map<String, String> fields) {
-		this.extractedFields = fields;
-		return this;
-	}
-
-	public List<Map<String, String>> getRecords() {
+	public List<Record> getRecords() {
 		return this.records;
 	}
 
-	public Scraper listing(List<String> results) throws IOException {
+	public Scraper listing(List<Field> fields) throws IOException {
 		// this method is going to get the list of strings and store them as
 		// links
 		pages -= 1; // when we get results, we will have parsed the first page
 					// already
-		extract(results);
+		extract(fields);
 		return this;
 	}
 
 	public Scraper detail(Scraper detailScraper) {
-		records = new ArrayList<Map<String, String>>();
+		records = new ArrayList<Record>();
 		// all we have to do here is loop through the links extracted in listing
 		// and perform the operations here, collecting all the fields into
 		// records..
@@ -259,9 +226,9 @@ public class Scraper {
 					link = convertToAbsoluteUrl(link);
 				}
 				log.debug("Using link = {}", link);
-				Map<String, String> fields = new HashMap<String, String>(detailScraper.url(new URL(link)).getFields());
+				List<Field> fields = new ArrayList<Field>(detailScraper.url(new URL(link)).getFields());
 				log.debug("returned fields = {}", fields);
-				records.add(fields);
+				records.add(new ScrapedRecord(fields));
 			} catch (MalformedURLException e) {
 				log.info("Bad URL in looping detail page for listing links: {}", e.toString());
 			}
@@ -285,4 +252,53 @@ public class Scraper {
 	public void setExtractor(Extractor extractor) {
 		this.extractor = extractor;
 	}
+
+	public Scraper extractStrings(List<String> results) throws IOException {
+		log.debug("extractor return these results: {}", results);
+		this.results = results;
+		if (iterator != null) {
+			for (int i = 0; i < pages; i++) {
+				URL nextUrl = iterator.build(i);
+
+				if (nextUrl.toString().contains(sessionIdKeyword)) {
+					String urlString = nextUrl.toString().replace(sessionIdKeyword, sessionIDName);
+					nextUrl = new URL(urlString);
+				}
+				log.debug("next url = {}", nextUrl);
+				extractor.url(nextUrl);
+				results.addAll(extractor.getResults());
+			}
+		}
+		return this;
+	}
+	
+	/**
+	 * Supports injecting session id into the URL. We will search for a keyword
+	 * and if it exists, it will replace it.
+	 * 
+	 * @param results
+	 * @return
+	 * @throws IOException
+	 */
+	public Scraper extract(List<Field> results) throws IOException {
+
+		this.extractedFields = results;
+
+		if (iterator != null) {
+			for (int i = 0; i < pages; i++) {
+				URL nextUrl = iterator.build(i);
+
+				if (nextUrl.toString().contains(sessionIdKeyword)) {
+					String urlString = nextUrl.toString().replace(sessionIdKeyword, sessionIDName);
+					nextUrl = new URL(urlString);
+				}
+				log.debug("next url = {}", nextUrl);
+				extractor.url(nextUrl);
+				results.addAll(extractor.getFields());
+			}
+		}
+		return this;
+	}
+
+
 }
