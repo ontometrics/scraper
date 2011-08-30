@@ -287,22 +287,19 @@ public class Extractor {
 			}
 		}
 
+		Source source = new Source(url);
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
+			source.fullSequentialParse();
 			if (!(tagOccurrence.getTag().contains(HTMLElementName.TABLE) || tagOccurrence.getTag().contains(
 					HTMLElementName.A))) {
 				throw new IllegalStateException(MessageFormat.format(
 						"Asked to extract tag: {0}, only know how to extract fields from tables.",
 						tagOccurrence.getTag()));
 			} else {
-				Source source = new Source(url);
-				source.fullSequentialParse();
-				String tableText = extractTagText(source.toString(), tagOccurrence);
-				source = new Source(tableText);
-				source.fullSequentialParse();
-				// log.debug("about to peel fields from this table: {}",
-				// source.toString());
 
-				if (tagOccurrence.getTag().equals(HTMLElementName.TABLE)) {
+				if (tagOccurrence.getTag().equals(HTMLElementName.TABLE) && tagOccurrence.getOccurrence() > 0) {
+					source = new Source(extractTagText(source.toString(), tagOccurrence));
+				} else if (tagOccurrence.getTag().equals(HTMLElementName.TABLE)) {
 					extractedFields.addAll(extractFieldsFromTable(source.toString()));
 				} else {
 					extractedFields.addAll(extractLinksFromList(source.toString()));
@@ -310,7 +307,7 @@ public class Extractor {
 
 			}
 		}
-		Source source = new Source(url);
+		source = new Source(url);
 		source.fullSequentialParse();
 		if (this.afterTagOccurrence != null) {
 			source = pruneFrom(source, afterTagOccurrence);
@@ -346,6 +343,7 @@ public class Extractor {
 	}
 
 	private List<Field> extractLinksFromList(String html) {
+		log.debug("extracting links...");
 		List<Field> fields = new ArrayList<Field>();
 		Source source = new Source(html);
 		source.fullSequentialParse();
