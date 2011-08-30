@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.extraction.Extractor;
 import com.ontometrics.scraper.extraction.Field;
-import com.ontometrics.scraper.extraction.Link;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 /**
@@ -58,8 +57,7 @@ public class Scraper {
 	private List<String> results;
 
 	/**
-	 * Scraper will call this to get the URL of the next page.<br>
-	 * Supports injection of the session id stored in this class, see {@link extract()} for the syntax
+	 * Scraper will call this to get the URL of the next page.
 	 */
 	private Iterator iterator;
 
@@ -147,10 +145,8 @@ public class Scraper {
 	 * @throws MalformedURLException
 	 */
 	public Scraper url(URL url) throws MalformedURLException {
-		// TODO: need to do a better fix for this
-		this.extractedFields = null;
-		
 		this.url = url;
+		this.extractedFields = null;
 		extractor.url(url);
 		if (this.extractedFields != null) {
 			this.extractedFields.clear();
@@ -217,21 +213,23 @@ public class Scraper {
 		pages -= 1; // when we get results, we will have parsed the first page
 					// already
 		extract(fields);
+		log.debug("extracted links: {}", fields);
 		return this;
 	}
 
 	public Scraper detail(Scraper detailScraper) {
-		records = new ArrayList<Record>();
+		this.records = new ArrayList<Record>();
 		// all we have to do here is loop through the links extracted in listing
 		// and perform the operations here, collecting all the fields into
 		// records..
+		String builtUrl = null;
 		for (Field link : this.extractedFields) {
 			try {
 				if (isRelativeUrl(link.getValue())) {
-					link = new Link(link.getLabel(), convertToAbsoluteUrl(link.getValue()));
+					builtUrl = convertToAbsoluteUrl(link.getValue());
 				}
-				log.debug("Using link = {}", link);
-				List<Field> fields = new ArrayList<Field>(detailScraper.url(new URL(link.getValue())).getFields());	// need to new a new list
+				log.debug("Using link = {}", builtUrl);
+				List<Field> fields = new ArrayList<Field>(detailScraper.url(new URL(builtUrl)).getFields());
 				log.debug("returned fields = {}", fields);
 				records.add(new ScrapedRecord(fields));
 			} catch (MalformedURLException e) {

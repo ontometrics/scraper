@@ -79,7 +79,7 @@ public class ScraperTest {
 
 		log.info("links extracted: {}", urls);
 		assertThat(urls.size(), is(greaterThan(0)));
-		
+
 	}
 
 	@Test
@@ -237,11 +237,12 @@ public class ScraperTest {
 		Scraper scraper = new Scraper();
 		List<Field> fields = scraper.url(DetailPage.getUrl()).getFields();
 
+		log.info("fields in detail page: {}", fields.size());
 		assertThat(fields.size(), is(greaterThan(0)));
 
 		fields = scraper.url(PagedListingTable.getUrl()).getFields();
 
-		assertThat(fields.size(), is(0)); // for now don't support extracting
+		assertThat(fields.size(), is(1)); // for now don't support extracting
 											// fields from listing tables
 
 	}
@@ -264,9 +265,11 @@ public class ScraperTest {
 
 	}
 
-	@Ignore
 	@Test
+	@Ignore
 	public void useIteratedListingAndDetailInterface() throws IOException {
+		String listingTableKeyword = "Opportunity Title";
+		String linkPattern = "mode=VIEW";
 		Scraper scraper = new Scraper();
 		Iterator pageIterator = new Iterator() {
 			@Override
@@ -277,11 +280,18 @@ public class ScraperTest {
 			}
 		};
 		Scraper detailScraper = new Scraper();
+		detailScraper.extractor().setUseDefaultFieldExtractor(false);
 		List<Record> records = scraper
 				.url(PagedListingTable.getUrl())
-				.pages(3)
+				.pages(2)
 				.iterator(pageIterator)
-				.listing(scraper.extractor().table(3).links().getFields())
+				.listing(
+						scraper.extractor()
+								.setUseDefaultFieldExtractor(false)
+								.table(listingTableKeyword)
+								.links()
+								.matching(linkPattern)
+								.getFields())
 				.detail(detailScraper)
 				.getRecords();
 
@@ -300,6 +310,7 @@ public class ScraperTest {
 
 		assertThat(ScraperUtil.getFieldValue(fields, "Agency"), is(notNullValue()));
 		assertThat(ScraperUtil.getFieldValue(fields, "Office"), is(notNullValue()));
+
 	}
 
 	@Test
