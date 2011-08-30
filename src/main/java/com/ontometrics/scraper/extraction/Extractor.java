@@ -497,21 +497,26 @@ public class Extractor {
 	}
 
 	private List<Field> extractFieldsFromTable(String html) {
+		log.debug("extracting fields from table: {}", html);
 		List<Field> extractedFields = new ArrayList<Field>();
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		List<Element> cells = source.getAllElements(HTMLElementName.TD);
-		Field lastField = null;
-		int fieldCount = cells.size() / 2;
-		for (int i = 0; i < fieldCount; i++) {
-			String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
-			String value = cells.get(++i).getTextExtractor().toString().trim();
-			log.debug("found field: {}={}", label, value);
-			if (StringUtils.isEmpty(label) && lastField != null) {
-				lastField.addValue(value);
-			} else {
-				lastField = new ScrapedField(label, value);
-				extractedFields.add(lastField);
+		int rows = source.getAllElements(HTMLElementName.TR).size();
+		log.debug("found {} cells in {} rows", cells.size(), rows);
+		if (cells.size() == (rows * 2)) {
+			Field lastField = null;
+			log.debug("cells.size: {}", cells.size());
+			for (int i = 0; i < cells.size(); i++) {
+				String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
+				String value = cells.get(++i).getTextExtractor().toString().trim();
+				log.debug("found field: {}={}", label, value);
+				if (StringUtils.isEmpty(label) && lastField != null) {
+					lastField.addValue(value);
+				} else {
+					lastField = new ScrapedField(label, value);
+					extractedFields.add(lastField);
+				}
 			}
 		}
 		return extractedFields;
