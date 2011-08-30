@@ -1,11 +1,15 @@
 package com.ontometrics.scraper.extraction;
 
-import java.net.URL;
 import java.util.List;
 
 import com.ontometrics.scraper.util.ScraperUtil;
 
-public class LinkExtractor extends BaseExtractor implements HtmlExtractor {
+/**
+ * Provides a simple means of pulling links out of a clump of html.
+ * 
+ * @author Rob
+ */
+public class LinkExtractor extends BaseExtractor {
 
 	/**
 	 * This is the product we are building here.
@@ -13,8 +17,21 @@ public class LinkExtractor extends BaseExtractor implements HtmlExtractor {
 	 * @return list of links found in the source (after manipulation)
 	 */
 	public List<Link> getLinks() {
-		performManipulations();
 		return ScraperUtil.extractLinks(getSource().toString());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics
+	 * .scraper.extraction.HtmlExtractor) Note: override here so we can do one
+	 * chain of calls..
+	 */
+	@Override
+	public LinkExtractor source(HtmlExtractor htmlExtractor) {
+		super.source(htmlExtractor);
+		return this;
 	}
 
 }
