@@ -2,7 +2,7 @@ package com.ontometrics.scraper.extraction;
 
 import net.htmlparser.jericho.Source;
 
-public class MockExtractionAgent extends ExtractionAgent {
+public class MockManipulator extends Manipulator {
 
 	public Source getResult() {
 		return getSource();
