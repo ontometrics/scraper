@@ -28,7 +28,13 @@ public enum HtmlSample {
 	/**
 	 * Just a table with some html inside with links that have text and hrefs.
 	 */
-	TableOfLinks("/testpages/table-of-links.html");
+	TableOfLinks("/testpages/table-of-links.html"),
+
+	/**
+	 * Sometimes a label with multiple values is done as one or more follow on
+	 * rows that have no label.
+	 */
+	TableWithMultipleValuesOnMultipleRows("/testpages/table-with-multiple-values-on-rows.html");
 
 	private String path;
 

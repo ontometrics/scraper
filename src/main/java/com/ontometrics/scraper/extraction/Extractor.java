@@ -2,16 +2,15 @@ package com.ontometrics.scraper.extraction;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +96,8 @@ public class Extractor {
 
 	private List<FieldToGet> fieldsToGet = new ArrayList<FieldToGet>();
 
+	private boolean useDefaultFieldExtractor = true;
+
 	public Extractor() {
 		this.tagsToGet = new ArrayList<TagOccurrence>();
 		this.fieldPairs = new ArrayList<PairedTags>();
@@ -141,7 +142,7 @@ public class Extractor {
 	}
 
 	public Extractor links() {
-		addTagToGet("href");
+		addTagToGet(HTMLElementName.A);
 		return this;
 	}
 
@@ -162,7 +163,7 @@ public class Extractor {
 		String result = "";
 		Source source = new Source(url);
 		source.fullSequentialParse();
-//		log.debug("parsed source: {}", source.toString());
+		// log.debug("parsed source: {}", source.toString());
 
 		if (idToGet != null) {
 			result = source.getElementById(idToGet).getTextExtractor().toString();
@@ -216,7 +217,7 @@ public class Extractor {
 				content = extractTagText(content, toGet);
 			} else if (toGet.getMatching() != null) {
 				content = extractTagMatching(source.toString(), toGet);
-			} else if (toGet.getTag().equals("href")) {
+			} else if (toGet.getTag().equals("a")) {
 				source = new Source(content);
 				currentElements = source.getAllElements(HTMLElementName.A);
 				for (Element element : currentElements) {
@@ -261,9 +262,14 @@ public class Extractor {
 		return this;
 	}
 
-	public Map<String, String> getFields() throws IOException {
-		Map<String, String> extractedFields = new HashMap<String, String>();
+	public List<Field> getFields() throws IOException {
+
+		List<Field> extractedFields = new ArrayList<Field>();
 		// fill in from the already extracted HTML..
+
+		if (isUsingDefaultFieldExtractor()) {
+			extractedFields.addAll(defaultFieldExtractions());
+		}
 
 		if (this.classToGet != null) {
 			Source source = new Source(url);
@@ -272,18 +278,21 @@ public class Extractor {
 			String text = elements.get(0).toString();
 			String[] fields = text.split("<br>");
 			log.debug("fields: {}", fields);
-			for (String field : fields){
+			for (String field : fields) {
 				Source fieldSource = new Source(field);
 				field = fieldSource.getTextExtractor().toString();
 				String[] fieldParts = field.split(":");
 				log.debug("{} : {}", fieldParts[0], fieldParts[1]);
-				extractedFields.put(fieldParts[0], fieldParts[1]);
+				extractedFields.add(new ScrapedField(fieldParts[0], fieldParts[1]));
 			}
 		}
 
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
-			if (!tagOccurrence.getTag().contains(HTMLElementName.TABLE)) {
-				throw new IllegalStateException("Only know how to extract fields from tables.");
+			if (!(tagOccurrence.getTag().contains(HTMLElementName.TABLE) || tagOccurrence.getTag().contains(
+					HTMLElementName.A))) {
+				throw new IllegalStateException(MessageFormat.format(
+						"Asked to extract tag: {0}, only know how to extract fields from tables.",
+						tagOccurrence.getTag()));
 			} else {
 				Source source = new Source(url);
 				source.fullSequentialParse();
@@ -293,12 +302,12 @@ public class Extractor {
 				// log.debug("about to peel fields from this table: {}",
 				// source.toString());
 
-				List<Element> cells = source.getAllElements(HTMLElementName.TD);
-				for (int i = 0; i < cells.size(); i++) {
-					String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
-					String value = cells.get(++i).getTextExtractor().toString().trim();
-					extractedFields.put(label, value);
+				if (tagOccurrence.getTag().equals(HTMLElementName.TABLE)) {
+					extractedFields.addAll(extractFieldsFromTable(source.toString()));
+				} else {
+					extractedFields.addAll(extractLinksFromList(source.toString()));
 				}
+
 			}
 		}
 		Source source = new Source(url);
@@ -311,7 +320,7 @@ public class Extractor {
 			if (fieldToGet.getSearchType() == FieldSearchType.Tag) {
 				value = source.getAllElements(fieldToGet.getLabel()).get(0).getTextExtractor().toString();
 			}
-			extractedFields.put(fieldToGet.getFieldname(), value);
+			extractedFields.add(new ScrapedField(fieldToGet.getFieldname(), value));
 		}
 		for (PairedTags tagPair : this.fieldPairs) {
 			List<Element> labels = source.getAllElements(tagPair.getLabelTag());
@@ -329,11 +338,32 @@ public class Extractor {
 					field = fields.get(i).getTextExtractor().toString();
 				}
 				log.debug("outputting pair: {} : {}", label, field);
-				extractedFields.put(label, field);
+				extractedFields.add(new ScrapedField(label, field));
 			}
 
 		}
 		return extractedFields;
+	}
+
+	private List<Field> extractLinksFromList(String html) {
+		List<Field> fields = new ArrayList<Field>();
+		Source source = new Source(html);
+		source.fullSequentialParse();
+		List<Element> links = source.getAllElements(HTMLElementName.A);
+		for (Element a : links) {
+			String label = a.getTextExtractor().toString();
+			String href = a.getAttributeValue("href");
+			fields.add(new Link(label, href));
+		}
+		return fields;
+	}
+
+	public boolean isUsingDefaultFieldExtractor() {
+		return this.useDefaultFieldExtractor;
+	}
+
+	public void setUseDefaultFieldExtractor(boolean useDefaultExtractor) {
+		this.useDefaultFieldExtractor = useDefaultExtractor;
 	}
 
 	private boolean fieldHasMultipleValues(String fieldValue) {
@@ -430,4 +460,65 @@ public class Extractor {
 		return this;
 	}
 
+	/**
+	 * We will refactor this away when we have specialized extractors that are
+	 * chained.
+	 * 
+	 * @return all fields that were found
+	 * @throws IOException
+	 */
+	private List<Field> defaultFieldExtractions() throws IOException {
+		List<Field> extractedFields = new ArrayList<Field>();
+
+		Source source = new Source(this.url);
+		source.fullSequentialParse();
+
+		List<Element> tables = source.getAllElements(HTMLElementName.TABLE);
+
+		for (Element table : tables) {
+			extractedFields.addAll(extractFieldsFromTable(table.toString()));
+		}
+
+		List<Element> dls = source.getAllElements(HTMLElementName.DL);
+
+		for (Element dt : dls) {
+			extractedFields.addAll(extractFieldsFromDL(dt.toString()));
+		}
+
+		return extractedFields;
+	}
+
+	private List<Field> extractFieldsFromTable(String html) {
+		List<Field> extractedFields = new ArrayList<Field>();
+		Source source = new Source(html);
+		source.fullSequentialParse();
+		List<Element> cells = source.getAllElements(HTMLElementName.TD);
+		Field lastField = null;
+		for (int i = 0; i < cells.size(); i++) {
+			String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
+			String value = cells.get(++i).getTextExtractor().toString().trim();
+			if (StringUtils.isEmpty(label) && lastField != null) {
+				lastField.addValue(value);
+			} else {
+				lastField = new ScrapedField(label, value);
+				extractedFields.add(lastField);
+			}
+		}
+		return extractedFields;
+	}
+
+	private List<Field> extractFieldsFromDL(String html) {
+		List<Field> extractedFields = new ArrayList<Field>();
+		Source source = new Source(html);
+		source.fullSequentialParse();
+		List<Element> labels = source.getAllElements(HTMLElementName.DT);
+		List<Element> values = source.getAllElements(HTMLElementName.DD);
+		int cellCount = Math.min(labels.size(), values.size());
+		for (int i = 0; i < cellCount; i++) {
+			String label = labels.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
+			String value = values.get(i).getTextExtractor().toString().trim();
+			extractedFields.add(new ScrapedField(label, value));
+		}
+		return extractedFields;
+	}
 }
