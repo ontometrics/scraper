@@ -146,6 +146,7 @@ public class Scraper {
 	 */
 	public Scraper url(URL url) throws MalformedURLException {
 		this.url = url;
+		this.extractedFields = null;
 		extractor.url(url);
 		if (this.extractedFields != null) {
 			this.extractedFields.clear();
@@ -212,21 +213,23 @@ public class Scraper {
 		pages -= 1; // when we get results, we will have parsed the first page
 					// already
 		extract(fields);
+		log.debug("extracted links: {}", fields);
 		return this;
 	}
 
 	public Scraper detail(Scraper detailScraper) {
-		records = new ArrayList<Record>();
+		this.records = new ArrayList<Record>();
 		// all we have to do here is loop through the links extracted in listing
 		// and perform the operations here, collecting all the fields into
 		// records..
-		for (String link : results) {
+		String builtUrl = null;
+		for (Field link : this.extractedFields) {
 			try {
-				if (isRelativeUrl(link)) {
-					link = convertToAbsoluteUrl(link);
+				if (isRelativeUrl(link.getValue())) {
+					builtUrl = convertToAbsoluteUrl(link.getValue());
 				}
-				log.debug("Using link = {}", link);
-				List<Field> fields = new ArrayList<Field>(detailScraper.url(new URL(link)).getFields());
+				log.debug("Using link = {}", builtUrl);
+				List<Field> fields = new ArrayList<Field>(detailScraper.url(new URL(builtUrl)).getFields());
 				log.debug("returned fields = {}", fields);
 				records.add(new ScrapedRecord(fields));
 			} catch (MalformedURLException e) {
