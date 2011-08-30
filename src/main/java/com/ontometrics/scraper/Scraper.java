@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.extraction.Extractor;
 import com.ontometrics.scraper.extraction.Field;
+import com.ontometrics.scraper.extraction.Link;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 /**
@@ -146,6 +147,9 @@ public class Scraper {
 	 * @throws MalformedURLException
 	 */
 	public Scraper url(URL url) throws MalformedURLException {
+		// TODO: need to do a better fix for this
+		this.extractedFields = null;
+		
 		this.url = url;
 		extractor.url(url);
 		if (this.extractedFields != null) {
@@ -221,13 +225,13 @@ public class Scraper {
 		// all we have to do here is loop through the links extracted in listing
 		// and perform the operations here, collecting all the fields into
 		// records..
-		for (String link : results) {
+		for (Field link : this.extractedFields) {
 			try {
-				if (isRelativeUrl(link)) {
-					link = convertToAbsoluteUrl(link);
+				if (isRelativeUrl(link.getValue())) {
+					link = new Link(link.getLabel(), convertToAbsoluteUrl(link.getValue()));
 				}
 				log.debug("Using link = {}", link);
-				List<Field> fields = new ArrayList<Field>(detailScraper.url(new URL(link)).getFields());
+				List<Field> fields = new ArrayList<Field>(detailScraper.url(new URL(link.getValue())).getFields());	// need to new a new list
 				log.debug("returned fields = {}", fields);
 				records.add(new ScrapedRecord(fields));
 			} catch (MalformedURLException e) {
@@ -295,7 +299,7 @@ public class Scraper {
 				}
 				log.debug("next url = {}", nextUrl);
 				extractor.url(nextUrl);
-				results.addAll(extractor.getFields());
+				this.extractedFields.addAll(extractor.getFields());
 			}
 		}
 		return this;
