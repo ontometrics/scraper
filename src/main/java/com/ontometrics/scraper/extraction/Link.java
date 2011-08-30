@@ -30,5 +30,10 @@ public class Link implements Field {
 		return "Link [label=" + label + ", href=" + href + "]";
 	}
 
+	@Override
+	public void addValue(String value) {
+		throw new IllegalStateException("cannot add to the href");
+	}
+
 
 }

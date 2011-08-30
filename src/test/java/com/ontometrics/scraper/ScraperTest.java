@@ -3,6 +3,7 @@ package com.ontometrics.scraper;
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
 import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
 import static com.ontometrics.scraper.HtmlSample.ProgramDetailPage;
+import static com.ontometrics.scraper.HtmlSample.TableWithMultipleValuesOnMultipleRows;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItems;
@@ -14,7 +15,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Map;
 
 import net.htmlparser.jericho.HTMLElementName;
 
@@ -209,9 +209,16 @@ public class ScraperTest {
 			log.debug("eligibility code: {}", eligibilityCodes[i]);
 		}
 		// log.debug("eligibility = {}", fields.get("Eligible Applicants"));
-
+		
+		fields = scraper
+				.url(TableWithMultipleValuesOnMultipleRows.getUrl())
+				.extract(scraper.extractor().getFields())
+				.getFields();
+		
+		log.info("fields from table with multiple values on rows: {}", fields);
+		
 	}
-
+	
 	@Test
 	public void extractFieldsBasedOnPairedTagsAfterAnotherTag() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();

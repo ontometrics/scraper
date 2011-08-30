@@ -2,6 +2,8 @@ package com.ontometrics.scraper.extraction;
 
 public class ScrapedField implements Field {
 
+	private static final String delimiter = ";";
+
 	private String label;
 
 	private String value;
@@ -21,6 +23,13 @@ public class ScrapedField implements Field {
 	public String getValue() {
 		return this.value;
 	}
+	
+
+	@Override
+	public void addValue(String newValue) {
+		this.value += delimiter + newValue;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -51,6 +60,11 @@ public class ScrapedField implements Field {
 		} else if (!value.equals(other.value))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ScrapedField [label=" + label + ", value=" + value + "]";
 	}
 
 }

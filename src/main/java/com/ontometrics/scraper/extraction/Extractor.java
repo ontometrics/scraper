@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.helper.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -288,8 +288,8 @@ public class Extractor {
 		}
 
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
-			if (!(tagOccurrence.getTag().contains(HTMLElementName.TABLE)
-					|| tagOccurrence.getTag().contains(HTMLElementName.A))) {
+			if (!(tagOccurrence.getTag().contains(HTMLElementName.TABLE) || tagOccurrence.getTag().contains(
+					HTMLElementName.A))) {
 				throw new IllegalStateException(MessageFormat.format(
 						"Asked to extract tag: {0}, only know how to extract fields from tables.",
 						tagOccurrence.getTag()));
@@ -350,7 +350,7 @@ public class Extractor {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		List<Element> links = source.getAllElements(HTMLElementName.A);
-		for (Element a : links){
+		for (Element a : links) {
 			String label = a.getTextExtractor().toString();
 			String href = a.getAttributeValue("href");
 			fields.add(new Link(label, href));
@@ -493,10 +493,16 @@ public class Extractor {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		List<Element> cells = source.getAllElements(HTMLElementName.TD);
+		Field lastField = null;
 		for (int i = 0; i < cells.size(); i++) {
 			String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
-			String value = cells.get(i).getTextExtractor().toString().trim();
-			extractedFields.add(new ScrapedField(label, value));
+			String value = cells.get(++i).getTextExtractor().toString().trim();
+			if (StringUtils.isEmpty(label) && lastField != null) {
+				lastField.addValue(value);
+			} else {
+				lastField = new ScrapedField(label, value);
+				extractedFields.add(lastField);
+			}
 		}
 		return extractedFields;
 	}
