@@ -79,7 +79,7 @@ public class ScraperTest {
 
 		log.info("links extracted: {}", urls);
 		assertThat(urls.size(), is(greaterThan(0)));
-
+		
 	}
 
 	@Test
