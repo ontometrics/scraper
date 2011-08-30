@@ -208,8 +208,10 @@ public class ScraperTest {
 		for (int i = 0; i < eligibilityCodes.length; i++) {
 			log.debug("eligibility code: {}", eligibilityCodes[i]);
 		}
-		// log.debug("eligibility = {}", fields.get("Eligible Applicants"));
+		
+		log.debug("eligibility codes: {}", eligibilityCodes);
 
+		
 		fields = scraper
 				.url(TableWithMultipleValuesOnMultipleRows.getUrl())
 				.extract(scraper.extractor().getFields())
@@ -224,6 +226,7 @@ public class ScraperTest {
 			}
 		}
 
+		assertThat(fields.size(), is(1));
 		assertThat(cfdaNumbers, is(notNullValue()));
 		assertThat(cfdaNumbers.getValue().contains(";"), is(true));
 

@@ -497,6 +497,7 @@ public class Extractor {
 		for (int i = 0; i < cells.size(); i++) {
 			String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
 			String value = cells.get(++i).getTextExtractor().toString().trim();
+			log.debug("found field: {}={}", label, value);
 			if (StringUtils.isEmpty(label) && lastField != null) {
 				lastField.addValue(value);
 			} else {
