@@ -77,6 +77,7 @@ public class ScraperTest {
 				.extract(scraper.extractor().setUseDefaultFieldExtractor(false).table(3).links().getFields())
 				.getFields();
 
+		log.info("links extracted: {}", urls);
 		assertThat(urls.size(), is(greaterThan(0)));
 
 	}
