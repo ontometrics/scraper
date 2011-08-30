@@ -289,6 +289,7 @@ public class Extractor {
 
 		Source source = new Source(url);
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
+			log.debug("extracting fields using tag: {}", tagOccurrence);
 			source.fullSequentialParse();
 			if (!(tagOccurrence.getTag().contains(HTMLElementName.TABLE) || tagOccurrence.getTag().contains(
 					HTMLElementName.A))) {
@@ -299,10 +300,12 @@ public class Extractor {
 
 				if (isAttemptingToMatchSpecificTable(tagOccurrence)) {
 					source = new Source(extractTagText(source.toString(), tagOccurrence));
+					log.debug("honed source down to: {}", source);
+					extractedFields.addAll(extractFieldsFromTable(source.toString()));
 				} else if (tagOccurrence.getTag().equals(HTMLElementName.TABLE)) {
 					extractedFields.addAll(extractFieldsFromTable(source.toString()));
 				} else {
-					extractedFields.addAll(extractLinksFromList(source.toString()));
+					extractedFields = extractLinksFromList(source.toString());
 				}
 
 			}
@@ -499,7 +502,8 @@ public class Extractor {
 		source.fullSequentialParse();
 		List<Element> cells = source.getAllElements(HTMLElementName.TD);
 		Field lastField = null;
-		for (int i = 0; i < cells.size(); i++) {
+		int fieldCount = cells.size() / 2;
+		for (int i = 0; i < fieldCount; i++) {
 			String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
 			String value = cells.get(++i).getTextExtractor().toString().trim();
 			log.debug("found field: {}={}", label, value);

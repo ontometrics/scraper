@@ -22,14 +22,14 @@ public class ScraperUtil {
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
 	
 	public static String getFieldValue(List<Field> fields, String label) {
-		Field found = null;
+		String foundValue = null;
 		for (Field field : fields){
 			if (field.getLabel().equalsIgnoreCase(label)){
-				found = field;
+				foundValue = field.getValue();
 				break;
 			}
 		}
-		return found.getValue();
+		return foundValue;
 	}
 
 
