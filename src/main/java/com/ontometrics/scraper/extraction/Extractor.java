@@ -297,7 +297,7 @@ public class Extractor {
 						tagOccurrence.getTag()));
 			} else {
 
-				if (tagOccurrence.getTag().equals(HTMLElementName.TABLE) && tagOccurrence.getOccurrence() > 0) {
+				if (isAttemptingToMatchSpecificTable(tagOccurrence)) {
 					source = new Source(extractTagText(source.toString(), tagOccurrence));
 				} else if (tagOccurrence.getTag().equals(HTMLElementName.TABLE)) {
 					extractedFields.addAll(extractFieldsFromTable(source.toString()));
@@ -342,6 +342,10 @@ public class Extractor {
 		return extractedFields;
 	}
 
+	private boolean isAttemptingToMatchSpecificTable(TagOccurrence tagOccurrence) {
+		return tagOccurrence.getOccurrence() > 0 || !StringUtils.isEmpty(tagOccurrence.getMatching());
+	}
+
 	private List<Field> extractLinksFromList(String html) {
 		log.debug("extracting links...");
 		List<Field> fields = new ArrayList<Field>();
@@ -351,7 +355,9 @@ public class Extractor {
 		for (Element a : links) {
 			String label = a.getTextExtractor().toString();
 			String href = a.getAttributeValue("href");
-			fields.add(new Link(label, href));
+			if (matchingPattern == null || href.contains(matchingPattern)) {
+				fields.add(new Link(label, href));
+			}
 		}
 		return fields;
 	}
