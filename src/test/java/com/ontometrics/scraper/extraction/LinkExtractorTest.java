@@ -13,15 +13,15 @@ import org.slf4j.LoggerFactory;
 import com.ontometrics.scraper.HtmlSample;
 
 public class LinkExtractorTest {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(LinkExtractorTest.class);
 
 	@Test
 	public void canExtractLinksFromPage() {
-		
+
 		LinkExtractor linkExtractor = new LinkExtractor();
-		List<Link> links = linkExtractor.url(HtmlSample.PagedListingTable.getUrl()).table(3).getLinks();
-		
+		linkExtractor.url(HtmlSample.PagedListingTable.getUrl()).table(3);
+		List<Link> links = linkExtractor.getLinks();
 		log.info("found links: {}", links);
 		assertThat(links.size(), is(greaterThan(0)));
 

@@ -2,13 +2,13 @@ package com.ontometrics.scraper.extraction;
 
 import net.htmlparser.jericho.Source;
 
-public abstract class ExtractionAgent implements ExtractionCommand {
+public abstract class Manipulator implements Manipulation {
 	
 	protected OperationType type = OperationType.Unbound;
 
 	private Source source;
 
-	private ExtractionAgent successor;
+	private Manipulator successor;
 
 	@Override
 	public final void execute(Source source) {
@@ -29,11 +29,11 @@ public abstract class ExtractionAgent implements ExtractionCommand {
 		return source;
 	}
 
-	public ExtractionAgent getSuccessor() {
+	public Manipulator getSuccessor() {
 		return successor;
 	}
 
-	public void setSuccessor(ExtractionAgent successor) {
+	public void setSuccessor(Manipulator successor) {
 		this.successor = successor;
 	}
 

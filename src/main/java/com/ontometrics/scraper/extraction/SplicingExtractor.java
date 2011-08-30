@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.util.ScraperUtil;
 
-public class SplicingExtractor extends ExtractionAgent {
+public class SplicingExtractor extends Manipulator {
 	
 	private static final Logger log = LoggerFactory.getLogger(SplicingExtractor.class);
 
