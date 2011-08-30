@@ -209,16 +209,26 @@ public class ScraperTest {
 			log.debug("eligibility code: {}", eligibilityCodes[i]);
 		}
 		// log.debug("eligibility = {}", fields.get("Eligible Applicants"));
-		
+
 		fields = scraper
 				.url(TableWithMultipleValuesOnMultipleRows.getUrl())
 				.extract(scraper.extractor().getFields())
 				.getFields();
-		
+
 		log.info("fields from table with multiple values on rows: {}", fields);
-		
+
+		Field cfdaNumbers = null;
+		for (Field field : fields) {
+			if (field.getLabel().equals("CFDA Number(s)")) {
+				cfdaNumbers = field;
+			}
+		}
+
+		assertThat(cfdaNumbers, is(notNullValue()));
+		assertThat(cfdaNumbers.getValue().contains(";"), is(true));
+
 	}
-	
+
 	@Test
 	public void extractFieldsBasedOnPairedTagsAfterAnotherTag() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
