@@ -35,7 +35,7 @@ import com.ontometrics.scraper.util.ScraperUtil;
 public class Scraper {
 
 	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
-	
+
 	public static final String sessionIdKeyword = "$SESSION_ID$";;
 
 	/**
@@ -165,7 +165,7 @@ public class Scraper {
 	public Extractor extractor() {
 		return this.extractor;
 	}
-	
+
 	public Scraper iterator(Iterator iterator) {
 		log.debug("setting iterator: {}", iterator);
 		this.iterator = iterator;
@@ -192,12 +192,12 @@ public class Scraper {
 	public List<Field> getFields() {
 		if (this.extractedFields == null) {
 			this.extractedFields = new ArrayList<Field>();
-		}
-		try {
-			List<Field> fields = extractor.getFields();
-			this.extractedFields.addAll(fields);
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				List<Field> fields = extractor.getFields();
+				this.extractedFields.addAll(fields);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return extractedFields;
 	}
@@ -271,7 +271,7 @@ public class Scraper {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Supports injecting session id into the URL. We will search for a keyword
 	 * and if it exists, it will replace it.
@@ -299,6 +299,5 @@ public class Scraper {
 		}
 		return this;
 	}
-
 
 }
