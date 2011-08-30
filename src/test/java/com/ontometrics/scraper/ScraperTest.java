@@ -74,7 +74,7 @@ public class ScraperTest {
 	public void extractLinksFromTableOnPage() throws Exception {
 		List<Field> urls = scraper
 				.url(PagedListingTable.getUrl())
-				.extract(scraper.extractor().table(3).links().getFields())
+				.extract(scraper.extractor().setUseDefaultFieldExtractor(false).table(3).links().getFields())
 				.getFields();
 
 		assertThat(urls.size(), is(greaterThan(0)));
@@ -208,10 +208,9 @@ public class ScraperTest {
 		for (int i = 0; i < eligibilityCodes.length; i++) {
 			log.debug("eligibility code: {}", eligibilityCodes[i]);
 		}
-		
+
 		log.debug("eligibility codes: {}", eligibilityCodes);
 
-		
 		fields = scraper
 				.url(TableWithMultipleValuesOnMultipleRows.getUrl())
 				.extract(scraper.extractor().getFields())
@@ -229,6 +228,20 @@ public class ScraperTest {
 		assertThat(fields.size(), is(1));
 		assertThat(cfdaNumbers, is(notNullValue()));
 		assertThat(cfdaNumbers.getValue().contains(";"), is(true));
+
+	}
+
+	@Test
+	public void extractFieldFromLargeDetailPage() throws MalformedURLException {
+		Scraper scraper = new Scraper();
+		List<Field> fields = scraper.url(DetailPage.getUrl()).getFields();
+
+		assertThat(fields.size(), is(greaterThan(0)));
+
+		fields = scraper.url(PagedListingTable.getUrl()).getFields();
+
+		assertThat(fields.size(), is(0)); // for now don't support extracting
+											// fields from listing tables
 
 	}
 

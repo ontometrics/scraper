@@ -362,8 +362,9 @@ public class Extractor {
 		return this.useDefaultFieldExtractor;
 	}
 
-	public void setUseDefaultFieldExtractor(boolean useDefaultExtractor) {
+	public Extractor setUseDefaultFieldExtractor(boolean useDefaultExtractor) {
 		this.useDefaultFieldExtractor = useDefaultExtractor;
+		return this;
 	}
 
 	private boolean fieldHasMultipleValues(String fieldValue) {
