@@ -1,41 +1,36 @@
 package com.ontometrics.scraper.extraction;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
-import net.htmlparser.jericho.HTMLElementName;
-import net.htmlparser.jericho.Source;
-
-import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.util.ScraperUtil;
 
-public class LinkExtractor implements HtmlExtractor {
-	
-	private Source source;
-	
-	private ExtractionAgent extractionAgent;
+/**
+ * Provides a simple means of pulling links out of a clump of html.
+ * 
+ * @author Rob
+ */
+public class LinkExtractor extends BaseExtractor {
 
-	private URL url;
-
-	public LinkExtractor url(URL url){
-		this.url = url;
-		return this;
-	}	
-	
-	public List<Link> getLinks(){
-		try {
-			source = new Source(url);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		source.fullSequentialParse();
-		extractionAgent.execute(source);
-		return ScraperUtil.extractLinks(source.toString());
+	/**
+	 * This is the product we are building here.
+	 * 
+	 * @return list of links found in the source (after manipulation)
+	 */
+	public List<Link> getLinks() {
+		return ScraperUtil.extractLinks(getSource().toString());
 	}
-	
-	public LinkExtractor table(int occurrence){
-		extractionAgent = new ElementExtractor(new TagOccurrence(HTMLElementName.TABLE, occurrence));
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics
+	 * .scraper.extraction.HtmlExtractor) Note: override here so we can do one
+	 * chain of calls..
+	 */
+	@Override
+	public LinkExtractor source(HtmlExtractor htmlExtractor) {
+		super.source(htmlExtractor);
 		return this;
 	}
 

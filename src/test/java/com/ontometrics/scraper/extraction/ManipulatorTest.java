@@ -13,17 +13,17 @@ import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.TagOccurrence;
 
-public class ExtractionAgentTest {
+public class ManipulatorTest {
 
-	private static final Logger log = LoggerFactory.getLogger(ExtractionAgentTest.class);
+	private static final Logger log = LoggerFactory.getLogger(ManipulatorTest.class);
 
-	private MockExtractionAgent mockExtractionAgent;
+	private MockManipulator mockExtractionAgent;
 
 	private SplicingExtractor splicingExtractor;
 
 	@Before
 	public void setup() {
-		mockExtractionAgent = new MockExtractionAgent();
+		mockExtractionAgent = new MockManipulator();
 		splicingExtractor = new SplicingExtractor(SpliceOperation.After, new TagOccurrence("table", 3));
 		splicingExtractor.setSuccessor(mockExtractionAgent);
 
