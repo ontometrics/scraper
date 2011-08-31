@@ -24,8 +24,8 @@ public class ElementManipulator extends Manipulator {
 	private String extractTag() {
 		String extraction = null;
 		if (tagOccurrence.getMatching() != null) {
-			log.debug("matching tags..");
 			extraction = ScraperUtil.extractTagMatching(getSource().toString(), tagOccurrence);
+			log.debug("result of matching: {}", extraction);
 		} else {
 			extraction = ScraperUtil.extract(getSource().toString(), tagOccurrence.getTag(),
 					tagOccurrence.getOccurrence());

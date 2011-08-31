@@ -2,9 +2,14 @@ package com.ontometrics.scraper.extraction;
 
 import net.htmlparser.jericho.Source;
 
-public abstract class Manipulator implements Manipulation {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	protected OperationType type = OperationType.Unbound;
+public abstract class Manipulator implements Manipulation {
+	
+	private static final Logger log = LoggerFactory.getLogger(Manipulator.class);
+
+	protected OperationType type = OperationType.Manipulator;
 
 	private Source source;
 
@@ -16,9 +21,12 @@ public abstract class Manipulator implements Manipulation {
 	public final void execute(Source source) {
 		this.source = source;
 		String result = performExtraction();
+		log.debug("result of extraction: {}", result);
 		if (type == OperationType.Manipulator) {
+			log.debug("reassigning source..");
 			source = new Source(result);
 			source.fullSequentialParse();
+			this.source = source;
 		}
 		if (successor != null) {
 			successor.execute(source);

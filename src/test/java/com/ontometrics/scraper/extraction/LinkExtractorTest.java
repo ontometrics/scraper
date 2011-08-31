@@ -16,8 +16,8 @@ public class LinkExtractorTest {
 	private static final Logger log = LoggerFactory.getLogger(LinkExtractorTest.class);
 	private LinkExtractor linkExtractor;
 	private HtmlExtractor htmlExtractor;
-	private int numberOfLinksInTargetTable = 86;
-	
+	private int numberOfLinksInTable3 = 23;
+	private int numberOfLinksInTargetTable = 80;
 
 	@Before
 	public void setup() {
@@ -31,13 +31,21 @@ public class LinkExtractorTest {
 	public void canExtractLinksFromPage() {
 		List<Link> links = linkExtractor.source(htmlExtractor.url(PagedListingTable.getUrl()).table(3)).getLinks();
 		log.info("found {} links: {}", links.size(), links);
-		assertThat(links.size(), is(numberOfLinksInTargetTable));
+		assertThat(links.size(), is(numberOfLinksInTable3));
 	}
 
 	@Test
 	public void canExtractLinksMatching() {
 		List<Link> links = linkExtractor.source(
 				htmlExtractor.url(PagedListingTable.getUrl()).table().matching("Opportunity Title")).getLinks();
+		log.info("found {} links: {}", links.size(), links);
+		assertThat(links.size(), is(numberOfLinksInTargetTable));
+		
+		linkExtractor = new LinkExtractor();
+		htmlExtractor = new HtmlExtractor();
+		links = linkExtractor
+				.source(htmlExtractor.url(PagedListingTable.getUrl()).table().matching("663-A-08-002"))
+				.getLinks();
 		log.info("found {} links: {}", links.size(), links);
 		assertThat(links.size(), is(numberOfLinksInTargetTable));
 	}
