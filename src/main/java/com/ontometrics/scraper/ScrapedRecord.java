@@ -23,4 +23,8 @@ public class ScrapedRecord implements Record {
 		return ScraperUtil.getFieldValue(fields, titleFieldKey);
 	}
 
+	@Override
+	public String toString() {
+		return "ScrapedRecord [fields=" + fields + "]";
+	}
 }
