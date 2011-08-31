@@ -249,8 +249,8 @@ public class Extractor {
 		for (int i = 0; i < afterTagOccurrence.getOccurrence(); i++) {
 			sourceHtml = sourceHtml.substring(sourceHtml.indexOf(endAfterTag) + 1);
 		}
-		log.debug("pruned after count {} of tag {}: {}", new Object[] { afterTagOccurrence.getOccurrence(),
-				afterTagOccurrence.getTag(), sourceHtml });
+		//log.debug("pruned after count {} of tag {}: {}", new Object[] { afterTagOccurrence.getOccurrence(),
+		//		afterTagOccurrence.getTag(), sourceHtml });
 		String afterSource = sourceHtml;
 		source = new Source(afterSource);
 		source.fullSequentialParse();
@@ -289,7 +289,7 @@ public class Extractor {
 
 		Source source = new Source(url);
 		for (TagOccurrence tagOccurrence : this.tagsToGet) {
-			log.debug("extracting fields using tag: {}", tagOccurrence);
+			//log.debug("extracting fields using tag: {}", tagOccurrence);
 			source.fullSequentialParse();
 			if (!(tagOccurrence.getTag().contains(HTMLElementName.TABLE) || tagOccurrence.getTag().contains(
 					HTMLElementName.A))) {
@@ -300,7 +300,6 @@ public class Extractor {
 
 				if (isAttemptingToMatchSpecificTable(tagOccurrence)) {
 					source = new Source(extractTagText(source.toString(), tagOccurrence));
-					log.debug("honed source down to: {}", source);
 					extractedFields.addAll(extractFieldsFromTable(source.toString()));
 				} else if (tagOccurrence.getTag().equals(HTMLElementName.TABLE)) {
 					extractedFields.addAll(extractFieldsFromTable(source.toString()));
@@ -497,7 +496,7 @@ public class Extractor {
 	}
 
 	private List<Field> extractFieldsFromTable(String html) {
-		log.debug("extracting fields from table: {}", html);
+		//log.debug("extracting fields from table: {}", html);
 		List<Field> extractedFields = new ArrayList<Field>();
 		Source source = new Source(html);
 		source.fullSequentialParse();
@@ -510,7 +509,7 @@ public class Extractor {
 			for (int i = 0; i < cells.size(); i++) {
 				String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
 				String value = cells.get(++i).getTextExtractor().toString().trim();
-				log.debug("found field: {}={}", label, value);
+				//log.debug("found field: {}={}", label, value);
 				if (StringUtils.isEmpty(label) && lastField != null) {
 					lastField.addValue(value);
 				} else {
