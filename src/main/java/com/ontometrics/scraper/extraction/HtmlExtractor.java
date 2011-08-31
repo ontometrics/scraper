@@ -107,6 +107,25 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
+	 * Provides means of getting the html after a tag.
+	 * 
+	 * @param tag
+	 *            the element to look for
+	 * @param occurrence
+	 *            which one
+	 * @return all the html after (and including) the element
+	 */
+	public HtmlExtractor after(String tag, int occurrence) {
+		addManipulator(new SplicingExtractor(SpliceOperation.After, new TagOccurrence(tag, occurrence)));
+		return this;
+	}
+	
+	public HtmlExtractor matching(String matcher){
+		manipulators.getLast().setMatcher(matcher);
+		return this;
+	}
+
+	/**
 	 * Usually the starting point: provides the path to a file that would be the
 	 * original source that is then progressively transformed by any additional
 	 * {@link Manipulator}s.
@@ -117,6 +136,11 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public HtmlExtractor url(URL url) {
 		this.url = url;
+		return this;
+	}
+
+	public HtmlExtractor table() {
+		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, 0)));
 		return this;
 	}
 

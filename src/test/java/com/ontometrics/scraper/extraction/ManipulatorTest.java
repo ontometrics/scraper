@@ -41,10 +41,10 @@ public class ManipulatorTest {
 		assertThat(result.toString().startsWith("<table"), is(true));
 
 	}
-	
+
 	@Test
-	public void canChainTwoCommands(){
-		
+	public void canChainTwoCommands() {
+
 	}
 
 }

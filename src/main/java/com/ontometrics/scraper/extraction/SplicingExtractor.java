@@ -7,7 +7,7 @@ import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class SplicingExtractor extends Manipulator {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(SplicingExtractor.class);
 
 	private SpliceOperation operation = SpliceOperation.After;
@@ -27,5 +27,10 @@ public class SplicingExtractor extends Manipulator {
 	@Override
 	public String performExtraction() {
 		return ScraperUtil.extract(getSource().toString(), tagOccurrence.getTag(), tagOccurrence.getOccurrence());
+	}
+
+	@Override
+	public void setMatcher(String matcher) {
+		this.tagOccurrence.setMatcher(matcher);
 	}
 }
