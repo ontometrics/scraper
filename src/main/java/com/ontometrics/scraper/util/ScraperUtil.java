@@ -24,10 +24,12 @@ public class ScraperUtil {
 
 	public static String getFieldValue(List<Field> fields, String label) {
 		String foundValue = null;
-		for (Field field : fields) {
-			if (field.getLabel().equalsIgnoreCase(label)) {
-				foundValue = field.getValue();
-				break;
+		if (fields != null && fields.size() > 0) {
+			for (Field field : fields) {
+				if (field.getLabel().equalsIgnoreCase(label)) {
+					foundValue = field.getValue();
+					break;
+				}
 			}
 		}
 		return foundValue;
@@ -95,7 +97,7 @@ public class ScraperUtil {
 		log.debug("occurrence {} at {} to {}", new Object[] { occurrence, begin, length });
 		return tags[occurrence].substring(begin, length);
 	}
-	
+
 	public static String extractTagMatching(String html, TagOccurrence toGet) {
 		log.debug("looking for {} in tags: {}", toGet.getMatching(), toGet.getTag());
 		String found = null;
@@ -111,7 +113,6 @@ public class ScraperUtil {
 		}
 		return found.toString();
 	}
-
 
 	private static String cleanupTag(String tag) {
 		tag = tag.startsWith("<") ? tag : "<" + tag;

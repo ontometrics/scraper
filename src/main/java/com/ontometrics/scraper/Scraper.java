@@ -298,7 +298,7 @@ public class Scraper {
 				}
 				log.debug("next url = {}", nextUrl);
 				extractor.url(nextUrl);
-				results.addAll(extractor.getFields());
+				this.extractedFields.addAll(extractor.getFields());
 			}
 		}
 		return this;
