@@ -263,6 +263,8 @@ public class ScraperTest {
 		log.debug("paired tags returned fields: {}", fields);
 		assertThat(ScraperUtil.getFieldValue(fields, "Eligible Applicants"), is(notNullValue()));
 
+		assertThat(fields.get(fields.size()-1).getValue().contains("mailto"), is(true));
+
 	}
 
 	@Test
