@@ -10,8 +10,8 @@ public class ScrapedField implements Field {
 
 	public ScrapedField(String label, String value) {
 		super();
-		this.label = label;
-		this.value = value;
+		this.label = (label == null) ? null : label.trim();
+		this.value = (value == null) ? null : value.trim();
 	}
 
 	@Override
@@ -23,13 +23,11 @@ public class ScrapedField implements Field {
 	public String getValue() {
 		return this.value;
 	}
-	
 
 	@Override
 	public void addValue(String newValue) {
 		this.value += delimiter + newValue;
 	}
-
 
 	@Override
 	public int hashCode() {
