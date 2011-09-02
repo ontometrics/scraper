@@ -309,8 +309,14 @@ public class ScraperTest {
 				.extract(scraper.extractor().ofClass("agency-name").getFields())
 				.getFields();
 
-		assertThat(ScraperUtil.getFieldValue(fields, "Agency"), is(notNullValue()));
-		assertThat(ScraperUtil.getFieldValue(fields, "Office"), is(notNullValue()));
+		String agency = ScraperUtil.getFieldValue(fields, "Agency");
+		String office = ScraperUtil.getFieldValue(fields, "Office");
+		
+		log.info("agency: {}", agency);
+		log.info("office: {}", office);
+		
+		assertThat(agency, is("Department of Agriculture"));
+		assertThat(office, is("Agricultural Research Service"));
 
 	}
 

@@ -20,26 +20,26 @@ import com.ontometrics.scraper.extraction.Link;
 public class ScraperUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
-	
+
 	public static String getFieldValue(List<Field> fields, String label) {
 		String foundValue = null;
-		for (Field field : fields){
-			if (field.getLabel().equalsIgnoreCase(label)){
-				foundValue = field.getValue();
-				break;
+		if (fields != null && fields.size() > 0) {
+			for (Field field : fields) {
+				if (field.getLabel().equalsIgnoreCase(label)) {
+					foundValue = field.getValue();
+					break;
+				}
 			}
 		}
 		return foundValue;
 	}
 
-
-	
-	public static List<Link> extractLinks(String sourceToParse){
+	public static List<Link> extractLinks(String sourceToParse) {
 		Source source = new Source(sourceToParse);
 		source.fullSequentialParse();
 		List<Link> links = new ArrayList<Link>();
 		List<Element> as = source.getAllElements(HTMLElementName.A);
-		for (Element linkElement : as){
+		for (Element linkElement : as) {
 			links.add(new Link(linkElement.getTextExtractor().toString(), linkElement.getAttributeValue("href")));
 		}
 		return links;
@@ -76,7 +76,7 @@ public class ScraperUtil {
 		int begin = tags[occurrence].indexOf(tag);
 		int length = tags[occurrence].length();
 		log.debug("occurrence {} at {} to {}", new Object[] { occurrence, begin, length });
-		//log.debug("returning: {}", tags[occurrence].substring(begin, length));
+		// log.debug("returning: {}", tags[occurrence].substring(begin, length));
 		return tags[occurrence].substring(begin, length);
 	}
 
@@ -86,7 +86,7 @@ public class ScraperUtil {
 		source.fullSequentialParse();
 		List<Element> links = source.getAllElements(HTMLElementName.A);
 		for (Element link : links) {
-			//log.info("link: {}", link.toString());
+			// log.info("link: {}", link.toString());
 			String href = link.getAttributeValue("href");
 			if (href != null && href.contains(sessionIDName)) {
 				sessionID = extractParameter(href, sessionIDName);
@@ -98,11 +98,9 @@ public class ScraperUtil {
 		return sessionID;
 	}
 
-
-
-	public static Map<String, String> createFieldMap(List<Field> fields) {		
+	public static Map<String, String> createFieldMap(List<Field> fields) {
 		Map<String, String> fieldMap = new HashMap<String, String>();
-		for (Field field : fields){
+		for (Field field : fields) {
 			fieldMap.put(field.getLabel(), field.getValue());
 		}
 		return fieldMap;
