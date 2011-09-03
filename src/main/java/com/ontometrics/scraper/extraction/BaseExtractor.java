@@ -1,5 +1,7 @@
 package com.ontometrics.scraper.extraction;
 
+import java.util.LinkedList;
+
 import net.htmlparser.jericho.Source;
 
 /**
@@ -30,7 +32,7 @@ public abstract class BaseExtractor {
 	/**
 	 * Does the work of actually honing in on the source we are interested in.
 	 */
-	private HtmlExtractor htmlExtractor;
+	private LinkedList<HtmlExtractor> htmlExtractors = new LinkedList<HtmlExtractor>();
 
 	/**
 	 * Provides access to the source from the {@link #htmlExtractor} which
@@ -42,7 +44,22 @@ public abstract class BaseExtractor {
 	 *         so they can have one chain of calls. See the note above.
 	 */
 	public BaseExtractor source(HtmlExtractor htmlExtractor) {
-		this.htmlExtractor = htmlExtractor;
+		this.htmlExtractors.add(htmlExtractor);
+		return this;
+	}
+
+	/**
+	 * Provided as a convenience method for use in cases where might want to
+	 * extract things from multiple sections of the page.
+	 * 
+	 * @param htmlExtractor
+	 *            the chain of {@link Manipulator}s that will be used to get
+	 *            interested html element
+	 * @return this for chaining, note: overload this in subclasses so calls can
+	 *         be chained.
+	 */
+	public BaseExtractor section(HtmlExtractor htmlExtractor) {
+		source(htmlExtractor);
 		return this;
 	}
 
@@ -53,7 +70,13 @@ public abstract class BaseExtractor {
 	 * @return the manipulated source gotten from the {@link #htmlExtractor}
 	 */
 	public Source getSource() {
-		return htmlExtractor.getSource();
+		StringBuffer accumulatedSource = new StringBuffer();
+		for (HtmlExtractor extractor : htmlExtractors) {
+			accumulatedSource.append(extractor.getSource().toString());
+		}
+		Source combinedSource = new Source(accumulatedSource);
+		combinedSource.fullSequentialParse();
+		return combinedSource;
 	}
 
 }

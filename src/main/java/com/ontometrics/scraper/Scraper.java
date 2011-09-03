@@ -89,6 +89,7 @@ public class Scraper {
 	 */
 	public List<URL> getLinks() throws IOException {
 		List<URL> links = new ArrayList<URL>();
+		
 		Source source = new Source(url);
 		source.fullSequentialParse();
 		List<Element> linkElements = source.getAllElements(HTMLElementName.A);

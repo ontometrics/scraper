@@ -33,8 +33,13 @@ public class TagOccurrence {
 		return matching;
 	}
 
+	public void setMatcher(String matcher) {
+		this.matching = matcher;
+	}
+
 	@Override
 	public String toString() {
 		return "TagOccurrence [tag=" + tag + ", occurrence=" + occurrence + ", matching=" + matching + "]";
 	}
+
 }

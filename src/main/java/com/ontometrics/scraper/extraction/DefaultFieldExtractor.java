@@ -1,11 +1,11 @@
 package com.ontometrics.scraper.extraction;
 
-import java.util.Map;
+import java.util.List;
 
-public class DefaultFieldExtractor implements FieldExtractor {
+public class DefaultFieldExtractor extends BaseExtractor implements FieldExtractor {
 	
 	@Override
-	public Map<String, String> getFields(){
+	public List<Field> getFields(){
 		return null;
 	}
 

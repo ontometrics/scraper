@@ -328,7 +328,7 @@ public class Extractor {
 				if (fieldHasMultipleValues(fields.get(i).toString())) {
 					field = delimitFieldValues(fields.get(i).toString());
 				} else {
-					field = fields.get(i).getTextExtractor().toString();
+					field = getValueFieldText(fields.get(i));
 				}
 				log.debug("outputting pair: {} : {}", label, field);
 				extractedFields.add(new ScrapedField(label, field));
@@ -375,7 +375,7 @@ public class Extractor {
 
 	private String delimitFieldValues(String source) {
 		Source result = new Source(source.replace("<br>", ";").replace("<br/>", ";"));
-		return result.getTextExtractor().toString();
+		return getValueFieldText(result.getFirstElement());
 	}
 
 	private void removeInvalidFields(List<Element> fields) {
@@ -506,9 +506,11 @@ public class Extractor {
 			Field lastField = null;
 			log.debug("cells.size: {}", cells.size());
 			for (int i = 0; i < cells.size(); i++) {
-				String label = cells.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
-				String value = cells.get(++i).getTextExtractor().toString().trim();
-				// log.debug("found field: {}={}", label, value);
+				Element labelElement = cells.get(i);
+				Element valueElement = cells.get(++i);
+				String label = labelElement.getTextExtractor().toString().trim().replaceAll(":$", "");
+				String value = getValueFieldText(valueElement);
+				log.debug("found field: {}={}", label, value);
 				if (StringUtils.isEmpty(label) && lastField != null) {
 					lastField.addValue(value);
 				} else {
@@ -520,6 +522,25 @@ public class Extractor {
 		return extractedFields;
 	}
 
+	private String getValueFieldText(Element valueElement) {
+		String result = "";
+		List<Element> subElements = valueElement.getAllElements(HTMLElementName.A);
+		if (subElements.size() > 0) {
+			log.debug("found a tag inside field!");
+			for (Element element : subElements) {
+				if (element.getName().equals(HTMLElementName.A) && element.getAttributeValue("href").contains("mailto")) {
+					log.debug("found mailto");
+					result = element.getAttributeValue("href");
+				} else {
+					result = element.getTextExtractor().toString();
+				}
+			}
+		} else {
+			result = valueElement.getTextExtractor().toString();
+		}
+		return result;
+	}
+
 	private List<Field> extractFieldsFromDL(String html) {
 		List<Field> extractedFields = new ArrayList<Field>();
 		Source source = new Source(html);
@@ -529,7 +550,9 @@ public class Extractor {
 		int cellCount = Math.min(labels.size(), values.size());
 		for (int i = 0; i < cellCount; i++) {
 			String label = labels.get(i).getTextExtractor().toString().trim().replaceAll(":$", "");
-			String value = values.get(i).getTextExtractor().toString().trim();
+			Element valueElement = values.get(i);
+			log.debug("looking at value element: {}", valueElement);
+			String value = getValueFieldText(valueElement);
 			extractedFields.add(new ScrapedField(label, value));
 		}
 		return extractedFields;
