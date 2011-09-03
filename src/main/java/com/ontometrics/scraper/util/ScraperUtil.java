@@ -34,7 +34,7 @@ public class ScraperUtil {
 		}
 		return foundValue;
 	}
-	
+
 	public static List<Link> extractLinks(String sourceToParse) {
 		Source source = new Source(sourceToParse);
 		source.fullSequentialParse();
@@ -77,8 +77,6 @@ public class ScraperUtil {
 		int begin = tags[occurrence].indexOf(tag);
 		int length = tags[occurrence].length();
 		log.debug("occurrence {} at {} to {}", new Object[] { occurrence, begin, length });
-		// log.debug("returning: {}", tags[occurrence].substring(begin,
-		// length));
 		return tags[occurrence].substring(begin, length);
 	}
 
