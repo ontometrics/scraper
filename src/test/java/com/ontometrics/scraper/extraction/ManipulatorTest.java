@@ -4,6 +4,7 @@ import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import net.htmlparser.jericho.Source;
 
 import org.junit.Before;
@@ -32,7 +33,9 @@ public class ManipulatorTest {
 	@Test
 	public void canSpliceSource() {
 
-		splicingExtractor.execute(PagedListingTable.getSource());
+		Source pageSource = PagedListingTable.getSource();
+		assertThat(pageSource, is(notNullValue()));
+		splicingExtractor.execute(pageSource);
 		Source result = mockExtractionAgent.getResult();
 
 		log.info("result after splice: {}", result);

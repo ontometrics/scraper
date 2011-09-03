@@ -39,7 +39,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * source.
 	 */
 	private LinkedList<Manipulator> manipulators;
-	
+
 	public static HtmlExtractor html() {
 		return new HtmlExtractor();
 	}
@@ -77,8 +77,10 @@ public class HtmlExtractor extends BaseExtractor {
 	public void performManipulations() {
 		try {
 			source = new Source(url);
-			manipulators.getFirst().execute(source);
-			source = manipulators.getLast().getSource();
+			if (hasManipulators()) {
+				manipulators.getFirst().execute(source);
+				source = manipulators.getLast().getSource();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -168,6 +170,10 @@ public class HtmlExtractor extends BaseExtractor {
 	public HtmlExtractor table() {
 		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, 0)));
 		return this;
+	}
+
+	private boolean hasManipulators() {
+		return this.manipulators != null;
 	}
 
 }

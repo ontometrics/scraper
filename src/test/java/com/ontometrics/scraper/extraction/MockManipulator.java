@@ -10,7 +10,7 @@ public class MockManipulator extends Manipulator {
 
 	@Override
 	public String performExtraction() {
-		return null;
+		return getSource().toString();
 	}
 
 	@Override
