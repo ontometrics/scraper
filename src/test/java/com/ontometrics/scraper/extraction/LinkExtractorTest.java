@@ -35,9 +35,8 @@ public class LinkExtractorTest {
 
 	@Test
 	public void canExtractLinksMatching() {
-		List<Link> links = linkExtractor
-				.section(html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title"))
-				.getLinks();
+		List<Link> links = linkExtractor.section(
+				html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title")).getLinks();
 		log.info("found {} links: {}", links.size(), links);
 		assertThat(links.size(), is(numberOfLinksInTargetTable));
 
@@ -57,6 +56,18 @@ public class LinkExtractorTest {
 				.getLinks();
 		log.info("found {} links: {}", links.size(), links);
 		assertThat(links.size(), is(numberOfLinksInTargetTable + numberOfLinksInTable3));
+	}
+
+	@Test
+	public void canExtractLinksMatchingAString() {
+		String linkPattern = "mode=VIEW";
+		List<Link> links = linkExtractor
+				.section(html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title"))
+				.matching(linkPattern)
+				.getLinks();
+
+		log.info("found {} links matching: {}", links.size(), linkPattern);
+
 	}
 
 }

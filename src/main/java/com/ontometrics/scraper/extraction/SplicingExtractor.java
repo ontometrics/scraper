@@ -1,14 +1,12 @@
 package com.ontometrics.scraper.extraction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class SplicingExtractor extends Manipulator {
 
-	private static final Logger log = LoggerFactory.getLogger(SplicingExtractor.class);
+	// private static final Logger log =
+	// LoggerFactory.getLogger(SplicingExtractor.class);
 
 	private SpliceOperation operation = SpliceOperation.After;
 
@@ -33,4 +31,5 @@ public class SplicingExtractor extends Manipulator {
 	public void setMatcher(String matcher) {
 		this.tagOccurrence.setMatcher(matcher);
 	}
+
 }

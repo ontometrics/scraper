@@ -34,7 +34,7 @@ public class ScraperUtil {
 		}
 		return foundValue;
 	}
-
+	
 	public static List<Link> extractLinks(String sourceToParse) {
 		Source source = new Source(sourceToParse);
 		source.fullSequentialParse();
