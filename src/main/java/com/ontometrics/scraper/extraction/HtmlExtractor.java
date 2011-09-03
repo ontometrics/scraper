@@ -39,6 +39,10 @@ public class HtmlExtractor extends BaseExtractor {
 	 * source.
 	 */
 	private LinkedList<Manipulator> manipulators;
+	
+	public static HtmlExtractor html() {
+		return new HtmlExtractor();
+	}
 
 	/**
 	 * The idea here is that the various static methods that are used to present
@@ -107,6 +111,41 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
+	 * Provides means of getting the html after a tag.
+	 * 
+	 * @param tag
+	 *            the element to look for
+	 * @param occurrence
+	 *            which one
+	 * @return all the html after (and including) the element
+	 */
+	public HtmlExtractor after(String tag, int occurrence) {
+		addManipulator(new SplicingExtractor(SpliceOperation.After, new TagOccurrence(tag, occurrence)));
+		return this;
+	}
+
+	/**
+	 * Provides a simple means of adding matching to the prior operation. For
+	 * example, if you want to find a table that contains a given string, you
+	 * would do:
+	 * <p>
+	 * <code>
+	 * table().matching(targetString)
+	 * </code>
+	 * <p>
+	 * How the matching is done is going to be based on the manipulator.
+	 * 
+	 * @param matcher
+	 *            just a simple string to use for matching, or could be a regex
+	 *            expression
+	 * @return the current HtmlExtractor for call chaining
+	 */
+	public HtmlExtractor matching(String matcher) {
+		manipulators.getLast().setMatcher(matcher);
+		return this;
+	}
+
+	/**
 	 * Usually the starting point: provides the path to a file that would be the
 	 * original source that is then progressively transformed by any additional
 	 * {@link Manipulator}s.
@@ -117,6 +156,17 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public HtmlExtractor url(URL url) {
 		this.url = url;
+		return this;
+	}
+
+	/**
+	 * Provides a means of extracting a table.
+	 * 
+	 * @return this for method chaining
+	 * @see #matching(String)
+	 */
+	public HtmlExtractor table() {
+		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, 0)));
 		return this;
 	}
 

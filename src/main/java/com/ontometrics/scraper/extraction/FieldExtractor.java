@@ -1,9 +1,9 @@
 package com.ontometrics.scraper.extraction;
 
-import java.util.Map;
+import java.util.List;
 
 public interface FieldExtractor {
 
-	public abstract Map<String, String> getFields();
+	public abstract List<Field> getFields();
 
 }

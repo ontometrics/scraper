@@ -13,4 +13,9 @@ public class MockManipulator extends Manipulator {
 		return null;
 	}
 
+	@Override
+	public void setMatcher(String matcher) {
+
+	}
+
 }
