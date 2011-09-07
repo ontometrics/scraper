@@ -17,23 +17,18 @@ public class ListingDetailScraper extends RecordScraper {
 
 	private static final Logger log = LoggerFactory.getLogger(ListingDetailScraper.class);
 
-	private LinkExtractor linkExtractor;
-
 	private Iterator iterator;
-
-	private FieldExtractor<?> detailExtractor;
 
 	private List<Link> links;
 
-	private List<Record> extractedRecords = new ArrayList<Record>();
+	private boolean convertURLs = true;
 
-	public Scraper listing(LinkExtractor linkExtractor) throws MalformedURLException {
-		this.linkExtractor = linkExtractor;
+	public ListingDetailScraper listing(LinkExtractor linkExtractor) throws MalformedURLException {
 		links = linkExtractor.getLinks();
 		if (iterator != null) {
-			int i = 0;
 			while (iterator.hasNext()) {
 				URL nextUrl = iterator.next();
+				log.debug("nexturl: {}", nextUrl);
 				if (nextUrl.toString().contains(sessionIdKeyword)) {
 					String urlString = nextUrl.toString().replace(sessionIdKeyword, getSessionIDName());
 					nextUrl = new URL(urlString);
@@ -46,28 +41,38 @@ public class ListingDetailScraper extends RecordScraper {
 		return this;
 	}
 
-	public Scraper iterator(Iterator iterator) {
+	public ListingDetailScraper iterator(Iterator iterator) {
 		this.iterator = iterator;
 		return this;
 	}
 
-	public Scraper details(FieldExtractor<?> detailExtractor) {
-		this.detailExtractor = detailExtractor;
+	public ListingDetailScraper details(FieldExtractor<?> detailExtractor) {
+		log.debug("extracting details from {} found links", links.size());
 		String builtUrl = null;
 		for (Link link : links) {
 			try {
-				if (isRelativeUrl(link.getValue())) {
+				builtUrl = link.getHref();
+				if (shouldConvertURLs() && isRelativeUrl(link.getValue())) {
 					builtUrl = convertToAbsoluteUrl(link.getValue());
 				}
 				log.debug("Using link = {}", builtUrl);
 				List<Field> fields = new ArrayList<Field>(detailExtractor.url(new URL(builtUrl)).getFields());
 				log.debug("returned fields = {}", fields);
-				extractedRecords.add(new ScrapedRecord(fields));
+				addRecord(new ScrapedRecord(fields));
 			} catch (MalformedURLException e) {
 				log.info("Bad URL in looping detail page for listing links: {}", e.toString());
 			}
 
 		}
+		return this;
+	}
+
+	private boolean shouldConvertURLs() {
+		return convertURLs;
+	}
+
+	public ListingDetailScraper setConvertURLs(boolean convertURLs) {
+		this.convertURLs = convertURLs;
 		return this;
 	}
 

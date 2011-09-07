@@ -3,6 +3,7 @@ package com.ontometrics.scraper.legacy;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +104,7 @@ public class Scraper {
 			// A element can contain other tags so need to extract the text from
 			// it:
 			String label = linkElement.getContent().getTextExtractor().toString();
-			log.debug(label + " <" + href + '>');
+			log.debug(MessageFormat.format("{0} <{1}>", label, href));
 			URL currentUrl;
 			try {
 				currentUrl = new URL(href);

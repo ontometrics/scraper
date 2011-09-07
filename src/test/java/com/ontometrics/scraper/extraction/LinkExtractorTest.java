@@ -18,12 +18,11 @@ public class LinkExtractorTest {
 	private LinkExtractor linkExtractor;
 	private int numberOfLinksInTable3 = 23;
 	private int numberOfLinksInTargetTable = 78;
+	private int numberOfMatchingLinks = 30;
 
 	@Before
 	public void setup() {
-
 		linkExtractor = new LinkExtractor();
-
 	}
 
 	@Test
@@ -43,9 +42,10 @@ public class LinkExtractorTest {
 		linkExtractor = new LinkExtractor();
 		links = linkExtractor
 				.source(html().url(PagedListingTable.getUrl()).table().matching("663-A-08-002"))
+				.matching("PAGECHANGE")
 				.getLinks();
 		log.info("found {} links: {}", links.size(), links);
-		assertThat(links.size(), is(numberOfLinksInTargetTable));
+		assertThat(links.size(), is(numberOfMatchingLinks));
 	}
 
 	@Test
