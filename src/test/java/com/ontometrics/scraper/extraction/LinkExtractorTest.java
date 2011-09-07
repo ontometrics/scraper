@@ -62,7 +62,7 @@ public class LinkExtractorTest {
 	public void canExtractLinksMatchingAString() {
 		String linkPattern = "mode=VIEW";
 		List<Link> links = linkExtractor
-				.section(html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title"))
+				.source(html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title"))
 				.matching(linkPattern)
 				.getLinks();
 

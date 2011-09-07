@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.extraction.Field;
+import com.ontometrics.scraper.legacy.Scraper;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class ScraperTest {
@@ -135,11 +136,18 @@ public class ScraperTest {
 	public void extractParameterFromLinksInIteratedTables() throws Exception {
 		Scraper scraper = new Scraper();
 		Iterator pageIterator = new Iterator() {
+			private int currentPage = 2;
+
 			@Override
-			public URL build(int i) {
-				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", i + 2);
+			public URL next() {
+				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage++);
 				log.debug("next page to iterate to: {}", nextPageUrl);
 				return TestUtil.getFileAsURL(nextPageUrl);
+			}
+
+			@Override
+			public boolean hasNext() {
+				return true;
 			}
 		};
 		List<String> ids = scraper
@@ -293,11 +301,18 @@ public class ScraperTest {
 		String linkPattern = "mode=VIEW";
 		Scraper scraper = new Scraper();
 		Iterator pageIterator = new Iterator() {
+			private int currentPage = 2;
+
 			@Override
-			public URL build(int i) {
-				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", i + 2);
+			public URL next() {
+				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage ++);
 				log.debug("next page to iterate to: {}", nextPageUrl);
 				return TestUtil.getFileAsURL(nextPageUrl);
+			}
+
+			@Override
+			public boolean hasNext() {
+				return true;
 			}
 		};
 		Scraper detailScraper = new Scraper();
