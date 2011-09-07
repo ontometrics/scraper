@@ -4,6 +4,8 @@ import java.net.URL;
 
 public interface Iterator {
 
-	public URL build(int i);
-	
+	public boolean hasNext();
+
+	public URL next();
+
 }

@@ -1,5 +1,6 @@
 package com.ontometrics.scraper.extraction;
 
+import java.net.URL;
 import java.util.LinkedList;
 
 import net.htmlparser.jericho.Source;
@@ -60,6 +61,13 @@ public abstract class BaseExtractor {
 	 */
 	public BaseExtractor section(HtmlExtractor htmlExtractor) {
 		source(htmlExtractor);
+		return this;
+	}
+	
+	public BaseExtractor url(URL url) {
+		for (HtmlExtractor extractor : htmlExtractors){
+			extractor.url(url);
+		}
 		return this;
 	}
 

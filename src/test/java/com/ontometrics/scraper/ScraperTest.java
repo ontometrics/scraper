@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.extraction.Field;
+import com.ontometrics.scraper.legacy.Scraper;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class ScraperTest {
@@ -60,7 +61,8 @@ public class ScraperTest {
 	@Test
 	public void extractTableFromPage() throws Exception {
 		log.info("HtmlElementName.TABLE: {}", HTMLElementName.TABLE);
-		String pageText = scraper.url(PagedListingTable.getUrl())
+		String pageText = scraper
+				.url(PagedListingTable.getUrl())
 				.extract(scraper.extractor().table(3).execute())
 				.getResult();
 		log.debug("table extracted: {}", pageText);
@@ -71,7 +73,8 @@ public class ScraperTest {
 
 	@Test
 	public void extractLinksFromTableOnPage() throws Exception {
-		List<Field> urls = scraper.url(PagedListingTable.getUrl())
+		List<Field> urls = scraper
+				.url(PagedListingTable.getUrl())
 				.extract(scraper.extractor().setUseDefaultFieldExtractor(false).table(3).links().getFields())
 				.getFields();
 
@@ -82,7 +85,8 @@ public class ScraperTest {
 
 	@Test
 	public void extractContentsOfElementWithId() throws Exception {
-		String tagText = scraper.url(ProgramDetailPage.getUrl())
+		String tagText = scraper
+				.url(ProgramDetailPage.getUrl())
 				.extract(scraper.extractor().id(eligibilityCodeId).execute())
 				.getResult();
 		log.info("tag text: {}", tagText);
@@ -91,7 +95,8 @@ public class ScraperTest {
 
 	@Test
 	public void extractContentsByClassAndOccurrence() throws Exception {
-		String tagText = scraper.url(ProgramDetailPage.getUrl())
+		String tagText = scraper
+				.url(ProgramDetailPage.getUrl())
 				.extract(scraper.extractor().ofClass(eligibilityClassName, 1).execute())
 				.getResult();
 		log.info("tag text: {}", tagText);
@@ -102,7 +107,8 @@ public class ScraperTest {
 	@Test
 	public void extractParameterFromLinksInTable() throws Exception {
 		Scraper scraper = new Scraper();
-		List<String> ids = scraper.url(PagedListingTable.getUrl())
+		List<String> ids = scraper
+				.url(PagedListingTable.getUrl())
 				.extractStrings(scraper.extractor().table(3).links().parameter("oppId").getResults())
 				.getResults();
 
@@ -116,7 +122,8 @@ public class ScraperTest {
 	@Test
 	public void extractLinksFromTableContainingString() throws Exception {
 		Scraper scraper = new Scraper();
-		String table = scraper.url(DetailPage.getUrl())
+		String table = scraper
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().table("Document Type").execute())
 				.getResult();
 
@@ -129,14 +136,22 @@ public class ScraperTest {
 	public void extractParameterFromLinksInIteratedTables() throws Exception {
 		Scraper scraper = new Scraper();
 		Iterator pageIterator = new Iterator() {
+			private int currentPage = 2;
+
 			@Override
-			public URL build(int i) {
-				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", i + 2);
+			public URL next() {
+				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage++);
 				log.debug("next page to iterate to: {}", nextPageUrl);
 				return TestUtil.getFileAsURL(nextPageUrl);
 			}
+
+			@Override
+			public boolean hasNext() {
+				return true;
+			}
 		};
-		List<String> ids = scraper.url(PagedListingTable.getUrl())
+		List<String> ids = scraper
+				.url(PagedListingTable.getUrl())
 				.pages(1)
 				.iterator(pageIterator)
 				.extractStrings(scraper.extractor().table(3).links().parameter("oppId").getResults())
@@ -149,7 +164,8 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsFromTable() throws IOException {
 		Scraper scraper = new Scraper();
-		List<Field> opportunities = scraper.url(DetailPage.getUrl())
+		List<Field> opportunities = scraper
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().field("title", HTMLElementName.H1).getFields())
 				.getFields();
 
@@ -161,7 +177,8 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsFromTableAndTitleFromH1() throws IOException {
 		Scraper scraper = new Scraper();
-		List<Field> opportunities = scraper.url(DetailPage.getUrl())
+		List<Field> opportunities = scraper
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().field("title", HTMLElementName.H1).getFields())
 				.extract(scraper.extractor().table(4).getFields())
 				.getFields();
@@ -175,7 +192,8 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsAfterTablePairedTags() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		List<Field> fields = scraper.url(DetailPage.getUrl())
+		List<Field> fields = scraper
+				.url(DetailPage.getUrl())
 				.extract(
 						scraper.extractor()
 								.after(HTMLElementName.TABLE, 5)
@@ -184,6 +202,8 @@ public class ScraperTest {
 				.getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
+		assertThat(ScraperUtil.getFieldValue(fields, "description").startsWith("The focus of this two-year program"),
+				is(true));
 		log.debug("fields = {}", fields);
 
 	}
@@ -191,7 +211,8 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsBasedOnPairedTags() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		List<Field> fields = scraper.url(DetailPage.getUrl())
+		List<Field> fields = scraper
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields())
 				.getFields();
 
@@ -203,7 +224,8 @@ public class ScraperTest {
 	@Test
 	public void extractFieldWithMultipleValues() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		List<Field> fields = scraper.url(DetailPage.getUrl())
+		List<Field> fields = scraper
+				.url(DetailPage.getUrl())
 				.extract(scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields())
 				.getFields();
 
@@ -217,7 +239,8 @@ public class ScraperTest {
 
 		log.debug("eligibility codes: {}", eligibilityCodes);
 
-		fields = scraper.url(TableWithMultipleValuesOnMultipleRows.getUrl())
+		fields = scraper
+				.url(TableWithMultipleValuesOnMultipleRows.getUrl())
 				.extract(scraper.extractor().getFields())
 				.getFields();
 
@@ -254,7 +277,8 @@ public class ScraperTest {
 	@Test
 	public void extractFieldsBasedOnPairedTagsAfterAnotherTag() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		List<Field> fields = scraper.url(DetailPage.getUrl())
+		List<Field> fields = scraper
+				.url(DetailPage.getUrl())
 				.extract(
 						scraper.extractor()
 								.after(HTMLElementName.TABLE, 5)
@@ -266,7 +290,7 @@ public class ScraperTest {
 		log.debug("paired tags returned fields: {}", fields);
 		assertThat(ScraperUtil.getFieldValue(fields, "Eligible Applicants"), is(notNullValue()));
 
-		assertThat(fields.get(fields.size()-1).getValue().contains("mailto"), is(true));
+		assertThat(fields.get(fields.size() - 1).getValue().contains("mailto"), is(true));
 
 	}
 
@@ -277,16 +301,24 @@ public class ScraperTest {
 		String linkPattern = "mode=VIEW";
 		Scraper scraper = new Scraper();
 		Iterator pageIterator = new Iterator() {
+			private int currentPage = 2;
+
 			@Override
-			public URL build(int i) {
-				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", i + 2);
+			public URL next() {
+				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage ++);
 				log.debug("next page to iterate to: {}", nextPageUrl);
 				return TestUtil.getFileAsURL(nextPageUrl);
+			}
+
+			@Override
+			public boolean hasNext() {
+				return true;
 			}
 		};
 		Scraper detailScraper = new Scraper();
 		detailScraper.extractor().setUseDefaultFieldExtractor(false);
-		List<Record> records = scraper.url(PagedListingTable.getUrl())
+		List<Record> records = scraper
+				.url(PagedListingTable.getUrl())
 				.pages(2)
 				.iterator(pageIterator)
 				.listing(
@@ -307,16 +339,17 @@ public class ScraperTest {
 	@Test
 	public void extractBuyerAndOfficeInformation() throws MalformedURLException, IOException {
 		Scraper scraper = new Scraper();
-		List<Field> fields = scraper.url(ProgramDetailPage.getUrl())
+		List<Field> fields = scraper
+				.url(ProgramDetailPage.getUrl())
 				.extract(scraper.extractor().ofClass("agency-name").getFields())
 				.getFields();
 
 		String agency = ScraperUtil.getFieldValue(fields, "Agency");
 		String office = ScraperUtil.getFieldValue(fields, "Office");
-		
+
 		log.info("agency: {}", agency);
 		log.info("office: {}", office);
-		
+
 		assertThat(agency, is("Department of Agriculture"));
 		assertThat(office, is("Agricultural Research Service"));
 
@@ -327,7 +360,8 @@ public class ScraperTest {
 		String officeInfoID = "dnf_class_values_cfda__hq_office_info__widget";
 		String contactInfoFromPage = "Kathleen S. Townson, 5601 Sunnyside Ave, MS-5110, Betsville, Maryland 20705 Email: kathleen.townson@ars.usda.gov Phone: (301) 504-1702";
 		Scraper scraper = new Scraper();
-		String contactInfo = scraper.url(ProgramDetailPage.getUrl())
+		String contactInfo = scraper
+				.url(ProgramDetailPage.getUrl())
 				.extract(scraper.extractor().id(officeInfoID).execute())
 				.getResult();
 
