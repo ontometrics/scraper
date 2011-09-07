@@ -52,7 +52,8 @@ public abstract class Manipulator implements Manipulation {
 	public final void execute(Source source) {
 		this.source = source;
 		String result = performExtraction();
-		log.debug("result of extraction: {}", result);
+		if (result == null)
+			throw new IllegalStateException("Manipulator " + this.getClass().getName() + " returned null.");
 		if (type == OperationType.Manipulator) {
 			log.debug("reassigning source..");
 			source = new Source(result);

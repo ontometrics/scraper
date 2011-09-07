@@ -1,6 +1,8 @@
 package com.ontometrics.scraper.extraction;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
@@ -11,31 +13,71 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Provides a means of pulling fields out of a page.
+ * <p>
+ * This extractor will work on tables and on DLs. The tables have to have 2
+ * columns (TDs). This will take the first as the label and the second as the
+ * value. Same is done with the DLs: the DT is read as the label and the DD as
+ * the value.
+ * <p>
+ * One way to use this tool is to just start with this default extractor and
+ * then start removing the the elements that are not helping.
+ * 
+ * @author Rob
+ */
 public class DefaultFieldExtractor extends BaseExtractor implements FieldExtractor<DefaultFieldExtractor> {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultFieldExtractor.class);
+	
+	@Override
+	public DefaultFieldExtractor url(URL url) {
+		super.url(url);
+		return this;
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.ontometrics.scraper.extraction.FieldExtractor#getFields()
+	 */
 	@Override
 	public List<Field> getFields() {
+		List<Field> extractedFields = new ArrayList<Field>();
+		extractedFields.addAll(extractFieldsFromTables());
+		extractedFields.addAll(extractFieldsFromDLs());
+		return extractedFields;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics
+	 * .scraper.extraction.HtmlExtractor)
+	 */
+	public DefaultFieldExtractor source(HtmlExtractor htmlExtractor) {
+		super.source(htmlExtractor);
+		return this;
+	}
+
+	private Collection<? extends Field> extractFieldsFromDLs() {
+		List<Field> extractedFields = new ArrayList<Field>();
+		List<Element> dls = getSource().getAllElements(HTMLElementName.DL);
+		for (Element dt : dls) {
+			extractedFields.addAll(extractFieldsFromDL(dt.toString()));
+		}
+		return extractedFields;
+	}
+
+	private Collection<? extends Field> extractFieldsFromTables() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> tables = getSource().getAllElements(HTMLElementName.TABLE);
 
 		for (Element table : tables) {
 			extractedFields.addAll(extractFieldsFromTable(table.toString()));
 		}
-
-		List<Element> dls = getSource().getAllElements(HTMLElementName.DL);
-
-		for (Element dt : dls) {
-			extractedFields.addAll(extractFieldsFromDL(dt.toString()));
-		}
-
 		return extractedFields;
-	}
-	
-	public DefaultFieldExtractor source(HtmlExtractor htmlExtractor) {
-		super.source(htmlExtractor);
-		return this;
 	}
 
 	private List<Field> extractFieldsFromTable(String html) {

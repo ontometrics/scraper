@@ -70,8 +70,8 @@ public class LinkExtractor extends BaseExtractor {
 			String href = linkElement.getAttributeValue("href");
 			if (href != null) {
 				Link link = new Link(text, href);
-				log.debug("constructed link: {} from {}", link, linkElement);
-				if (matcher == null || link.getHref().matches(matcher)) {
+				log.debug("constructed link: {} from {} must match: {}", new Object[]{link, linkElement, matcher});
+				if (matcher == null || link.getHref().contains(matcher)) {
 					links.add(link);
 				}
 			}

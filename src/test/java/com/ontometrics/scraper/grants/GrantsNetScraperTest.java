@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ontometrics.scraper.Scraper;
 import com.ontometrics.scraper.extraction.Field;
+import com.ontometrics.scraper.legacy.Scraper;
 
 public class GrantsNetScraperTest {
 	
