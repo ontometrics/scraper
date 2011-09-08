@@ -139,7 +139,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				}
 			}
 		} else {
-			result = valueElement.getTextExtractor().toString();
+			result = valueElement.getRenderer().setNewLine("; ").toString();
+			log.debug("returning value = {}", result);
 		}
 		return result;
 	}
