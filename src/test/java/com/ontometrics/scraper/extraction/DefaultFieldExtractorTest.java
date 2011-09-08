@@ -14,6 +14,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.Record;
+import com.ontometrics.scraper.ScrapedRecord;
+import static com.ontometrics.scraper.grants.GrantHtmlSample.*;
+
 public class DefaultFieldExtractorTest {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultFieldExtractorTest.class);
@@ -26,6 +30,19 @@ public class DefaultFieldExtractorTest {
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		log.debug("fields = {}", fields);
+
+	}
+
+	@Test
+	public void extractsFieldsFromULs() {
+
+		List<Field> fields = fieldExtractor.source(html().url(GrantsnetDetailPage.getUrl())).getFields();
+
+		assertThat(fields.size(), is(greaterThan(0)));
+		Record record = new ScrapedRecord(fields);
+
+		Field fieldFromUL = new ScrapedField("Application deadline(s)", "07/13/2010");
+		assertThat(record.getFields().contains(fieldFromUL), is(true));
 
 	}
 
