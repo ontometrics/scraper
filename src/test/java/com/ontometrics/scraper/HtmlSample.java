@@ -34,7 +34,13 @@ public enum HtmlSample {
 	 * Sometimes a label with multiple values is done as one or more follow on
 	 * rows that have no label.
 	 */
-	TableWithMultipleValuesOnMultipleRows("/testpages/table-with-multiple-values-on-rows.html");
+	TableWithMultipleValuesOnMultipleRows("/testpages/table-with-multiple-values-on-rows.html"),
+	
+	/**
+	 * Sometimes a label with multiple values is done as one or more follow on
+	 * rows that have no label.
+	 */
+	TableWithULs("/testpages/table-with-uls.html");
 
 	private String path;
 
