@@ -1,4 +1,4 @@
-package com.ontometrics.scraper;
+package com.ontometrics.scraper.legacy;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
 import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
@@ -24,6 +24,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.Iterator;
+import com.ontometrics.scraper.Record;
+import com.ontometrics.scraper.TestUtil;
 import com.ontometrics.scraper.extraction.Field;
 import com.ontometrics.scraper.legacy.Scraper;
 import com.ontometrics.scraper.util.ScraperUtil;

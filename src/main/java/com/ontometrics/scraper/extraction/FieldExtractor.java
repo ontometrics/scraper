@@ -9,6 +9,8 @@ public interface FieldExtractor<T extends FieldExtractor<T>> {
 	
 	public abstract T source(HtmlExtractor htmlExtractor);
 	
+	public abstract T field(String label, String element);
+	
 	public abstract T url(URL url);
 
 }
