@@ -102,7 +102,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	private List<Field> extractFieldsFromULs() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> lists = getSource().getAllElements(HTMLElementName.UL);
-		log.debug("found {} ULs to try and find fields in {}", lists.size(), getSource().toString());
+		log.debug("found {} ULs to try and find fields in", lists.size());
 		for (Element list : lists) {
 			extractedFields.addAll(extractFieldsFromUL(list.toString()));
 		}
