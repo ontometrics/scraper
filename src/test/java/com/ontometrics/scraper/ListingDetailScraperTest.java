@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import com.ontometrics.scraper.extraction.DefaultFieldExtractor;
 import com.ontometrics.scraper.extraction.Link;
 import com.ontometrics.scraper.extraction.LinkExtractor;
-import com.ontometrics.scraper.legacy.Scraper;
 
 public class ListingDetailScraperTest {
 
