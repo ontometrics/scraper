@@ -3,7 +3,9 @@ package com.ontometrics.scraper.extraction;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -12,6 +14,8 @@ import net.htmlparser.jericho.Source;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ontometrics.scraper.TagOccurrence;
 
 /**
  * Provides a means of pulling fields out of a page.
@@ -30,6 +34,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultFieldExtractor.class);
 
+	private List<DesignatedField> fieldsToGet = new ArrayList<DesignatedField>();
+
 	@Override
 	public DefaultFieldExtractor url(URL url) {
 		super.url(url);
@@ -47,6 +53,21 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		extractedFields.addAll(extractFieldsFromULs());
 		extractedFields.addAll(extractFieldsFromTables());
 		extractedFields.addAll(extractFieldsFromDLs());
+		extractedFields.addAll(extractDesignatedFields());
+		return extractedFields;
+	}
+
+	private List<Field> extractDesignatedFields() {
+		List<Field> extractedFields = new ArrayList<Field>();
+
+		for (DesignatedField designatedField : this.fieldsToGet) {
+			List<Element> elementWithValue = getSource().getAllElements(designatedField.getTagToGetValueFrom());
+			Element firstElement = elementWithValue.get(0);
+			String value = firstElement.getTextExtractor().toString();
+			log.debug("looking for field: {}, value: {}", designatedField.getLabel(), value);
+			extractedFields.add(new ScrapedField(designatedField.getLabel(), value));
+		}
+
 		return extractedFields;
 	}
 
@@ -62,7 +83,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return this;
 	}
 
-	private Collection<? extends Field> extractFieldsFromDLs() {
+	private List<Field> extractFieldsFromDLs() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> dls = getSource().getAllElements(HTMLElementName.DL);
 		for (Element dt : dls) {
@@ -71,7 +92,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return extractedFields;
 	}
 
-	private Collection<? extends Field> extractFieldsFromTables() {
+	private List<Field> extractFieldsFromTables() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> tables = getSource().getAllElements(HTMLElementName.TABLE);
 		log.debug("found {} tables to try and find fields in {}", tables.size(), getSource().toString());
@@ -82,7 +103,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return extractedFields;
 	}
 
-	private Collection<? extends Field> extractFieldsFromULs() {
+	private List<Field> extractFieldsFromULs() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> lists = getSource().getAllElements(HTMLElementName.UL);
 		log.debug("found {} ULs to try and find fields in {}", lists.size(), getSource().toString());
@@ -171,6 +192,13 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			result = valueElement.getTextExtractor().toString();
 		}
 		return result;
+	}
+
+	@Override
+	public DefaultFieldExtractor field(String label, String element) {
+		getCurrentHtmlExtractor().addManipulator(new ElementManipulator(new TagOccurrence(element, 0)));
+		this.fieldsToGet.add(new DesignatedField(label, element));
+		return this;
 	}
 
 }
