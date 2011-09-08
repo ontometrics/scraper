@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 public class DefaultFieldExtractor extends BaseExtractor implements FieldExtractor<DefaultFieldExtractor> {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultFieldExtractor.class);
-	
+
 	@Override
 	public DefaultFieldExtractor url(URL url) {
 		super.url(url);
@@ -44,6 +44,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	@Override
 	public List<Field> getFields() {
 		List<Field> extractedFields = new ArrayList<Field>();
+		extractedFields.addAll(extractFieldsFromULs());
 		extractedFields.addAll(extractFieldsFromTables());
 		extractedFields.addAll(extractFieldsFromDLs());
 		return extractedFields;
@@ -73,9 +74,20 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	private Collection<? extends Field> extractFieldsFromTables() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> tables = getSource().getAllElements(HTMLElementName.TABLE);
+		log.debug("found {} tables to try and find fields in {}", tables.size(), getSource().toString());
 
 		for (Element table : tables) {
 			extractedFields.addAll(extractFieldsFromTable(table.toString()));
+		}
+		return extractedFields;
+	}
+
+	private Collection<? extends Field> extractFieldsFromULs() {
+		List<Field> extractedFields = new ArrayList<Field>();
+		List<Element> lists = getSource().getAllElements(HTMLElementName.UL);
+		log.debug("found {} ULs to try and find fields in {}", lists.size(), getSource().toString());
+		for (Element list : lists) {
+			extractedFields.addAll(extractFieldsFromUL(list.toString()));
 		}
 		return extractedFields;
 	}
@@ -121,6 +133,23 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			log.debug("looking at value element: {}", valueElement);
 			String value = getValueFieldText(valueElement);
 			extractedFields.add(new ScrapedField(label, value));
+		}
+		return extractedFields;
+	}
+
+	private Collection<? extends Field> extractFieldsFromUL(String html) {
+		List<Field> extractedFields = new ArrayList<Field>();
+		Source source = new Source(html);
+		source.fullSequentialParse();
+		List<Element> lis = source.getAllElements(HTMLElementName.LI);
+		for (Element li : lis) {
+			log.debug("looking at li: {} w/text: {}", li, li.getTextExtractor().toString());
+			String[] parts = li.getTextExtractor().toString().split(":");
+			if (parts.length == 2) {
+				Field field = new ScrapedField(parts[0], parts[1]);
+				extractedFields.add(field);
+				log.debug("found <li> to process: {}, added field: {}", li, field);
+			}
 		}
 		return extractedFields;
 	}
