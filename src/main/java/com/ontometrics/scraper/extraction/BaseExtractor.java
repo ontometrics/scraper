@@ -70,6 +70,10 @@ public abstract class BaseExtractor {
 		}
 		return this;
 	}
+	
+	protected HtmlExtractor getCurrentHtmlExtractor(){
+		return this.htmlExtractors.getLast();
+	}
 
 	/**
 	 * Provides a means of kicking off the {@link Manipulation} chain and
