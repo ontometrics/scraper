@@ -3,9 +3,7 @@ package com.ontometrics.scraper.extraction;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -14,8 +12,6 @@ import net.htmlparser.jericho.Source;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.ontometrics.scraper.TagOccurrence;
 
 /**
  * Provides a means of pulling fields out of a page.
@@ -197,7 +193,6 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	@Override
 	public DefaultFieldExtractor field(String label, String element) {
-		getCurrentHtmlExtractor().addManipulator(new ElementManipulator(new TagOccurrence(element, 0)));
 		this.fieldsToGet.add(new DesignatedField(label, element));
 		return this;
 	}
