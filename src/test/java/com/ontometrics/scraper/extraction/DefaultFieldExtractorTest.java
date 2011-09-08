@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import net.htmlparser.jericho.HTMLElementName;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,4 +48,19 @@ public class DefaultFieldExtractorTest {
 
 	}
 
+	@Test
+	public void extractsFieldFromSpecificTagOccurrence() {
+
+		List<Field> fields = fieldExtractor
+				.source(html().url(GrantsnetDetailPage.getUrl()))
+				.field("source", HTMLElementName.H2)
+				.getFields();
+
+		assertThat(fields.size(), is(greaterThan(0)));
+		Record record = new ScrapedRecord(fields);
+
+		Field fieldFromUL = new ScrapedField("source", "Autonomous Province of Trento");
+		assertThat(record.getFields().contains(fieldFromUL), is(true));
+
+	}
 }
