@@ -74,7 +74,7 @@ public class DefaultFieldExtractorTest {
 		assertThat(fields.size(), is(greaterThan(0)));
 		Record record = new ScrapedRecord(fields);
 
-		Field fieldFromUL = new ScrapedField("Minimum Term", null);
+		Field fieldFromUL = new ScrapedField("Minimum Term", "");
 		assertThat(record.getFields().contains(fieldFromUL), is(true));
 	}
 	
