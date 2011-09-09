@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.HtmlSample;
 import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.ScrapedRecord;
 
@@ -31,7 +32,8 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void extractFieldsAfterTablePairedTags() throws MalformedURLException, IOException {
-		List<Field> fields = fieldExtractor.source(html().url(DetailPage.getUrl())).getFields();
+		List<Field> fields = fieldExtractor.source(html().url(DetailPage.getUrl()))
+				.getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		log.debug("fields = {}", fields);
@@ -41,21 +43,22 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void extractsFieldsFromULs() {
 
-		List<Field> fields = fieldExtractor.source(html().url(GrantsnetDetailPage.getUrl())).getFields();
+		List<Field> fields = fieldExtractor.source(html().url(HtmlSample.TableWithULs.getUrl()))
+				.getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		Record record = new ScrapedRecord(fields);
 
 		Field fieldFromUL = new ScrapedField("Application deadline(s)", "07/13/2010");
-		assertThat(record.getFields().contains(fieldFromUL), is(true));
+		assertThat(record.getFields()
+				.contains(fieldFromUL), is(true));
 
 	}
 
 	@Test
 	public void extractsFieldFromSpecificTagOccurrence() {
 
-		List<Field> fields = fieldExtractor
-				.source(html().url(GrantsnetDetailPage.getUrl()))
+		List<Field> fields = fieldExtractor.source(html().url(HtmlSample.TableWithULs.getUrl()))
 				.field("source", HTMLElementName.H2)
 				.getFields();
 
@@ -63,7 +66,8 @@ public class DefaultFieldExtractorTest {
 		Record record = new ScrapedRecord(fields);
 
 		Field fieldFromUL = new ScrapedField("source", "Autonomous Province of Trento");
-		assertThat(record.getFields().contains(fieldFromUL), is(true));
+		assertThat(record.getFields()
+				.contains(fieldFromUL), is(true));
 
 	}
 
