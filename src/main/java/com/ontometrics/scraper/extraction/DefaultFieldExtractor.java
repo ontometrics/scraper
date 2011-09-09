@@ -8,6 +8,7 @@ import java.util.List;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.Tag;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -166,7 +167,21 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				Field field = new ScrapedField(parts[0], parts[1]);
 				extractedFields.add(field);
 				log.debug("found <li> to process: {}, added field: {}", li, field);
+				break;
 			}
+			if (li.getAllTags().size() == 4) {
+				Tag enclosingTag = li.getAllTags().get(1);
+				log.info("enclosing tag: {}", enclosingTag);
+				log.info("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
+				String tagText = enclosingTag.getElement().getTextExtractor().toString();
+				String allText = li.getTextExtractor().toString();
+				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
+				log.debug("tagText: {} alltext: {}", tagText, allText);
+				if (allText.startsWith(tagText)) {
+					extractedFields.add(new ScrapedField(tagText, allText.substring(tagText.length() + 1)));
+				}
+			}
+
 		}
 		return extractedFields;
 	}
