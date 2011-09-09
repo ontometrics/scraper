@@ -178,7 +178,9 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
 				log.debug("tagText: {} alltext: {}", tagText, allText);
 				if (allText.startsWith(tagText)) {
-					extractedFields.add(new ScrapedField(tagText, allText.substring(tagText.length() + 1)));
+					String valueText = (allText.length() > tagText.length()) ? allText.substring(tagText.length() + 1)
+							: null;
+					extractedFields.add(new ScrapedField(tagText, valueText));
 				}
 			}
 
