@@ -9,6 +9,7 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 import net.htmlparser.jericho.Tag;
+import net.htmlparser.jericho.TagType;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -160,6 +161,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		List<Element> lis = source.getAllElements(HTMLElementName.LI);
+		log.debug("All Lis = {}", lis);
 		for (Element li : lis) {
 			log.debug("looking at li: {} w/text: {}", li, li.getTextExtractor().toString());
 			String[] parts = li.getTextExtractor().toString().split(":");
@@ -167,25 +169,38 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				Field field = new ScrapedField(parts[0], parts[1]);
 				extractedFields.add(field);
 				log.debug("found <li> to process: {}, added field: {}", li, field);
-				break;
-			}
-			if (li.getAllTags().size() == 4) {
+			} else if (tagsWithSpecificTagRemoved(HTMLElementName.BR, li.getAllTags()).size() == 4) {
 				Tag enclosingTag = li.getAllTags().get(1);
 				log.info("enclosing tag: {}", enclosingTag);
 				log.info("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
-				String tagText = enclosingTag.getElement().getTextExtractor().toString();
-				String allText = li.getTextExtractor().toString();
+				String tagText = enclosingTag.getElement().getTextExtractor().toString().trim().replaceAll(":$", "");
+				String allText = li.getTextExtractor().toString().trim().replaceAll(":$", "");
 				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
-				log.debug("tagText: {} alltext: {}", tagText, allText);
+				log.debug("tagText (length = {}): {} alltext (length = {}): {}", new Object[] { tagText.length(), tagText, allText.length(), allText });
 				if (allText.startsWith(tagText)) {
 					String valueText = (allText.length() > tagText.length()) ? allText.substring(tagText.length() + 1)
-							: null;
+							: "";
 					extractedFields.add(new ScrapedField(tagText, valueText));
+					log.debug("extracted fields = {}", extractedFields);
 				}
 			}
 
 		}
 		return extractedFields;
+	}
+	
+	private List<Tag> tagsWithSpecificTagRemoved(String tagNameToRemove, List<Tag> tags) {
+		log.debug("Tag name to remove = {}, tags to operate on = {}", tagNameToRemove, tags);
+		for (int i = 0; i < tags.size(); i++) {
+			Tag currentTag = tags.get(i);
+			log.debug("Current tag name = {}", currentTag.getName());
+			if (currentTag.getName() == tagNameToRemove) {
+				tags.remove(currentTag);
+				i--;
+			}
+		}
+		log.debug("returning tags = {}", tags);
+		return tags;
 	}
 
 	private String getValueFieldText(Element valueElement) {
@@ -202,7 +217,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				}
 			}
 		} else {
-			result = valueElement.getRenderer().setNewLine("; ").toString();
+			result = valueElement.getTextExtractor().toString();
 			log.debug("returning value = {}", result);
 		}
 		return result;
