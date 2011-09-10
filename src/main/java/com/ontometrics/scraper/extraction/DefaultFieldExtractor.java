@@ -173,8 +173,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				Tag enclosingTag = li.getAllTags().get(1);
 				log.info("enclosing tag: {}", enclosingTag);
 				log.info("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
-				String tagText = enclosingTag.getElement().getTextExtractor().toString();
-				String allText = li.getTextExtractor().toString();
+				String tagText = enclosingTag.getElement().getTextExtractor().toString().trim().replaceAll(":$", "");
+				String allText = li.getTextExtractor().toString().trim().replaceAll(":$", "");
 				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
 				log.debug("tagText (length = {}): {} alltext (length = {}): {}", new Object[] { tagText.length(), tagText, allText.length(), allText });
 				if (allText.startsWith(tagText)) {
@@ -217,7 +217,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				}
 			}
 		} else {
-			result = valueElement.getRenderer().setNewLine("; ").toString();
+			result = valueElement.getTextExtractor().toString();
 			log.debug("returning value = {}", result);
 		}
 		return result;
