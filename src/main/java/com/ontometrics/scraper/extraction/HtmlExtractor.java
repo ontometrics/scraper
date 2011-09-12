@@ -176,4 +176,9 @@ public class HtmlExtractor extends BaseExtractor {
 		return this.manipulators != null;
 	}
 
+	public HtmlExtractor id(String tag, String id) {
+		addManipulator(new ElementManipulator(new TagOccurrence(tag, ElementIdentifierType.ID, id)));
+		return this;
+	}
+
 }

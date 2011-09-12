@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.TagOccurrence;
+import com.ontometrics.scraper.extraction.ElementIdentifierType;
 import com.ontometrics.scraper.extraction.Field;
 import com.ontometrics.scraper.extraction.Link;
 
@@ -94,6 +95,18 @@ public class ScraperUtil {
 		int length = tags[occurrence].length();
 		log.debug("occurrence {} at {} to {}", new Object[] { occurrence, begin, length });
 		return tags[occurrence].substring(begin, length);
+	}
+
+	public static String extractUsingIdentifier(String html, TagOccurrence tagOccurrence) {
+		String result = null;
+		Source source = new Source(html);
+		source.fullSequentialParse();
+		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
+			result = source.getElementById(tagOccurrence.getIdentifier()).toString();
+		}
+		log.debug("identifier: {}/{} result: {}",
+				new Object[] { tagOccurrence.getIdentifier(), tagOccurrence.getElementIdentifierType(), result });
+		return result;
 	}
 
 	public static String extractTagMatching(String html, TagOccurrence toGet) {

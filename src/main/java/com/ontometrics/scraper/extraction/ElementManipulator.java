@@ -14,7 +14,7 @@ public class ElementManipulator extends Manipulator {
 
 	public ElementManipulator(TagOccurrence tagOccurrence) {
 		this.tagOccurrence = tagOccurrence;
-		this.type = OperationType.Unbound;
+		this.type = OperationType.Manipulator;
 	}
 
 	@Override
@@ -28,8 +28,12 @@ public class ElementManipulator extends Manipulator {
 			extraction = ScraperUtil.extractTagMatching(getSource().toString(), tagOccurrence);
 			log.debug("result of matching: {}", extraction);
 		} else {
-			extraction = ScraperUtil.extract(getSource().toString(), tagOccurrence.getTag(),
-					tagOccurrence.getOccurrence());
+			if (tagOccurrence.getElementIdentifierType() != null) {
+				extraction = ScraperUtil.extractUsingIdentifier(getSource().toString(), tagOccurrence);
+			} else {
+				extraction = ScraperUtil.extract(getSource().toString(), tagOccurrence.getTag(),
+						tagOccurrence.getOccurrence());
+			}
 		}
 		return extraction;
 	}

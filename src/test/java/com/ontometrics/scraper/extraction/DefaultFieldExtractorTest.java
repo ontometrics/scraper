@@ -1,6 +1,7 @@
 package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
+import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
 import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -66,6 +67,14 @@ public class DefaultFieldExtractorTest {
 		Field fieldFromUL = new ScrapedField("source", "Autonomous Province of Trento");
 		assertThat(record.getFields().contains(fieldFromUL), is(true));
 
+	}
+
+	@Test
+	public void extractFieldsFromTableWithHeaders() {
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(ProgramListingPage.getUrl()).id(HTMLElementName.TABLE, "lst_indexcfda")).getFields();
+		assertThat(fields.size(), greaterThan(0));
+		log.info("found fields: {}", fields);
 	}
 
 	@Test
