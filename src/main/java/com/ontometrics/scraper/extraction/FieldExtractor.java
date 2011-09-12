@@ -8,6 +8,8 @@ public interface FieldExtractor<T extends FieldExtractor<T>> {
 	public abstract List<Field> getFields();
 	
 	public abstract T source(HtmlExtractor htmlExtractor);
+
+	public abstract T section(HtmlExtractor htmlExtractor);
 	
 	public abstract T field(String label, String element);
 	

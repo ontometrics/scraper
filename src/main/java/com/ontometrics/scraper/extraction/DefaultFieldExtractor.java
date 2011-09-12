@@ -79,6 +79,12 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		super.source(htmlExtractor);
 		return this;
 	}
+	
+	@Override
+	public DefaultFieldExtractor section(HtmlExtractor htmlExtractor) {
+		super.section(htmlExtractor);
+		return this;
+	}
 
 	private List<Field> extractFieldsFromDLs() {
 		List<Field> extractedFields = new ArrayList<Field>();
