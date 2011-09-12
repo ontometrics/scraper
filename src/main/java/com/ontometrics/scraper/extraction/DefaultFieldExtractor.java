@@ -9,7 +9,6 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 import net.htmlparser.jericho.Tag;
-import net.htmlparser.jericho.TagType;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -153,15 +152,15 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			List<Element> rows = source.getAllElements(HTMLElementName.TR);
 			for (Element row : rows) {
 				List<Element> cells = row.getAllElements(HTMLElementName.TD);
-				if (headers.size()==0){
-					for (int i = 0; i < cells.size(); i++){
+				if (headers.size() == 0) {
+					for (int i = 0; i < cells.size(); i++) {
 						headers.add("Col" + i);
 					}
 				}
 				int index = 0;
 				for (Element cell : cells) {
 					String label = headers.get(index++);
-					String value = cell.getTextExtractor().toString();
+					String value = getValueFieldText(cell);
 					extractedFields.add(new ScrapedField(label, value));
 				}
 			}
@@ -240,8 +239,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		if (subElements.size() > 0) {
 			log.debug("found a tag inside field!");
 			for (Element element : subElements) {
-				if (element.getName().equals(HTMLElementName.A) && element.getAttributeValue("href").contains("mailto")) {
-					log.debug("found mailto");
+				if (element.getName().equals(HTMLElementName.A) && element.getAttributeValue("href").length() > 0) {
+					log.debug("found href");
 					result = element.getAttributeValue("href");
 				} else {
 					result = element.getTextExtractor().toString();

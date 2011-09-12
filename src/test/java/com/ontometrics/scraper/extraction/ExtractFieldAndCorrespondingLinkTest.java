@@ -23,6 +23,19 @@ public class ExtractFieldAndCorrespondingLinkTest {
 		
 		log.info("fields: {}", fields);
 		
+		String program = null;
+		String url = null;
+				
+		for (Field field : fields){
+			if (field.getLabel().equals("Actions")){
+				url = field.getValue();
+			} else if (field.getLabel().equals("#")){
+				program = field.getValue();
+				log.info("program {} has url of: {}", program, url);
+				program = null;
+				url = null;
+			}
+		}
 	}
 
 }
