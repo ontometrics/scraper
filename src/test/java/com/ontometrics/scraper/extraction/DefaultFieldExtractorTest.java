@@ -72,7 +72,7 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void extractFieldsFromTableWithHeaders() {
 		List<Field> fields = new DefaultFieldExtractor().source(
-				html().url(ProgramListingPage.getUrl()).id(HTMLElementName.TABLE, "lst_indexcfda")).getFields();
+				html().url(ProgramListingPage.getUrl()).tableWithID("lst_indexcfda")).getFields();
 
 		assertThat(fields.size(), greaterThan(0));
 		log.info("found fields: {}", fields);
@@ -81,7 +81,7 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void extractSelectedFieldsFromTableWithHeaders() {
 		List<Field> fields = new DefaultFieldExtractor().source(
-				html().url(ProgramListingPage.getUrl()).id(HTMLElementName.TABLE, "lst_indexcfda")).getFields();
+				html().url(ProgramListingPage.getUrl()).tableWithID("lst_indexcfda")).getFields();
 
 		assertThat(fields.size(), greaterThan(0));
 		log.info("found fields: {}", fields);

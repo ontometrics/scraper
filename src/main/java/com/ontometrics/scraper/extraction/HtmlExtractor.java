@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 
-import com.ontometrics.scraper.TagOccurrence;
-
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
+
+import com.ontometrics.scraper.TagOccurrence;
 
 /**
  * Provides a means of collecting {@link Manipulator}s and performing
@@ -176,8 +176,8 @@ public class HtmlExtractor extends BaseExtractor {
 		return this.manipulators != null;
 	}
 
-	public HtmlExtractor id(String tag, String id) {
-		addManipulator(new ElementManipulator(new TagOccurrence(tag, ElementIdentifierType.ID, id)));
+	public HtmlExtractor tableWithID(String id) {
+		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, ElementIdentifierType.ID, id)));
 		return this;
 	}
 

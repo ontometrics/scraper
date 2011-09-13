@@ -239,9 +239,11 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		if (subElements.size() > 0) {
 			log.debug("found a tag inside field!");
 			for (Element element : subElements) {
-				if (element.getName().equals(HTMLElementName.A) && element.getAttributeValue("href").length() > 0) {
-					log.debug("found href");
-					result = element.getAttributeValue("href");
+				if (element.getName().equals(HTMLElementName.A)) {
+					if (element.getAttributeValue("href") != null) {
+						log.debug("found href");
+						result = element.getAttributeValue("href");
+					}
 				} else {
 					result = element.getTextExtractor().toString();
 				}
