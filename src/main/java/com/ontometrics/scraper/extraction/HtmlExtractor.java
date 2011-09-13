@@ -175,5 +175,4 @@ public class HtmlExtractor extends BaseExtractor {
 	private boolean hasManipulators() {
 		return this.manipulators != null;
 	}
-
 }

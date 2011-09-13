@@ -27,6 +27,7 @@ public class ListingDetailScraper extends RecordScraper {
 		links = linkExtractor.getLinks();
 		if (iterator != null) {
 			while (iterator.hasNext()) {
+				log.debug("Inside iterator.hasnext");
 				URL nextUrl = iterator.next();
 				log.debug("nexturl: {}", nextUrl);
 				if (nextUrl.toString().contains(sessionIdKeyword)) {
@@ -54,6 +55,7 @@ public class ListingDetailScraper extends RecordScraper {
 				builtUrl = link.getHref();
 				if (shouldConvertURLs() && isRelativeUrl(link.getValue())) {
 					builtUrl = convertToAbsoluteUrl(link.getValue());
+					log.info("converted built url to absolute, result = {}", builtUrl);
 				}
 				log.debug("Using link = {}", builtUrl);
 				List<Field> fields = new ArrayList<Field>(detailExtractor.url(new URL(builtUrl)).getFields());
