@@ -16,8 +16,8 @@ public class LinkExtractorTest {
 
 	private static final Logger log = LoggerFactory.getLogger(LinkExtractorTest.class);
 	private LinkExtractor linkExtractor;
-	private int numberOfLinksInTable3 = 83;
-	private int numberOfLinksInTargetTable = 83;
+	private int numberOfLinksInTable3 = 23;
+	private int numberOfLinksInTargetTable = 78;
 	private int numberOfMatchingLinks = 30;
 
 	@Before
