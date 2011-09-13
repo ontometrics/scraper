@@ -9,7 +9,6 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 import net.htmlparser.jericho.Tag;
-import net.htmlparser.jericho.TagType;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -80,7 +79,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		super.source(htmlExtractor);
 		return this;
 	}
-	
+
 	@Override
 	public DefaultFieldExtractor section(HtmlExtractor htmlExtractor) {
 		super.section(htmlExtractor);
@@ -122,13 +121,14 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		List<Field> extractedFields = new ArrayList<Field>();
 		Source source = new Source(html);
 		source.fullSequentialParse();
-		List<Element> cells = source.getAllElements(HTMLElementName.TD);
-		int rows = source.getAllElements(HTMLElementName.TR).size();
-		log.debug("found {} cells in {} rows", cells.size(), rows);
-		if (cells.size() == (rows * 2)) {
+		int cellCount = source.getAllElements(HTMLElementName.TD).size();
+		int rowCount = source.getAllElements(HTMLElementName.TR).size();
+		log.debug("found {} cells in {} rows", cellCount, rowCount);
+		if (cellCount == (rowCount * 2)) {
 			Field lastField = null;
-			log.debug("cells.size: {}", cells.size());
-			for (int i = 0; i < cells.size(); i++) {
+			log.debug("cells.size: {}", cellCount);
+			List<Element> cells = source.getAllElements(HTMLElementName.TD);
+			for (int i = 0; i < cellCount; i++) {
 				Element labelElement = cells.get(i);
 				Element valueElement = cells.get(++i);
 				String label = labelElement.getTextExtractor().toString().trim().replaceAll(":$", "");
@@ -139,6 +139,29 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				} else {
 					lastField = new ScrapedField(label, value);
 					extractedFields.add(lastField);
+				}
+			}
+		} else {
+			List<String> headers = new ArrayList<String>();
+			List<Element> headerElements = source.getAllElements(HTMLElementName.TH);
+			for (Element headerElement : headerElements) {
+				String header = headerElement.getTextExtractor().toString();
+				headers.add(header);
+				log.debug("header text: {}", header);
+			}
+			List<Element> rows = source.getAllElements(HTMLElementName.TR);
+			for (Element row : rows) {
+				List<Element> cells = row.getAllElements(HTMLElementName.TD);
+				if (headers.size() == 0) {
+					for (int i = 0; i < cells.size(); i++) {
+						headers.add("Col" + i);
+					}
+				}
+				int index = 0;
+				for (Element cell : cells) {
+					String label = headers.get(index++);
+					String value = getValueFieldText(cell);
+					extractedFields.add(new ScrapedField(label, value));
 				}
 			}
 		}
@@ -182,7 +205,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				String tagText = enclosingTag.getElement().getTextExtractor().toString().trim().replaceAll(":$", "");
 				String allText = li.getTextExtractor().toString().trim().replaceAll(":$", "");
 				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
-				log.debug("tagText (length = {}): {} alltext (length = {}): {}", new Object[] { tagText.length(), tagText, allText.length(), allText });
+				log.debug("tagText (length = {}): {} alltext (length = {}): {}", new Object[] { tagText.length(),
+						tagText, allText.length(), allText });
 				if (allText.startsWith(tagText)) {
 					String valueText = (allText.length() > tagText.length()) ? allText.substring(tagText.length() + 1)
 							: "";
@@ -194,7 +218,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		}
 		return extractedFields;
 	}
-	
+
 	private List<Tag> tagsWithSpecificTagRemoved(String tagNameToRemove, List<Tag> tags) {
 		log.debug("Tag name to remove = {}, tags to operate on = {}", tagNameToRemove, tags);
 		for (int i = 0; i < tags.size(); i++) {
@@ -215,9 +239,11 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		if (subElements.size() > 0) {
 			log.debug("found a tag inside field!");
 			for (Element element : subElements) {
-				if (element.getName().equals(HTMLElementName.A) && element.getAttributeValue("href").contains("mailto")) {
-					log.debug("found mailto");
-					result = element.getAttributeValue("href");
+				if (element.getName().equals(HTMLElementName.A)) {
+					if (element.getAttributeValue("href") != null) {
+						log.debug("found href");
+						result = element.getAttributeValue("href");
+					}
 				} else {
 					result = element.getTextExtractor().toString();
 				}

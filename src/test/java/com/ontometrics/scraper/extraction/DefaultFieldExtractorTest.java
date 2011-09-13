@@ -1,8 +1,10 @@
 package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
+import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
 import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
+import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -66,6 +68,33 @@ public class DefaultFieldExtractorTest {
 		Field fieldFromUL = new ScrapedField("source", "Autonomous Province of Trento");
 		assertThat(record.getFields().contains(fieldFromUL), is(true));
 
+	}
+
+	@Test
+	public void extractFieldsFromTableWithHeaders() {
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(ProgramListingPage.getUrl()).tableWithID("lst_indexcfda")).getFields();
+
+		assertThat(fields.size(), greaterThan(0));
+		log.info("found fields: {}", fields);
+	}
+
+	@Test
+	public void extractSelectedFieldsFromTableWithHeaders() {
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(ProgramListingPage.getUrl()).tableWithID("lst_indexcfda")).getFields();
+
+		assertThat(fields.size(), greaterThan(0));
+		log.info("found fields: {}", fields);
+	}
+
+	@Test
+	public void extractSelectedColumnsFromTable() {
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(ProgramListingPage.getUrl()).add(table().withID("lst_indexcfda").columns(2, 3))).getFields();
+
+		assertThat(fields.size(), greaterThan(0));
+		log.info("found fields: {}", fields);
 	}
 
 	@Test

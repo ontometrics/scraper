@@ -26,6 +26,12 @@ public enum HtmlSample {
 	ProgramDetailPage("/testpages/cfda-program.html"),
 
 	/**
+	 * Complex page with sidebar, lots of id-based components, fields with list
+	 * values, etc.
+	 */
+	ProgramListingPage("/testpages/cfda-program-table.html"),
+	
+	/**
 	 * Just a table with some html inside with links that have text and hrefs.
 	 */
 	TableOfLinks("/testpages/table-of-links.html"),

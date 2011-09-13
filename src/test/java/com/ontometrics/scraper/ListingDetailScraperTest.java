@@ -41,11 +41,11 @@ public class ListingDetailScraperTest {
 	public void canExtractLinksFromMultiplePagesThenFollowToDetailsPage() throws MalformedURLException {
 		Iterator pageIterator = new Iterator() {
 
-			private int startingPage = 2;
+			private int startingPage = 1;
 
 			private int currentPage = startingPage;
 
-			private int numberOfPages = 1;
+			private int numberOfPages = 2;
 
 			private URL nextUrl;
 
@@ -57,7 +57,7 @@ public class ListingDetailScraperTest {
 
 			@Override
 			public boolean hasNext() {
-				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage++);
+				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage);
 				log.debug("next page to iterate to: {}", nextPageUrl);
 				nextUrl = TestUtil.getFileAsURL(nextPageUrl);
 				return currentPage < startingPage + numberOfPages;

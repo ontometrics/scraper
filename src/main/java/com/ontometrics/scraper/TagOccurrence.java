@@ -1,12 +1,24 @@
 package com.ontometrics.scraper;
 
+import com.ontometrics.scraper.extraction.ElementIdentifierType;
+
 public class TagOccurrence {
 
 	private String tag;
+	
+	private ElementIdentifierType elementIdentifierType;
+	
+	private String identifier;
 
 	private int occurrence;
 
 	private String matching;
+	
+	public TagOccurrence(String element, ElementIdentifierType identifierType, String identifier){
+		this.elementIdentifierType = identifierType;
+		this.identifier = identifier;
+		this.tag = element;
+	}
 
 	public TagOccurrence(String tag, int occurrence) {
 		super();
@@ -31,6 +43,14 @@ public class TagOccurrence {
 
 	public String getMatching() {
 		return matching;
+	}
+	
+	public ElementIdentifierType getElementIdentifierType() {
+		return elementIdentifierType;
+	}
+	
+	public String getIdentifier() {
+		return identifier;
 	}
 
 	public void setMatcher(String matcher) {

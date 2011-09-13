@@ -19,12 +19,11 @@ public class ListingDetailScraper extends RecordScraper {
 
 	private Iterator iterator;
 
-	private List<Link> links;
+	private List<Link> links = new ArrayList<Link>();
 
 	private boolean convertURLs = true;
 
 	public ListingDetailScraper listing(LinkExtractor linkExtractor) throws MalformedURLException {
-		links = linkExtractor.getLinks();
 		if (iterator != null) {
 			while (iterator.hasNext()) {
 				log.debug("Inside iterator.hasnext");
@@ -38,6 +37,8 @@ public class ListingDetailScraper extends RecordScraper {
 				linkExtractor.url(nextUrl);
 				this.links.addAll(linkExtractor.getLinks());
 			}
+		} else {
+			links = linkExtractor.getLinks();
 		}
 		return this;
 	}
@@ -48,6 +49,9 @@ public class ListingDetailScraper extends RecordScraper {
 	}
 
 	public ListingDetailScraper details(FieldExtractor<?> detailExtractor) {
+		if (links==null || links.size() == 0) {
+			throw new IllegalStateException("No links found, can't extract detail pages.");
+		}
 		log.debug("extracting details from {} found links", links.size());
 		String builtUrl = null;
 		for (Link link : links) {
