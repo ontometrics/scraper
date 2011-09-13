@@ -2,7 +2,9 @@ package com.ontometrics.scraper.html;
 
 import java.util.List;
 
-public class HtmlTable {
+import com.ontometrics.scraper.extraction.Manipulator;
+
+public class HtmlTable extends Manipulator {
 
 	private String id;
 
@@ -36,6 +38,20 @@ public class HtmlTable {
 	public HtmlTable containing(String text) {
 		this.containsText = text;
 		return this;
+	}
+
+	@Override
+	public String performExtraction() {
+		if (id!=null){
+			getSource();
+		}
+		return null;
+	}
+
+	@Override
+	public void setMatcher(String matcher) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -7,7 +7,9 @@ import java.util.LinkedList;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
+import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.TagOccurrence;
+import com.ontometrics.scraper.html.HtmlTable;
 
 /**
  * Provides a means of collecting {@link Manipulator}s and performing
@@ -178,6 +180,11 @@ public class HtmlExtractor extends BaseExtractor {
 
 	public HtmlExtractor tableWithID(String id) {
 		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, ElementIdentifierType.ID, id)));
+		return this;
+	}
+
+	public HtmlExtractor add(Manipulator manipulator) {
+		addManipulator(manipulator);
 		return this;
 	}
 
