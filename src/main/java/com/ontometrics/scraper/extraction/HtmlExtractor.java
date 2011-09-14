@@ -95,9 +95,9 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @see com.ontometrics.scraper.extraction.BaseExtractor#getSource()
 	 */
 	public Source getSource() {
-		if (source == null) {
+//		if (source == null) {
 			performManipulations();
-		}
+//		}
 		return source;
 	}
 

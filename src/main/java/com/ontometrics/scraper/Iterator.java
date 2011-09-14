@@ -1,5 +1,6 @@
 package com.ontometrics.scraper;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public interface Iterator {
@@ -8,4 +9,5 @@ public interface Iterator {
 
 	public URL next();
 
+	public URL getBaseUrl();
 }

@@ -36,6 +36,10 @@ public class Scraper {
 	public URL getBaseUrl() {
 		return baseUrl;
 	}
+	
+	public void setBaseUrl(URL baseUrl) {
+		this.baseUrl = baseUrl;
+	}
 
 	protected boolean isRelativeUrl(String url) {
 		boolean result = false;

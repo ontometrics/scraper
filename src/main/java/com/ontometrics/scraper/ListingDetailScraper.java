@@ -49,12 +49,23 @@ public class ListingDetailScraper extends RecordScraper {
 	}
 
 	public ListingDetailScraper details(FieldExtractor<?> detailExtractor) {
+		// set base url here if need be
+		if (shouldConvertURLs()) {
+			setBaseUrl(iterator.getBaseUrl());
+		}
+		
 		if (links==null || links.size() == 0) {
 			throw new IllegalStateException("No links found, can't extract detail pages.");
 		}
-		log.debug("extracting details from {} found links", links.size());
+		log.debug("extracting details from {} links.", links.size());
+		for (int i = 0; i < links.size(); i++) {
+			log.info("{}) {}", i, links.get(i));
+		}
+
+		int counter = 0;
 		String builtUrl = null;
 		for (Link link : links) {
+			log.debug("** Current detail link counter = {}", counter++);
 			try {
 				builtUrl = link.getHref();
 				if (shouldConvertURLs() && isRelativeUrl(link.getValue())) {
