@@ -182,6 +182,11 @@ public class HtmlExtractor extends BaseExtractor {
 		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, ElementIdentifierType.ID, id)));
 		return this;
 	}
+	
+	public HtmlExtractor divWithID(String id) {
+		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.DIV, ElementIdentifierType.ID, id)));
+		return this;
+	}
 
 	public HtmlExtractor add(Manipulator manipulator) {
 		addManipulator(manipulator);
