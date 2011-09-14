@@ -125,6 +125,15 @@ public class DefaultFieldExtractorTest {
 		log.info("found field: {}", field);
 
 	}
+	
+	@Test
+	public void canExtractFieldsFromDivByID(){
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(TableWithULs.getUrl()).divWithID("MainColumn")).getFields();
+
+		assertThat(fields.size(), greaterThan(0)); 
+		log.info("found fields: {}", fields);
+	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
 		Field found = null;
