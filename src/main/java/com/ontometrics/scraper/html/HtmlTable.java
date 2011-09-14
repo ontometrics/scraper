@@ -1,5 +1,6 @@
 package com.ontometrics.scraper.html;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ontometrics.scraper.extraction.Manipulator;
@@ -25,6 +26,7 @@ public class HtmlTable extends Manipulator {
 
 	public HtmlTable columns(int... columnNumbers) {
 		for (int columnNumber : columnNumbers) {
+			this.columnsToGet = new ArrayList<Integer>();
 			this.columnsToGet.add(columnNumber);
 		}
 		return this;
