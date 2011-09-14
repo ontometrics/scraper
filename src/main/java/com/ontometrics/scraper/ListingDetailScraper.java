@@ -65,7 +65,7 @@ public class ListingDetailScraper extends RecordScraper {
 		int counter = 0;
 		String builtUrl = null;
 		for (Link link : links) {
-			log.debug("** Current detail link counter = {}", counter++);
+			log.debug("** Current detail link counter = {} of {} total.", counter++, links.size());
 			try {
 				builtUrl = link.getHref();
 				if (shouldConvertURLs() && isRelativeUrl(link.getValue())) {
