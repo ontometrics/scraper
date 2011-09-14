@@ -42,15 +42,15 @@ public class HtmlTable extends Manipulator {
 
 	@Override
 	public String performExtraction() {
+		String result = null;
 		if (id!=null){
-			getSource();
+			result = getSource().getElementById(id).toString();
 		}
-		return null;
+		return result;
 	}
 
 	@Override
 	public void setMatcher(String matcher) {
-		// TODO Auto-generated method stub
 		
 	}
 
