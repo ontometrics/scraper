@@ -98,7 +98,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	private List<Field> extractFieldsFromTables() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> tables = getSource().getAllElements(HTMLElementName.TABLE);
-		log.debug("found {} tables to try and find fields in {}", tables.size(), getSource().toString());
+		//log.debug("found {} tables to try and find fields in {}", tables.size(), getSource().toString());
 
 		for (Element table : tables) {
 			extractedFields.addAll(extractFieldsFromTable(table.toString()));
@@ -190,7 +190,6 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		List<Element> lis = source.getAllElements(HTMLElementName.LI);
-		log.debug("All Lis = {}", lis);
 		for (Element li : lis) {
 			log.debug("looking at li: {} w/text: {}", li, li.getTextExtractor().toString());
 			String[] parts = li.getTextExtractor().toString().split(":");

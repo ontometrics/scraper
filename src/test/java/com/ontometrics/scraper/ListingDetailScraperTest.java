@@ -62,6 +62,12 @@ public class ListingDetailScraperTest {
 				nextUrl = TestUtil.getFileAsURL(nextPageUrl);
 				return currentPage < startingPage + numberOfPages;
 			}
+
+			@Override
+			public URL getBaseUrl() {
+				// TODO Auto-generated method stub
+				return null;
+			}
 		};
 		List<Record> records = new ListingDetailScraper()
 				.setConvertURLs(false)
