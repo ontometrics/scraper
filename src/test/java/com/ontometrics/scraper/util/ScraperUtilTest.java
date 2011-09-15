@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -85,5 +86,22 @@ public class ScraperUtilTest {
 		log.info("tag matching 3: {}", source);
 		
 	}
+	
+	@Test
+	public void testGetBaseUrl() throws MalformedURLException {
+		URL onlyHostName = new URL("http://www.google.com");
+		URL anotherUrl = new URL("http://www.google.com/about");
+		URL oneDirectoryDeep = new URL("http://www.google.com/about/index.html");
+		
+		URL result = null;
+		log.info("ohn = {}", onlyHostName.getProtocol());
+		result = ScraperUtil.getBaseUrl(onlyHostName);
+		assertThat(result.toString(), is("http://www.google.com/"));
 
+		result = ScraperUtil.getBaseUrl(anotherUrl);
+		assertThat(result.toString(), is("http://www.google.com/"));
+
+		result = ScraperUtil.getBaseUrl(oneDirectoryDeep);
+		assertThat(result.toString(), is("http://www.google.com/about/"));
+	}
 }

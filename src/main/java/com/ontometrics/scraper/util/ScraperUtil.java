@@ -1,6 +1,7 @@
 package com.ontometrics.scraper.util;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +29,8 @@ public class ScraperUtil {
 		String foundValue = null;
 		if (fields != null && fields.size() > 0) {
 			for (Field field : fields) {
-				if (field.getLabel().equalsIgnoreCase(label)) {
+				if (field.getLabel()
+						.equalsIgnoreCase(label)) {
 					foundValue = field.getValue();
 					break;
 				}
@@ -42,7 +45,8 @@ public class ScraperUtil {
 		List<Link> links = new ArrayList<Link>();
 		List<Element> as = source.getAllElements(HTMLElementName.A);
 		for (Element linkElement : as) {
-			links.add(new Link(linkElement.getTextExtractor().toString(), linkElement.getAttributeValue("href")));
+			links.add(new Link(linkElement.getTextExtractor()
+					.toString(), linkElement.getAttributeValue("href")));
 		}
 		return links;
 	}
@@ -102,7 +106,8 @@ public class ScraperUtil {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
-			result = source.getElementById(tagOccurrence.getIdentifier()).toString();
+			result = source.getElementById(tagOccurrence.getIdentifier())
+					.toString();
 		}
 		log.debug("identifier: {}/{} result: {}",
 				new Object[] { tagOccurrence.getIdentifier(), tagOccurrence.getElementIdentifierType(), result });
@@ -116,7 +121,8 @@ public class ScraperUtil {
 		source.fullSequentialParse();
 		List<Element> elements = source.getAllElements(HTMLElementName.TABLE);
 		for (Element element : elements) {
-			String elementText = element.getTextExtractor().toString();
+			String elementText = element.getTextExtractor()
+					.toString();
 			if (elementText.contains(toGet.getMatching())) {
 				found = element.toString();
 				break;
@@ -155,5 +161,28 @@ public class ScraperUtil {
 			fieldMap.put(field.getLabel(), field.getValue());
 		}
 		return fieldMap;
+	}
+
+	public static URL getBaseUrl(URL nextUrl) {
+		String baseUrlString = nextUrl.getProtocol() + "://" + nextUrl.getHost();
+
+		String path = nextUrl.getPath();
+		if (!StringUtils.isEmpty(path)) {
+			int indexOfLastSlash = path.lastIndexOf('/');
+			if (indexOfLastSlash != -1) {
+				baseUrlString += path.substring(0, indexOfLastSlash);
+			}
+		}
+		if (!baseUrlString.endsWith("/")) {
+			baseUrlString += "/";
+		}
+
+		URL result = null;
+		try {
+			result = new URL(baseUrlString);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

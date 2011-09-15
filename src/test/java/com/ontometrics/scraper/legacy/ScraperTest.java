@@ -142,6 +142,11 @@ public class ScraperTest {
 			private int currentPage = 2;
 
 			@Override
+			public URL getBaseUrl() {
+				return null;
+			}
+			
+			@Override
 			public URL next() {
 				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage++);
 				log.debug("next page to iterate to: {}", nextPageUrl);
@@ -152,6 +157,7 @@ public class ScraperTest {
 			public boolean hasNext() {
 				return true;
 			}
+
 		};
 		List<String> ids = scraper
 				.url(PagedListingTable.getUrl())
@@ -316,6 +322,11 @@ public class ScraperTest {
 			@Override
 			public boolean hasNext() {
 				return true;
+			}
+
+			@Override
+			public URL getBaseUrl() {
+				return null;
 			}
 		};
 		Scraper detailScraper = new Scraper();
