@@ -3,6 +3,7 @@ package com.ontometrics.scraper.extraction;
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
 import static com.ontometrics.scraper.HtmlSample.TableWithULs;
+import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -132,6 +133,17 @@ public class DefaultFieldExtractorTest {
 				html().url(TableWithULs.getUrl()).divWithID("MainColumn")).getFields();
 
 		assertThat(fields.size(), greaterThan(0)); 
+		log.info("found fields: {}", fields);
+	}
+	
+	@Test
+	public void canExtractFieldsFromTableWithHeadingsOnAlternatingRows(){
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(TableWithAlternatingRowsOfHeaders.getUrl())).getFields();
+
+		Field rating = new ScrapedField("Rating", "DOC9");
+		assertThat(fields.size(), greaterThan(0)); 
+		assertThat(fields.contains(rating), is(true));
 		log.info("found fields: {}", fields);
 	}
 
