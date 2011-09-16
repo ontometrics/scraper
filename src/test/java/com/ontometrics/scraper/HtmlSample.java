@@ -46,7 +46,12 @@ public enum HtmlSample {
 	 * Sometimes a label with multiple values is done as one or more follow on
 	 * rows that have no label.
 	 */
-	TableWithULs("/testpages/table-with-uls.html");
+	TableWithULs("/testpages/table-with-uls.html"),
+	
+	/**
+	 * It's legal to have alternating TRs with THs on one row and TDs in the other.  
+	 */
+	TableWithAlternatingRowsOfHeaders("/testpages/table-with-alternating-rows-of-headers.html");
 
 	private String path;
 
