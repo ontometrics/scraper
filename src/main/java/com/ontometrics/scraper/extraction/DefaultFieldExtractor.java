@@ -143,19 +143,20 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			}
 		} else {
 			List<String> headers = new ArrayList<String>();
-			List<Element> headerElements = source.getAllElements(HTMLElementName.TH);
-			for (Element headerElement : headerElements) {
-				String header = headerElement.getTextExtractor().toString();
-				headers.add(header);
-				log.debug("header text: {}", header);
-			}
 			List<Element> rows = source.getAllElements(HTMLElementName.TR);
 			for (Element row : rows) {
+				List<Element> headerElements = row.getAllElements(HTMLElementName.TH);
+				if (headerElements.size()>0){
+					headers.clear();
+				}
+				for (Element headerElement : headerElements) {
+					String header = headerElement.getTextExtractor().toString();
+					headers.add(header);
+					log.debug("header text: {}", header);
+				}
 				List<Element> cells = row.getAllElements(HTMLElementName.TD);
-				if (headers.size() == 0) {
-					for (int i = 0; i < cells.size(); i++) {
-						headers.add("Col" + i);
-					}
+				for (int n = headers.size(); n < cells.size(); n++){
+					headers.add("col" + n);
 				}
 				int index = 0;
 				for (Element cell : cells) {
