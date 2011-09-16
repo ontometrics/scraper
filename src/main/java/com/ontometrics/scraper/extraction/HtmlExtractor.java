@@ -7,9 +7,17 @@ import java.util.LinkedList;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
-import com.ontometrics.scraper.Record;
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ontometrics.scraper.TagOccurrence;
-import com.ontometrics.scraper.html.HtmlTable;
 
 /**
  * Provides a means of collecting {@link Manipulator}s and performing
@@ -24,6 +32,7 @@ import com.ontometrics.scraper.html.HtmlTable;
  * 
  */
 public class HtmlExtractor extends BaseExtractor {
+	private static final Logger log = LoggerFactory.getLogger(HtmlExtractor.class);
 
 	/**
 	 * This holds the source that we are manipulating.
@@ -41,6 +50,16 @@ public class HtmlExtractor extends BaseExtractor {
 	 * source.
 	 */
 	private LinkedList<Manipulator> manipulators;
+
+	/**
+	 * Some sites require session-like behavior to navigate to certain pages.
+	 * For example, on CFDA.gov, you have to visit the initial listing page
+	 * before navigating to other pages. <br>
+	 * <br>
+	 * If {@code isUsingSessionSupport} is set, we will visit this the initial
+	 * page before navigating to the target URL.
+	 */
+	private String sessionSupportUrl;
 
 	public static HtmlExtractor html() {
 		return new HtmlExtractor();
@@ -67,7 +86,8 @@ public class HtmlExtractor extends BaseExtractor {
 		if (manipulators == null) {
 			manipulators = new LinkedList<Manipulator>();
 		} else {
-			manipulators.getLast().setSuccessor(manipulator);
+			manipulators.getLast()
+					.setSuccessor(manipulator);
 		}
 		manipulators.add(manipulator);
 	}
@@ -78,15 +98,54 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public void performManipulations() {
 		try {
-			source = new Source(url);
+			source = isUsingSessionSupport() ? getSessionSupportedSource() : new Source(url);
+
 			if (hasManipulators()) {
-				manipulators.getFirst().execute(source);
-				source = manipulators.getLast().getSource();
+				manipulators.getFirst()
+						.execute(source);
+				source = manipulators.getLast()
+						.getSource();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * This method connects first to the initial URL, then to the target URL. It
+	 * then returns the {@code Source} for the target URL.
+	 * 
+	 * @return
+	 */
+	private Source getSessionSupportedSource() {
+		String initialUrl = sessionSupportUrl;
+		String targetUrl = url.toString();
+
+		HttpClient httpClient = new DefaultHttpClient();
+		String responseBody = null;
+		try {
+			HttpGet firstHttpGet = new HttpGet(initialUrl);
+			HttpGet secondHttpGet = new HttpGet(targetUrl);
+
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			httpClient.execute(firstHttpGet, responseHandler);
+			responseBody = httpClient.execute(secondHttpGet, responseHandler);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			// When HttpClient instance is no longer needed,
+			// shut down the connection manager to ensure
+			// immediate deallocation of all system resources
+			httpClient.getConnectionManager()
+					.shutdown();
+		}
+
+		Source source = new Source(responseBody);
+		log.info("Source = {}", source.toString());
+		return source;
 	}
 
 	/*
@@ -95,9 +154,9 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @see com.ontometrics.scraper.extraction.BaseExtractor#getSource()
 	 */
 	public Source getSource() {
-		if (source == null) {
-			performManipulations();
-		}
+		// if (source == null) {
+		performManipulations();
+		// }
 		return source;
 	}
 
@@ -145,7 +204,8 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @return the current HtmlExtractor for call chaining
 	 */
 	public HtmlExtractor matching(String matcher) {
-		manipulators.getLast().setMatcher(matcher);
+		manipulators.getLast()
+				.setMatcher(matcher);
 		return this;
 	}
 
@@ -182,7 +242,7 @@ public class HtmlExtractor extends BaseExtractor {
 		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, ElementIdentifierType.ID, id)));
 		return this;
 	}
-	
+
 	public HtmlExtractor divWithID(String id) {
 		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.DIV, ElementIdentifierType.ID, id)));
 		return this;
@@ -193,4 +253,17 @@ public class HtmlExtractor extends BaseExtractor {
 		return this;
 	}
 
+	public HtmlExtractor addSessionSupport(String initialPageUrl) {
+		sessionSupportUrl = initialPageUrl;
+		return this;
+	}
+
+	public HtmlExtractor clearSessionSupport() {
+		sessionSupportUrl = null;
+		return this;
+	}
+
+	private boolean isUsingSessionSupport() {
+		return !StringUtils.isEmpty(sessionSupportUrl);
+	}
 }
