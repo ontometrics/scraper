@@ -2,8 +2,8 @@ package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
-import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
+import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.HtmlSample;
+import com.ontometrics.scraper.PairedTags;
 import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.ScrapedRecord;
 
@@ -126,25 +127,37 @@ public class DefaultFieldExtractorTest {
 		log.info("found field: {}", field);
 
 	}
-	
+
 	@Test
-	public void canExtractFieldsFromDivByID(){
+	public void canExtractFieldsFromDivByID() {
 		List<Field> fields = new DefaultFieldExtractor().source(
 				html().url(TableWithULs.getUrl()).divWithID("MainColumn")).getFields();
 
-		assertThat(fields.size(), greaterThan(0)); 
+		assertThat(fields.size(), greaterThan(0));
 		log.info("found fields: {}", fields);
 	}
-	
+
 	@Test
-	public void canExtractFieldsFromTableWithHeadingsOnAlternatingRows(){
-		List<Field> fields = new DefaultFieldExtractor().source(
-				html().url(TableWithAlternatingRowsOfHeaders.getUrl())).getFields();
+	public void canExtractFieldsFromTableWithHeadingsOnAlternatingRows() {
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(TableWithAlternatingRowsOfHeaders.getUrl()))
+				.getFields();
 
 		Field rating = new ScrapedField("Rating", "DOC9");
-		assertThat(fields.size(), greaterThan(0)); 
+		assertThat(fields.size(), greaterThan(0));
 		assertThat(fields.contains(rating), is(true));
 		log.info("found fields: {}", fields);
+	}
+
+	@Test
+	public void canExtractFieldsFromPairedTags() {
+		Field agencyName = new ScrapedField("Agency Name", "Ethiopia USAID-Addis Ababa");
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(DetailPage.getUrl()))
+				.add(new PairedTags(HTMLElementName.H4, HTMLElementName.DD))
+				.getFields();
+		log.info("found fields: {}", fields);
+		assertThat(fields.contains(agencyName), is(true));
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {

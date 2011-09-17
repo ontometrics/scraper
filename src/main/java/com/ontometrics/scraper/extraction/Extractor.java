@@ -72,7 +72,7 @@ public class Extractor {
 	 * pair like this:
 	 * <p>
 	 * <code>
-	 * scraper.extractor().pair(HTMLElementName.H4HTMLElementName.DD).getFields()
+	 * scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields()
 	 * </code>
 	 * <p>
 	 * Note: The extractor will extract nothing if the pairs are not contiguous and matching.
