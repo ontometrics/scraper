@@ -24,6 +24,9 @@ public class ScrapedField implements Field {
 		return this.value;
 	}
 
+	/**
+	 * Adds a delimiter, then appends the new value to the current value.
+	 */
 	@Override
 	public void addValue(String newValue) {
 		this.value += delimiter + newValue;
