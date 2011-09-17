@@ -2,8 +2,8 @@ package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
-import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
+import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import com.ontometrics.scraper.HtmlSample;
 import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.ScrapedRecord;
-import com.ontometrics.scraper.legacy.Scraper;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class DefaultFieldExtractorTest {
@@ -156,11 +155,6 @@ public class DefaultFieldExtractorTest {
 				.getFields();
 
 		assertThat(fields.size(), greaterThan(0));
-		// TODO: After upgrading GrantsRSSImporter to use new
-		// scraper/defaultfieldextractor, fix this
-		assertThat(
-				ScraperUtil.getFieldValue(fields, "REQUEST FOR QUOTATION (THIS IS NOT AN ORDER)"),
-				is("DLA TROOP SUPPORT; C AND T SUPPLY CHAIN IND EQUIP DIV; 700 ROBBINS AVENUE; PHILADELPHIA PA 19111-5096"));
 		assertThat(ScraperUtil.getFieldValue(fields, "REQUEST NO."), is("SPM1C111T5504"));
 		log.info("found fields: {}", fields);
 	}
@@ -173,7 +167,7 @@ public class DefaultFieldExtractorTest {
 		log.debug("Detail fields = {}", fields);
 		assertThat(ScraperUtil.getFieldValue(fields, "Funding Opportunity Number"), is("663-A-08-002"));
 		assertThat(ScraperUtil.getFieldValue(fields, "CFDA Number(s)")
-				.contains("98.001  --  USAID Foreign Assistance for Programs Overseas;47.049  --  Mathematical"),
+				.contains("98.001  --  USAID Foreign Assistance for Programs Overseas; 47.049  --  Mathematical"),
 				is(true));
 	}
 

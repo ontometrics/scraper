@@ -60,7 +60,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		for (DesignatedField designatedField : this.fieldsToGet) {
 			List<Element> elementWithValue = getSource().getAllElements(designatedField.getTagToGetValueFrom());
 			Element firstElement = elementWithValue.get(0);
-			String value = firstElement.getTextExtractor().toString();
+			String value = getValueFieldText(firstElement);
 			log.debug("looking for field: {}, value: {}", designatedField.getLabel(), value);
 			extractedFields.add(new ScrapedField(designatedField.getLabel(), value));
 		}
@@ -202,8 +202,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				Tag enclosingTag = li.getAllTags().get(1);
 				log.info("enclosing tag: {}", enclosingTag);
 				log.info("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
-				String tagText = enclosingTag.getElement().getTextExtractor().toString().trim().replaceAll(":$", "");
-				String allText = li.getTextExtractor().toString().trim().replaceAll(":$", "");
+				String tagText = enclosingTag.getElement().getRenderer().setMaxLineLength(Integer.MAX_VALUE).toString().trim().replaceAll(":$", "");
+				String allText = li.getRenderer().setMaxLineLength(Integer.MAX_VALUE).toString().trim().replaceAll(":$", "");
 				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
 				log.debug("tagText (length = {}): {} alltext (length = {}): {}", new Object[] { tagText.length(),
 						tagText, allText.length(), allText });
@@ -249,7 +249,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				}
 			}
 		} else {
-			result = valueElement.getTextExtractor().toString();
+			result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).toString();
 			log.debug("returning value = {}", result);
 		}
 		return result;
