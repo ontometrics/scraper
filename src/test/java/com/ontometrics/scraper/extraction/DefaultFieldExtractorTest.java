@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.HtmlSample;
+import com.ontometrics.scraper.PairedTags;
 import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.ScrapedRecord;
 import com.ontometrics.scraper.util.ScraperUtil;
@@ -160,6 +161,17 @@ public class DefaultFieldExtractorTest {
 	}
 
 	@Test
+	public void canExtractFieldsFromPairedTags() {
+		Field agencyName = new ScrapedField("Agency Name", "Ethiopia USAID-Addis Ababa");
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(DetailPage.getUrl()))
+				.add(new PairedTags(HTMLElementName.H4, HTMLElementName.DD))
+				.getFields();
+		log.info("found fields: {}", fields);
+		assertThat(fields.contains(agencyName), is(true));
+	}
+
+	@Test
 	public void canExtractFieldsFromTableAtSpecificOccurrence() {
 		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl())
 				.table(4))
@@ -169,15 +181,6 @@ public class DefaultFieldExtractorTest {
 		assertThat(ScraperUtil.getFieldValue(fields, "CFDA Number(s)")
 				.contains("98.001  --  USAID Foreign Assistance for Programs Overseas; 47.049  --  Mathematical"),
 				is(true));
-	}
-
-	@Test
-	public void canExtractHtmlElementPairs() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl())
-				.after(HTMLElementName.TABLE, 5)
-				.pair(HTMLElementName.H4, HTMLElementName.DD))
-				.getFields();
-		log.debug("fields = {}", fields);
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {

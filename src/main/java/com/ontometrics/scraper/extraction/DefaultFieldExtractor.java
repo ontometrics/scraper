@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.PairedTags;
+
 /**
  * Provides a means of pulling fields out of a page.
  * <p>
@@ -33,6 +35,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	private List<DesignatedField> fieldsToGet = new ArrayList<DesignatedField>();
 
+	private List<PairedTags> pairedTagsToGet = new ArrayList<PairedTags>();
+
 	@Override
 	public DefaultFieldExtractor url(URL url) {
 		super.url(url);
@@ -51,6 +55,32 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		extractedFields.addAll(extractFieldsFromTables());
 		extractedFields.addAll(extractFieldsFromDLs());
 		extractedFields.addAll(extractDesignatedFields());
+		extractedFields.addAll(extractFieldsFromPairTags());
+		return extractedFields;
+	}
+
+	private List<Field> extractFieldsFromPairTags() {
+		List<Field> extractedFields = new ArrayList<Field>();
+		for (PairedTags pairedTags : this.pairedTagsToGet) {
+			List<Element> labels = getSource().getAllElements(pairedTags.getLabelTag());
+			List<Element> fields = getSource().getAllElements(pairedTags.getFieldTag());
+
+			removeInvalidFields(fields);
+
+			int fieldCount = Math.min(labels.size(), fields.size());
+			for (int i = 0; i < fieldCount; i++) {
+				String label = labels.get(i).getTextExtractor().toString().trim();
+				String field = "";
+				if (fieldHasMultipleValues(fields.get(i).toString())) {
+					field = delimitFieldValues(fields.get(i).toString());
+				} else {
+					field = getValueFieldText(fields.get(i));
+				}
+				log.debug("outputting pair: {} : {}", label, field);
+				extractedFields.add(new ScrapedField(label, field));
+			}
+
+		}
 		return extractedFields;
 	}
 
@@ -86,6 +116,11 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return this;
 	}
 
+	public DefaultFieldExtractor add(PairedTags pairedTags) {
+		this.pairedTagsToGet.add(pairedTags);
+		return this;
+	}
+
 	private List<Field> extractFieldsFromDLs() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> dls = getSource().getAllElements(HTMLElementName.DL);
@@ -98,7 +133,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	private List<Field> extractFieldsFromTables() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> tables = getSource().getAllElements(HTMLElementName.TABLE);
-		//log.debug("found {} tables to try and find fields in {}", tables.size(), getSource().toString());
+		// log.debug("found {} tables to try and find fields in {}",
+		// tables.size(), getSource().toString());
 
 		for (Element table : tables) {
 			extractedFields.addAll(extractFieldsFromTable(table.toString()));
@@ -146,7 +182,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			List<Element> rows = source.getAllElements(HTMLElementName.TR);
 			for (Element row : rows) {
 				List<Element> headerElements = row.getAllElements(HTMLElementName.TH);
-				if (headerElements.size()>0){
+				if (headerElements.size() > 0) {
 					headers.clear();
 				}
 				for (Element headerElement : headerElements) {
@@ -155,7 +191,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 					log.debug("header text: {}", header);
 				}
 				List<Element> cells = row.getAllElements(HTMLElementName.TD);
-				for (int n = headers.size(); n < cells.size(); n++){
+				for (int n = headers.size(); n < cells.size(); n++) {
 					headers.add("col" + n);
 				}
 				int index = 0;
@@ -259,6 +295,32 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	public DefaultFieldExtractor field(String label, String element) {
 		this.fieldsToGet.add(new DesignatedField(label, element));
 		return this;
+	}
+
+	private void removeInvalidFields(List<Element> fields) {
+		java.util.Iterator<Element> iterator = fields.iterator();
+		while (iterator.hasNext()) {
+			Element field = iterator.next();
+			if (!isAField(field.toString())) {
+				log.debug("pruning invalid field: {}", field);
+				iterator.remove();
+			}
+		}
+	}
+
+	private boolean isAField(String extract) {
+		return !extract.contains(HTMLElementName.TABLE);
+	}
+
+	private boolean fieldHasMultipleValues(String fieldValue) {
+		Source source = new Source(fieldValue);
+		source.fullSequentialParse();
+		return source.getAllElements(HTMLElementName.BR).size() > 1;
+	}
+
+	private String delimitFieldValues(String source) {
+		Source result = new Source(source.replace("<br>", ";").replace("<br/>", ";"));
+		return getValueFieldText(result.getFirstElement());
 	}
 
 }
