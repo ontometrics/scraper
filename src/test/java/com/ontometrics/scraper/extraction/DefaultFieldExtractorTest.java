@@ -2,8 +2,8 @@ package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
-import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
+import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.HtmlSample;
+import com.ontometrics.scraper.PairedTags;
 import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.ScrapedRecord;
 import com.ontometrics.scraper.legacy.Scraper;
@@ -160,9 +161,20 @@ public class DefaultFieldExtractorTest {
 		// scraper/defaultfieldextractor, fix this
 		assertThat(
 				ScraperUtil.getFieldValue(fields, "REQUEST FOR QUOTATION (THIS IS NOT AN ORDER)"),
-				is("DLA TROOP SUPPORT; C AND T SUPPLY CHAIN IND EQUIP DIV; 700 ROBBINS AVENUE; PHILADELPHIA PA 19111-5096"));
+				is("DLA TROOP SUPPORT C AND T SUPPLY CHAIN IND EQUIP DIV 700 ROBBINS AVENUE PHILADELPHIA PA 19111-5096"));
 		assertThat(ScraperUtil.getFieldValue(fields, "REQUEST NO."), is("SPM1C111T5504"));
 		log.info("found fields: {}", fields);
+	}
+
+	@Test
+	public void canExtractFieldsFromPairedTags() {
+		Field agencyName = new ScrapedField("Agency Name", "Ethiopia USAID-Addis Ababa");
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(DetailPage.getUrl()))
+				.add(new PairedTags(HTMLElementName.H4, HTMLElementName.DD))
+				.getFields();
+		log.info("found fields: {}", fields);
+		assertThat(fields.contains(agencyName), is(true));
 	}
 
 	@Test
@@ -175,15 +187,6 @@ public class DefaultFieldExtractorTest {
 		assertThat(ScraperUtil.getFieldValue(fields, "CFDA Number(s)")
 				.contains("98.001  --  USAID Foreign Assistance for Programs Overseas;47.049  --  Mathematical"),
 				is(true));
-	}
-
-	@Test
-	public void canExtractHtmlElementPairs() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl())
-				.after(HTMLElementName.TABLE, 5)
-				.pair(HTMLElementName.H4, HTMLElementName.DD))
-				.getFields();
-		log.debug("fields = {}", fields);
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
