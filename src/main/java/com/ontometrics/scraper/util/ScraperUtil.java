@@ -25,14 +25,37 @@ public class ScraperUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
 
+	/**
+	 * Get first occurrence of field value
+	 * 
+	 * @param fields
+	 * @param label
+	 * @return
+	 */
 	public static String getFieldValue(List<Field> fields, String label) {
+		return getFieldValue(fields, label, 1);
+	}
+
+	/**
+	 * Occurrence starts at index 1
+	 * 
+	 * @param fields
+	 * @param label
+	 * @param occurrence
+	 * @return
+	 */
+	public static String getFieldValue(List<Field> fields, String label, int occurrence) {
+		int foundOccurrenceCount = 0;
 		String foundValue = null;
+
 		if (fields != null && fields.size() > 0) {
 			for (Field field : fields) {
-				if (field.getLabel()
-						.equalsIgnoreCase(label)) {
-					foundValue = field.getValue();
-					break;
+				if (field.getLabel().equalsIgnoreCase(label)) {
+					foundOccurrenceCount++;
+					if (foundOccurrenceCount == occurrence) {
+						foundValue = field.getValue();
+						break;
+					}
 				}
 			}
 		}
@@ -45,8 +68,7 @@ public class ScraperUtil {
 		List<Link> links = new ArrayList<Link>();
 		List<Element> as = source.getAllElements(HTMLElementName.A);
 		for (Element linkElement : as) {
-			links.add(new Link(linkElement.getTextExtractor()
-					.toString(), linkElement.getAttributeValue("href")));
+			links.add(new Link(linkElement.getTextExtractor().toString(), linkElement.getAttributeValue("href")));
 		}
 		return links;
 	}
@@ -106,8 +128,7 @@ public class ScraperUtil {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
-			result = source.getElementById(tagOccurrence.getIdentifier())
-					.toString();
+			result = source.getElementById(tagOccurrence.getIdentifier()).toString();
 		}
 		log.debug("identifier: {}/{} result: {}",
 				new Object[] { tagOccurrence.getIdentifier(), tagOccurrence.getElementIdentifierType(), result });
@@ -121,8 +142,7 @@ public class ScraperUtil {
 		source.fullSequentialParse();
 		List<Element> elements = source.getAllElements(HTMLElementName.TABLE);
 		for (Element element : elements) {
-			String elementText = element.getTextExtractor()
-					.toString();
+			String elementText = element.getTextExtractor().toString();
 			if (elementText.contains(toGet.getMatching())) {
 				found = element.toString();
 				break;
