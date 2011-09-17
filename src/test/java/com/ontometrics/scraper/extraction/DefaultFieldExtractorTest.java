@@ -163,8 +163,7 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void canExtractFieldsFromPairedTags() {
 		Field agencyName = new ScrapedField("Agency Name", "Ethiopia USAID-Addis Ababa");
-		List<Field> fields = new DefaultFieldExtractor()
-				.source(html().url(DetailPage.getUrl()))
+		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl()))
 				.add(new PairedTags(HTMLElementName.H4, HTMLElementName.DD))
 				.getFields();
 		log.info("found fields: {}", fields);

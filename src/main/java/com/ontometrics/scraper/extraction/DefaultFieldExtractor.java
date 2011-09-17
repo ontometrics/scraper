@@ -59,6 +59,10 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return extractedFields;
 	}
 
+	/**
+	 * The pair function will delimit field values that have new lines (<BR>s) with semicolons.
+	 * @return
+	 */
 	private List<Field> extractFieldsFromPairTags() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		for (PairedTags pairedTags : this.pairedTagsToGet) {
