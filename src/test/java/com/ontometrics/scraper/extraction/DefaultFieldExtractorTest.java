@@ -27,7 +27,6 @@ import com.ontometrics.scraper.HtmlSample;
 import com.ontometrics.scraper.PairedTags;
 import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.ScrapedRecord;
-import com.ontometrics.scraper.legacy.Scraper;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class DefaultFieldExtractorTest {
