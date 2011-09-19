@@ -60,7 +60,9 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	}
 
 	/**
-	 * The pair function will delimit field values that have new lines (<BR>s) with semicolons.
+	 * The pair function will delimit field values that have new lines (<BR>
+	 * s) with semicolons.
+	 * 
 	 * @return
 	 */
 	private List<Field> extractFieldsFromPairTags() {
@@ -195,14 +197,17 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 					log.debug("header text: {}", header);
 				}
 				List<Element> cells = row.getAllElements(HTMLElementName.TD);
-				for (int n = headers.size(); n < cells.size(); n++) {
-					headers.add("col" + n);
-				}
-				int index = 0;
-				for (Element cell : cells) {
-					String label = headers.get(index++);
-					String value = getValueFieldText(cell);
-					extractedFields.add(new ScrapedField(label, value));
+				if (cells.size() > 0) {
+					for (int n = headers.size(); n < cells.size(); n++) {
+						headers.add("col" + n);
+					}
+					int index = 0;
+					for (Element cell : cells) {
+						String label = headers.get(index++);
+						String value = getValueFieldText(cell);
+						extractedFields.add(new ScrapedField(label, value));
+					}
+					headers.clear();
 				}
 			}
 		}
@@ -242,8 +247,19 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				Tag enclosingTag = li.getAllTags().get(1);
 				log.info("enclosing tag: {}", enclosingTag);
 				log.info("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
-				String tagText = enclosingTag.getElement().getRenderer().setMaxLineLength(Integer.MAX_VALUE).toString().trim().replaceAll(":$", "");
-				String allText = li.getRenderer().setMaxLineLength(Integer.MAX_VALUE).toString().trim().replaceAll(":$", "");
+				String tagText = enclosingTag
+						.getElement()
+						.getRenderer()
+						.setMaxLineLength(Integer.MAX_VALUE)
+						.toString()
+						.trim()
+						.replaceAll(":$", "");
+				String allText = li
+						.getRenderer()
+						.setMaxLineLength(Integer.MAX_VALUE)
+						.toString()
+						.trim()
+						.replaceAll(":$", "");
 				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
 				log.debug("tagText (length = {}): {} alltext (length = {}): {}", new Object[] { tagText.length(),
 						tagText, allText.length(), allText });
@@ -275,22 +291,27 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	private String getValueFieldText(Element valueElement) {
 		String result = "";
-		List<Element> anchorSubElements = valueElement.getAllElements(HTMLElementName.A);
-		if (anchorSubElements.size() > 0) {
-			log.debug("found a tag inside field!");
-			for (Element element : anchorSubElements) {
-				if (element.getName().equals(HTMLElementName.A)) {
-					if (element.getAttributeValue("href") != null) {
-						log.debug("found href");
-						result = element.getAttributeValue("href");
-					}
-				} else {
-					result = element.getTextExtractor().toString();
-				}
-			}
+		List<Element> preTags = valueElement.getAllElements(HTMLElementName.PRE);
+		if (preTags.size() > 0) {
+			result = preTags.get(0).getContent().toString();
 		} else {
-			result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).setNewLine("\n").toString();
-			log.debug("returning value = {}", result);
+			List<Element> anchorSubElements = valueElement.getAllElements(HTMLElementName.A);
+			if (anchorSubElements.size() > 0) {
+				log.debug("found a tag inside field!");
+				for (Element element : anchorSubElements) {
+					if (element.getName().equals(HTMLElementName.A)) {
+						if (element.getAttributeValue("href") != null) {
+							log.debug("found href");
+							result = element.getAttributeValue("href");
+						}
+					} else {
+						result = element.getTextExtractor().toString();
+					}
+				}
+			} else {
+				result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).setNewLine("\n").toString();
+				log.debug("returning value = {}", result);
+			}
 		}
 		return result;
 	}

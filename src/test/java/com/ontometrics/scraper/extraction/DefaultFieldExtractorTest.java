@@ -154,10 +154,10 @@ public class DefaultFieldExtractorTest {
 	public void canExtractFieldsFromTableWithHeadingsOnAlternatingRows() {
 		List<Field> fields = new DefaultFieldExtractor().source(html().url(TableWithAlternatingRowsOfHeaders.getUrl()))
 				.getFields();
+		log.info("found fields: {}", fields);
 
 		assertThat(fields.size(), greaterThan(0));
 		assertThat(ScraperUtil.getFieldValue(fields, "REQUEST NO."), is("SPM1C111T5504"));
-		log.info("found fields: {}", fields);
 	}
 
 	@Test
