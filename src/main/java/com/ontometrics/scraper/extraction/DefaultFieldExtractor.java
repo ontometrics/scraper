@@ -231,7 +231,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return extractedFields;
 	}
 
-	private Collection<? extends Field> extractFieldsFromUL(String html) {
+	private List<Field> extractFieldsFromUL(String html) {
 		List<Field> extractedFields = new ArrayList<Field>();
 		Source source = new Source(html);
 		source.fullSequentialParse();
