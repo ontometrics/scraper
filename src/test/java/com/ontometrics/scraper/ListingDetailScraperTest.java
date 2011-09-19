@@ -1,7 +1,5 @@
 package com.ontometrics.scraper;
 
-/*this is a comment*/
-
 import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static org.hamcrest.MatcherAssert.assertThat;
