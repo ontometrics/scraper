@@ -275,10 +275,10 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	private String getValueFieldText(Element valueElement) {
 		String result = "";
-		List<Element> subElements = valueElement.getAllElements(HTMLElementName.A);
-		if (subElements.size() > 0) {
+		List<Element> anchorSubElements = valueElement.getAllElements(HTMLElementName.A);
+		if (anchorSubElements.size() > 0) {
 			log.debug("found a tag inside field!");
-			for (Element element : subElements) {
+			for (Element element : anchorSubElements) {
 				if (element.getName().equals(HTMLElementName.A)) {
 					if (element.getAttributeValue("href") != null) {
 						log.debug("found href");
@@ -289,7 +289,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				}
 			}
 		} else {
-			result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).toString();
+			result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).setNewLine("\n").toString();
 			log.debug("returning value = {}", result);
 		}
 		return result;
