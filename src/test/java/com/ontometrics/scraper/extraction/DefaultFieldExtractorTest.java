@@ -1,6 +1,7 @@
 package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
+import static com.ontometrics.scraper.HtmlSample.ListingWithNumberedPaging;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
 import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
 import static com.ontometrics.scraper.HtmlSample.TableWithULs;
@@ -37,8 +38,7 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void extractFieldsAfterTablePairedTags() throws MalformedURLException, IOException {
-		List<Field> fields = fieldExtractor.source(html().url(DetailPage.getUrl()))
-				.getFields();
+		List<Field> fields = fieldExtractor.source(html().url(DetailPage.getUrl())).getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		log.debug("fields = {}", fields);
@@ -48,22 +48,21 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void extractsFieldsFromULs() {
 
-		List<Field> fields = fieldExtractor.source(html().url(HtmlSample.TableWithULs.getUrl()))
-				.getFields();
+		List<Field> fields = fieldExtractor.source(html().url(HtmlSample.TableWithULs.getUrl())).getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		Record record = new ScrapedRecord(fields);
 
 		Field fieldFromUL = new ScrapedField("Application deadline(s)", "07/13/2010");
-		assertThat(record.getFields()
-				.contains(fieldFromUL), is(true));
+		assertThat(record.getFields().contains(fieldFromUL), is(true));
 
 	}
 
 	@Test
 	public void extractsFieldFromSpecificTagOccurrence() {
 
-		List<Field> fields = fieldExtractor.source(html().url(HtmlSample.TableWithULs.getUrl()))
+		List<Field> fields = fieldExtractor
+				.source(html().url(HtmlSample.TableWithULs.getUrl()))
 				.field("source", HTMLElementName.H2)
 				.getFields();
 
@@ -71,16 +70,14 @@ public class DefaultFieldExtractorTest {
 		Record record = new ScrapedRecord(fields);
 
 		Field fieldFromUL = new ScrapedField("source", "Autonomous Province of Trento");
-		assertThat(record.getFields()
-				.contains(fieldFromUL), is(true));
+		assertThat(record.getFields().contains(fieldFromUL), is(true));
 
 	}
 
 	@Test
 	public void extractFieldsFromTableWithHeaders() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(ProgramListingPage.getUrl())
-				.tableWithID("lst_indexcfda"))
-				.getFields();
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(ProgramListingPage.getUrl()).tableWithID("lst_indexcfda")).getFields();
 
 		assertThat(fields.size(), greaterThan(0));
 		log.info("found fields: {}", fields);
@@ -88,9 +85,8 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void extractSelectedFieldsFromTableWithHeaders() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(ProgramListingPage.getUrl())
-				.tableWithID("lst_indexcfda"))
-				.getFields();
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(ProgramListingPage.getUrl()).tableWithID("lst_indexcfda")).getFields();
 
 		assertThat(fields.size(), greaterThan(0));
 		log.info("found fields: {}", fields);
@@ -98,10 +94,8 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void extractSelectedColumnsFromTable() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(ProgramListingPage.getUrl())
-				.add(table().withID("lst_indexcfda")
-						.columns(2, 3)))
-				.getFields();
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(ProgramListingPage.getUrl()).add(table().withID("lst_indexcfda").columns(2, 3))).getFields();
 
 		assertThat(fields.size(), greaterThan(0));
 		log.info("found fields: {}", fields);
@@ -109,15 +103,13 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void canSplitLabelAndValueOnClosingTag() {
-		List<Field> fields = fieldExtractor.source(html().url(TableWithULs.getUrl()))
-				.getFields();
+		List<Field> fields = fieldExtractor.source(html().url(TableWithULs.getUrl())).getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		Record record = new ScrapedRecord(fields);
 
 		Field fieldFromUL = new ScrapedField("Minimum Term", "");
-		assertThat(record.getFields()
-				.contains(fieldFromUL), is(true));
+		assertThat(record.getFields().contains(fieldFromUL), is(true));
 	}
 
 	@Test
@@ -127,12 +119,10 @@ public class DefaultFieldExtractorTest {
 		Source source = new Source(li);
 		source.fullSequentialParse();
 
-		String[] parsedOnClosingTag = source.toString()
-				.split("</");
+		String[] parsedOnClosingTag = source.toString().split("</");
 
 		log.info("split on close tag: {} and {}", parsedOnClosingTag[0], parsedOnClosingTag[1]);
-		Element liElement = source.getAllElements(HTMLElementName.LI)
-				.get(0);
+		Element liElement = source.getAllElements(HTMLElementName.LI).get(0);
 		log.info("li: {}", liElement);
 		log.info("li tags: {}", liElement.getAllTags());
 		Field field = extractFieldByDetectingTagWrapper(liElement);
@@ -142,9 +132,8 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void canExtractFieldsFromDivByID() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(TableWithULs.getUrl())
-				.divWithID("MainColumn"))
-				.getFields();
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(TableWithULs.getUrl()).divWithID("MainColumn")).getFields();
 
 		assertThat(fields.size(), greaterThan(0));
 		log.info("found fields: {}", fields);
@@ -152,7 +141,8 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void canExtractFieldsFromTableWithHeadingsOnAlternatingRows() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(TableWithAlternatingRowsOfHeaders.getUrl()))
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(TableWithAlternatingRowsOfHeaders.getUrl()))
 				.getFields();
 		log.info("found fields: {}", fields);
 
@@ -164,7 +154,8 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void canExtractFieldsFromPairedTags() {
 		Field agencyName = new ScrapedField("Agency Name", "Ethiopia USAID-Addis Ababa");
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl()))
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(DetailPage.getUrl()))
 				.add(new PairedTags(HTMLElementName.H4, HTMLElementName.DD))
 				.getFields();
 		log.info("found fields: {}", fields);
@@ -173,31 +164,36 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void canExtractFieldsFromTableAtSpecificOccurrence() {
-		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl())
-				.table(4))
-				.getFields();
+		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl()).table(4)).getFields();
 		log.debug("Detail fields = {}", fields);
 		assertThat(ScraperUtil.getFieldValue(fields, "Funding Opportunity Number"), is("663-A-08-002"));
-		assertThat(ScraperUtil.getFieldValue(fields, "CFDA Number(s)")
-				.contains("98.001  --  USAID Foreign Assistance for Programs Overseas; 47.049  --  Mathematical"),
+		assertThat(
+				ScraperUtil.getFieldValue(fields, "CFDA Number(s)").contains(
+						"98.001  --  USAID Foreign Assistance for Programs Overseas; 47.049  --  Mathematical"),
 				is(true));
+	}
+
+	@Test
+	public void canFindFieldByCSSClass() {
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(ListingWithNumberedPaging.getUrl()))
+				.field("pagingInfo", ElementIdentifierType.cssClass, "RecordsDisplay")
+				.getFields();
+		
+		Field pagingInfo = new ScrapedField("pagingInfo", "Records 1 thru 75 of 3532 Records.");
+		assertThat(fields.contains(pagingInfo), is(true));
+		log.info("found fields: {}", fields);
+
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
 		Field found = null;
-		if (liElement.getAllTags()
-				.size() == 4) {
-			Tag enclosingTag = liElement.getAllTags()
-					.get(1);
+		if (liElement.getAllTags().size() == 4) {
+			Tag enclosingTag = liElement.getAllTags().get(1);
 			log.info("enclosing tag: {}", enclosingTag);
-			log.info("first element of enclosing tag: {}", enclosingTag.getElement()
-					.getTextExtractor()
-					.toString());
-			String tagText = enclosingTag.getElement()
-					.getTextExtractor()
-					.toString();
-			String allText = liElement.getTextExtractor()
-					.toString();
+			log.info("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
+			String tagText = enclosingTag.getElement().getTextExtractor().toString();
+			String allText = liElement.getTextExtractor().toString();
 			log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
 			log.debug("tagText: {} alltext: {}", tagText, allText);
 			if (allText.startsWith(tagText)) {
