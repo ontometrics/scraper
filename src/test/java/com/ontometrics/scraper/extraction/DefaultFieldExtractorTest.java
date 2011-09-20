@@ -158,6 +158,7 @@ public class DefaultFieldExtractorTest {
 
 		assertThat(fields.size(), greaterThan(0));
 		assertThat(ScraperUtil.getFieldValue(fields, "REQUEST NO."), is("SPM1C111T5504"));
+		assertThat(ScraperUtil.getFieldValue(fields, "col0").contains("QUESTIONS REGARDING THE DLA-BSM INTERNET BID BOARD SYSTEM"), is(true));
 	}
 
 	@Test
