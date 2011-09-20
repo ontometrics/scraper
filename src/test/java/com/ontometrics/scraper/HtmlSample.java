@@ -5,6 +5,10 @@ import java.net.URL;
 
 import net.htmlparser.jericho.Source;
 
+/**
+ * @author robwilliams
+ * 
+ */
 public enum HtmlSample {
 
 	/**
@@ -30,7 +34,13 @@ public enum HtmlSample {
 	 * values, etc.
 	 */
 	ProgramListingPage("/testpages/cfda-program-table.html"),
-	
+
+	/**
+	 * This page also has information about the total records in the paging
+	 * component.
+	 */
+	ListingWithNumberedPaging("/testpages/listing-with-numbered-paging.html"),
+
 	/**
 	 * Just a table with some html inside with links that have text and hrefs.
 	 */
@@ -41,15 +51,16 @@ public enum HtmlSample {
 	 * rows that have no label.
 	 */
 	TableWithMultipleValuesOnMultipleRows("/testpages/table-with-multiple-values-on-rows.html"),
-	
+
 	/**
 	 * Sometimes a label with multiple values is done as one or more follow on
 	 * rows that have no label.
 	 */
 	TableWithULs("/testpages/table-with-uls.html"),
-	
+
 	/**
-	 * It's legal to have alternating TRs with THs on one row and TDs in the other.  
+	 * It's legal to have alternating TRs with THs on one row and TDs in the
+	 * other.
 	 */
 	TableWithAlternatingRowsOfHeaders("/testpages/table-with-alternating-rows-of-headers.html");
 
