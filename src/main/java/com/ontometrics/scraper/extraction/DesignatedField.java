@@ -1,12 +1,20 @@
 package com.ontometrics.scraper.extraction;
 
+import com.ontometrics.scraper.TagOccurrence;
+
+/**
+ * Provides a means of stipulating fields we expect to find by assigning a label
+ * then finding the corresponding element.
+ * 
+ * @author Rob
+ */
 public class DesignatedField {
 
 	private String label;
 
-	private String tagToGetValueFrom;
+	private TagOccurrence tagToGetValueFrom;
 
-	public DesignatedField(String label, String tagToGetValueFrom) {
+	public DesignatedField(String label, TagOccurrence tagToGetValueFrom) {
 		super();
 		this.label = label;
 		this.tagToGetValueFrom = tagToGetValueFrom;
@@ -16,7 +24,7 @@ public class DesignatedField {
 		return label;
 	}
 
-	public String getTagToGetValueFrom() {
+	public TagOccurrence getTagToGetValueFrom() {
 		return tagToGetValueFrom;
 	}
 

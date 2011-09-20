@@ -2,7 +2,6 @@ package com.ontometrics.scraper.extraction;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
@@ -15,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.PairedTags;
+import com.ontometrics.scraper.TagOccurrence;
+import com.ontometrics.scraper.util.ScraperUtil;
 
 /**
  * Provides a means of pulling fields out of a page.
@@ -94,9 +95,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		List<Field> extractedFields = new ArrayList<Field>();
 
 		for (DesignatedField designatedField : this.fieldsToGet) {
-			List<Element> elementWithValue = getSource().getAllElements(designatedField.getTagToGetValueFrom());
-			Element firstElement = elementWithValue.get(0);
-			String value = getValueFieldText(firstElement);
+			Element elementWithValue = ScraperUtil.extract(getSource(), designatedField.getTagToGetValueFrom());
+			String value = getValueFieldText(elementWithValue);
 			log.debug("looking for field: {}, value: {}", designatedField.getLabel(), value);
 			extractedFields.add(new ScrapedField(designatedField.getLabel(), value));
 		}
@@ -318,7 +318,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	@Override
 	public DefaultFieldExtractor field(String label, String element) {
-		this.fieldsToGet.add(new DesignatedField(label, element));
+		this.fieldsToGet.add(new DesignatedField(label, new TagOccurrence(element, 0)));
 		return this;
 	}
 
@@ -346,6 +346,11 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	private String delimitFieldValues(String source) {
 		Source result = new Source(source.replace("<br>", ";").replace("<br/>", ";"));
 		return getValueFieldText(result.getFirstElement());
+	}
+
+	public DefaultFieldExtractor field(String label, ElementIdentifierType identierType, String id) {
+		this.fieldsToGet.add(new DesignatedField(label, new TagOccurrence("", identierType, id)));
+		return this;
 	}
 
 }
