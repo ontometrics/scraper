@@ -123,6 +123,17 @@ public class ScraperUtil {
 		return tags[occurrence].substring(begin, length);
 	}
 
+	public static Element extract(Source source, TagOccurrence tagOccurrence) {
+		Element result = null;
+		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.cssClass) {
+			result = source.getAllElementsByClass(tagOccurrence.getIdentifier()).get(0);
+		} else {
+			List<Element> elements = source.getAllElements(tagOccurrence.getTag());
+			result = elements.get(tagOccurrence.getOccurrence());
+		}
+		return result;
+	}
+
 	public static String extractUsingIdentifier(String html, TagOccurrence tagOccurrence) {
 		String result = null;
 		Source source = new Source(html);

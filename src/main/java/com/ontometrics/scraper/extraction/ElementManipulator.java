@@ -8,6 +8,7 @@ import com.ontometrics.scraper.util.ScraperUtil;
 
 public class ElementManipulator extends Manipulator {
 
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(ElementManipulator.class);
 
 	private TagOccurrence tagOccurrence;
