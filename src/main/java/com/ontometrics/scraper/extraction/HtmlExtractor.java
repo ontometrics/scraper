@@ -132,9 +132,9 @@ public class HtmlExtractor extends BaseExtractor {
 			httpClient.execute(firstHttpGet, responseHandler);
 			responseBody = httpClient.execute(secondHttpGet, responseHandler);
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			log.error("Error getting source in session mode: {}", e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Error getting source in session mode: {}", e);
 		} finally {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
