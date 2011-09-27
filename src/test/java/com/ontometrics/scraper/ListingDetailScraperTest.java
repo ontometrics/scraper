@@ -1,6 +1,8 @@
 package com.ontometrics.scraper;
 
 import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
+import static com.ontometrics.scraper.HtmlSample.PagedListingFolder;
+
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -16,8 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.extraction.DefaultFieldExtractor;
+import com.ontometrics.scraper.extraction.HtmlExtractor;
 import com.ontometrics.scraper.extraction.Link;
 import com.ontometrics.scraper.extraction.LinkExtractor;
+import java.util.ListIterator;
 
 public class ListingDetailScraperTest {
 
@@ -29,8 +33,7 @@ public class ListingDetailScraperTest {
 	@Test
 	public void canExtractLinksFromListingPage() {
 		List<Link> foundLinks = new LinkExtractor()
-				.source(html().url(PagedListingTable.getUrl()).table().matching(listingTableKeyword))
-				.matching(linkPattern)
+				.source(html().url(PagedListingTable.getUrl()))
 				.getLinks();
 
 		log.info("found {} links: {}", foundLinks.size(), foundLinks);
@@ -41,47 +44,52 @@ public class ListingDetailScraperTest {
 	public void canExtractLinksFromMultiplePagesThenFollowToDetailsPage() throws MalformedURLException {
 		Iterator pageIterator = new Iterator() {
 
-			private int startingPage = 1;
-
-			private int currentPage = startingPage;
-
-			private int numberOfPages = 2;
-
-			private URL nextUrl;
-
+			List<Link> foundLinks = new LinkExtractor()
+                                                .source(html().url(PagedListingTable.getUrl()))
+                                                .getLinks();
+                        ListIterator foundLinksItertator= foundLinks.listIterator();
+                        
 			@Override
 			public URL next() {
-				currentPage++;
-				return nextUrl;
+                            Link currentLink =(Link)foundLinksItertator.next();                            
+                            log.debug("current iterating page = {}", currentLink.getHref());
+                            
+                            String CurrentURLStr = PagedListingFolder.getPath() +"/"+currentLink.getHref();
+                            URL currentURL = TestUtil.getFileAsURL(CurrentURLStr);
+                            
+                            return currentURL; 
 			}
 
-			@Override
+			@Override 
 			public boolean hasNext() {
-				String nextPageUrl = MessageFormat.format("/testpages/ids-page-{0}.html", currentPage);
-				log.debug("next page to iterate to: {}", nextPageUrl);
-				nextUrl = TestUtil.getFileAsURL(nextPageUrl);
-				return currentPage < startingPage + numberOfPages;
+                            
+                            try {
+                                Link nextLink =(Link)foundLinks.get(foundLinksItertator.nextIndex()); 
+                                log.debug("next page to iterate = {}", nextLink.getHref());
+                            } catch (Exception e) {                                
+                               log.debug("Page iterator can't peek next link");
+                            }
+                                      
+                            return foundLinksItertator.hasNext();
 			}
 
 			@Override
 			public URL getBaseUrl() {
 				// TODO Auto-generated method stub
-				return null;
+				return PagedListingFolder.getUrl();
 			}
 		};
-		List<Record> records = new ListingDetailScraper()
-				.setConvertURLs(false)
+                HtmlExtractor htmlExtractor = html().url(PagedListingTable.getUrl());
+		
+                List<Record> records = new ListingDetailScraper()
+				.setConvertURLs(true)
 				.iterator(pageIterator)
-				.listing(
-						new LinkExtractor().source(
-								html().url(PagedListingTable.getUrl()).table().matching(listingTableKeyword)).matching(
-								linkPattern))
-				.details(new DefaultFieldExtractor())
+				.listing(new LinkExtractor().source(htmlExtractor))
+				.details(new DefaultFieldExtractor().source(htmlExtractor))
 				.getRecords();
 
-		assertThat(records.size(), is(0)); // this is not going to find any
-											// records because the URLs are all
-											// invalid
+		assertThat(records.size(), greaterThan(0)); 
+											
 		log.debug("fields = {}", records);
 
 	}
