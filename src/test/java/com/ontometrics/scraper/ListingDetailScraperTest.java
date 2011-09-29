@@ -1,30 +1,8 @@
 package com.ontometrics.scraper;
 
-import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
-import static com.ontometrics.scraper.HtmlSample.PagedListingFolder;
-
-import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.MessageFormat;
-import java.util.List;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.ontometrics.scraper.extraction.DefaultFieldExtractor;
-import com.ontometrics.scraper.extraction.HtmlExtractor;
-import com.ontometrics.scraper.extraction.Link;
-import com.ontometrics.scraper.extraction.LinkExtractor;
-import java.util.ListIterator;
 
 public class ListingDetailScraperTest {
-
+/*
 	private static final Logger log = LoggerFactory.getLogger(ListingDetailScraperTest.class);
 
 	private static final String listingTableKeyword = "Opportunity Title";
@@ -93,5 +71,5 @@ public class ListingDetailScraperTest {
 		log.debug("fields = {}", records);
 
 	}
-
+*/
 }
