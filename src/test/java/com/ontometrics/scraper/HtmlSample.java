@@ -16,6 +16,8 @@ public enum HtmlSample {
 	 * with a link to a detail page that could be scraped to get the details.
 	 */
 	PagedListingTable("/testpages/grants-gov-table.html"),
+//	PagedListingTable("/testpages/PagedListingTable.html"),
+//        PagedListingFolder("/testpages"),
 
 	/**
 	 * Goes with the listing above, shows the details on a given Grant, has a
@@ -70,6 +72,9 @@ public enum HtmlSample {
 		this.path = path;
 	}
 
+        public String getPath() {
+		return path;
+	}
 	public URL getUrl() {
 		return TestUtil.getFileAsURL(path);
 	}

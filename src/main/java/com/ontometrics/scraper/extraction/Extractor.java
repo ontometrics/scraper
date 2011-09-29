@@ -24,8 +24,9 @@ import com.ontometrics.scraper.util.ScraperUtil;
 /**
  * Does the work of iteratively extracting portions of the page.
  * <p>
- * Note that once the requested elements are specified, this class is held in the scraper and can be successively
- * invoked for jobs that involve iteration (e.g. paging).
+ * Note that once the requested elements are specified, this class is held in
+ * the scraper and can be successively invoked for jobs that involve iteration
+ * (e.g. paging).
  * 
  * @author Rob
  */
@@ -54,35 +55,39 @@ public class Extractor {
 	private String classToGet;
 
 	/**
-	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed so 1st would be 0.
+	 * Which occurrence of the tag should we extract? (Remember it is 0 indexed
+	 * so 1st would be 0.
 	 */
 	private int occurrence = 0;
 
 	/**
-	 * We collect the desired tags, and whether there is some associate occurrence, e.g. in the dsl we might want to
-	 * support calls like: table(3).row(2).cell(3) to get something out of the 3rd table on the page, its second row and
-	 * 3rd cell.
+	 * We collect the desired tags, and whether there is some associate
+	 * occurrence, e.g. in the dsl we might want to support calls like:
+	 * table(3).row(2).cell(3) to get something out of the 3rd table on the
+	 * page, its second row and 3rd cell.
 	 */
 	private List<TagOccurrence> tagsToGet;
 
 	/**
 	 * Provides a means of defining paired tags that contain fields.
 	 * <p>
-	 * For example, if you have a page where the labels are all wrapped with h4 and the fields with dd, you would add a
-	 * pair like this:
+	 * For example, if you have a page where the labels are all wrapped with h4
+	 * and the fields with dd, you would add a pair like this:
 	 * <p>
 	 * <code>
 	 * scraper.extractor().pair(HTMLElementName.H4, HTMLElementName.DD).getFields()
 	 * </code>
 	 * <p>
-	 * Note: The extractor will extract nothing if the pairs are not contiguous and matching.
+	 * Note: The extractor will extract nothing if the pairs are not contiguous
+	 * and matching.
 	 */
 	private List<PairedTags> fieldPairs;
 
 	/**
-	 * If there is a parameter to be extracted from a link. Eventually, we might want to make link extraction its own
-	 * sub-DSL. If there is a parameter to be extracted from a link. Eventually, we might want to make link extraction
-	 * its own sub-DSL.
+	 * If there is a parameter to be extracted from a link. Eventually, we might
+	 * want to make link extraction its own sub-DSL. If there is a parameter to
+	 * be extracted from a link. Eventually, we might want to make link
+	 * extraction its own sub-DSL.
 	 */
 	private String parameter;
 
@@ -148,10 +153,11 @@ public class Extractor {
 	}
 
 	/**
-	 * Call this method to have the scrape performed and the extractions returned in the desired format
-	 * {@link #outputFormat}.
+	 * Call this method to have the scrape performed and the extractions
+	 * returned in the desired format {@link #outputFormat}.
 	 * 
-	 * @return the items from the {@link #url} that were prescribed by the various manipulators
+	 * @return the items from the {@link #url} that were prescribed by the
+	 *         various manipulators
 	 * @throws IOException
 	 */
 	public String execute() throws IOException {
@@ -192,8 +198,9 @@ public class Extractor {
 	}
 
 	/**
-	 * Prunes the raw URL content down based on the manipulators that have been used to specify subelements, then
-	 * extracts links and potentially parameters from them.
+	 * Prunes the raw URL content down based on the manipulators that have been
+	 * used to specify subelements, then extracts links and potentially
+	 * parameters from them.
 	 * 
 	 * @return a set of extracted elements
 	 * @throws IOException
@@ -243,7 +250,8 @@ public class Extractor {
 		for (int i = 0; i < afterTagOccurrence.getOccurrence(); i++) {
 			sourceHtml = sourceHtml.substring(sourceHtml.indexOf(endAfterTag) + 1);
 		}
-		// log.debug("pruned after count {} of tag {}: {}", new Object[] { afterTagOccurrence.getOccurrence(),
+		// log.debug("pruned after count {} of tag {}: {}", new Object[] {
+		// afterTagOccurrence.getOccurrence(),
 		// afterTagOccurrence.getTag(), sourceHtml });
 		String afterSource = sourceHtml;
 		source = new Source(afterSource);
@@ -426,7 +434,7 @@ public class Extractor {
 	}
 
 	private void addTagToGet(String tag, int occurrence, String match) {
-		tagsToGet.add(new TagOccurrence(tag, occurrence, match));
+		tagsToGet.add(new TagOccurrence.Builder().tag(tag).occurrence(occurrence).matching(match).build());
 	}
 
 	private void addTagToGet(String tag) {
@@ -447,7 +455,7 @@ public class Extractor {
 	}
 
 	public Extractor after(String tag, int occurrence) {
-		this.afterTagOccurrence = new TagOccurrence(tag, occurrence);
+		this.afterTagOccurrence = new TagOccurrence.Builder().tag(tag).occurrence(occurrence).build();
 		return this;
 
 	}
@@ -462,7 +470,8 @@ public class Extractor {
 	}
 
 	/**
-	 * We will refactor this away when we have specialized extractors that are chained.
+	 * We will refactor this away when we have specialized extractors that are
+	 * chained.
 	 * 
 	 * @return all fields that were found
 	 * @throws IOException

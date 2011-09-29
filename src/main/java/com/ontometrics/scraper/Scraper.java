@@ -50,7 +50,7 @@ public class Scraper {
 	}
 
 	protected String convertToAbsoluteUrl(String link) {
-		String absoluteUrlString = (getBaseUrl().toString()).concat(link);
+		String absoluteUrlString = (getBaseUrl().toString())+"/"+link;
 		return absoluteUrlString;
 	}
 
