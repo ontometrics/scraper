@@ -318,7 +318,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	@Override
 	public DefaultFieldExtractor field(String label, String element) {
-		this.fieldsToGet.add(new DesignatedField(label, new TagOccurrence(element, 0)));
+		this.fieldsToGet.add(new DesignatedField(label, new TagOccurrence.Builder().tag(element).build()));
 		return this;
 	}
 
@@ -349,7 +349,10 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	}
 
 	public DefaultFieldExtractor field(String label, ElementIdentifierType identierType, String id) {
-		this.fieldsToGet.add(new DesignatedField(label, new TagOccurrence("", identierType, id)));
+		this.fieldsToGet.add(new DesignatedField(label, new TagOccurrence.Builder()
+				.elementIdentifierType(ElementIdentifierType.cssClass)
+				.identifier(id)
+				.build()));
 		return this;
 	}
 

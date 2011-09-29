@@ -86,8 +86,7 @@ public class HtmlExtractor extends BaseExtractor {
 		if (manipulators == null) {
 			manipulators = new LinkedList<Manipulator>();
 		} else {
-			manipulators.getLast()
-					.setSuccessor(manipulator);
+			manipulators.getLast().setSuccessor(manipulator);
 		}
 		manipulators.add(manipulator);
 	}
@@ -101,10 +100,8 @@ public class HtmlExtractor extends BaseExtractor {
 			source = isUsingSessionSupport() ? getSessionSupportedSource() : new Source(url);
 
 			if (hasManipulators()) {
-				manipulators.getFirst()
-						.execute(source);
-				source = manipulators.getLast()
-						.getSource();
+				manipulators.getFirst().execute(source);
+				source = manipulators.getLast().getSource();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -139,8 +136,7 @@ public class HtmlExtractor extends BaseExtractor {
 			// When HttpClient instance is no longer needed,
 			// shut down the connection manager to ensure
 			// immediate deallocation of all system resources
-			httpClient.getConnectionManager()
-					.shutdown();
+			httpClient.getConnectionManager().shutdown();
 		}
 
 		Source source = new Source(responseBody);
@@ -169,7 +165,10 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @return the table tag and all its contents
 	 */
 	public HtmlExtractor table(int occurrence) {
-		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, occurrence)));
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
+				.tag(HTMLElementName.TABLE)
+				.occurrence(occurrence)
+				.build()));
 		return this;
 	}
 
@@ -183,7 +182,10 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @return all the html after (and including) the element
 	 */
 	public HtmlExtractor after(String tag, int occurrence) {
-		addManipulator(new SplicingExtractor(SpliceOperation.After, new TagOccurrence(tag, occurrence)));
+		addManipulator(new SplicingExtractor(SpliceOperation.After, new TagOccurrence.Builder()
+				.tag(tag)
+				.occurrence(occurrence)
+				.build()));
 		return this;
 	}
 
@@ -204,8 +206,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @return the current HtmlExtractor for call chaining
 	 */
 	public HtmlExtractor matching(String matcher) {
-		manipulators.getLast()
-				.setMatcher(matcher);
+		manipulators.getLast().setMatcher(matcher);
 		return this;
 	}
 
@@ -230,7 +231,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @see #matching(String)
 	 */
 	public HtmlExtractor table() {
-		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, 0)));
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.TABLE).build()));
 		return this;
 	}
 
@@ -239,12 +240,20 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	public HtmlExtractor tableWithID(String id) {
-		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.TABLE, ElementIdentifierType.ID, id)));
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
+				.tag(HTMLElementName.TABLE)
+				.elementIdentifierType(ElementIdentifierType.ID)
+				.identifier(id)
+				.build()));
 		return this;
 	}
 
 	public HtmlExtractor divWithID(String id) {
-		addManipulator(new ElementManipulator(new TagOccurrence(HTMLElementName.DIV, ElementIdentifierType.ID, id)));
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
+				.tag(HTMLElementName.DIV)
+				.elementIdentifierType(ElementIdentifierType.ID)
+				.identifier(id)
+				.build()));
 		return this;
 	}
 
@@ -265,5 +274,15 @@ public class HtmlExtractor extends BaseExtractor {
 
 	private boolean isUsingSessionSupport() {
 		return !StringUtils.isEmpty(sessionSupportUrl);
+	}
+
+	public HtmlExtractor ofClass(String className, int occurrence) {
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
+				.elementIdentifierType(ElementIdentifierType.cssClass)
+				.identifier(className)
+				.ofClass(className)
+				.occurrence(occurrence)
+				.build()));
+		return this;
 	}
 }
