@@ -140,6 +140,12 @@ public class ScraperUtil {
 		source.fullSequentialParse();
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
 			result = source.getElementById(tagOccurrence.getIdentifier()).toString();
+		} else if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.cssClass) {
+			log.debug("extracting: {}", tagOccurrence);
+			result = source
+					.getAllElementsByClass(tagOccurrence.getIdentifier())
+					.get(tagOccurrence.getOccurrence())
+					.toString();
 		}
 		log.debug("identifier: {}/{} result: {}",
 				new Object[] { tagOccurrence.getIdentifier(), tagOccurrence.getElementIdentifierType(), result });

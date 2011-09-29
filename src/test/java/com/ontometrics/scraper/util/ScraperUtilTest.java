@@ -81,18 +81,22 @@ public class ScraperUtilTest {
 	public void extractTagMatching() {
 		String test = "<table>1</table><table>2</table><table>3</table><table>4</table><table>5</table>";
 
-		String source = ScraperUtil.extractTagMatching(test, new TagOccurrence(HTMLElementName.TABLE, 0, "3"));
+		String source = ScraperUtil.extractTagMatching(test, new TagOccurrence.Builder()
+				.tag(HTMLElementName.TABLE)
+				.occurrence(0)
+				.matching("3")
+				.build());
 
 		log.info("tag matching 3: {}", source);
-		
+
 	}
-	
+
 	@Test
 	public void testGetBaseUrl() throws MalformedURLException {
 		URL onlyHostName = new URL("http://www.google.com");
 		URL anotherUrl = new URL("http://www.google.com/about");
 		URL oneDirectoryDeep = new URL("http://www.google.com/about/index.html");
-		
+
 		URL result = null;
 		log.info("ohn = {}", onlyHostName.getProtocol());
 		result = ScraperUtil.getBaseUrl(onlyHostName);
