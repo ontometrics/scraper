@@ -25,7 +25,10 @@ public class ManipulatorTest {
 	@Before
 	public void setup() {
 		mockExtractionAgent = new MockManipulator();
-		splicingExtractor = new SplicingExtractor(SpliceOperation.After, new TagOccurrence("table", 3));
+		splicingExtractor = new SplicingExtractor(SpliceOperation.After, new TagOccurrence.Builder()
+				.tag("table")
+				.occurrence(3)
+				.build());
 		splicingExtractor.setSuccessor(mockExtractionAgent);
 
 	}
