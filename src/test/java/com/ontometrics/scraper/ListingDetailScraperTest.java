@@ -1,8 +1,8 @@
-package com.ontometrics.scraper;
+/*package com.ontometrics.scraper;
 
 
 public class ListingDetailScraperTest {
-/*
+
 	private static final Logger log = LoggerFactory.getLogger(ListingDetailScraperTest.class);
 
 	private static final String listingTableKeyword = "Opportunity Title";
@@ -71,5 +71,6 @@ public class ListingDetailScraperTest {
 		log.debug("fields = {}", records);
 
 	}
-*/
+
 }
+*/
