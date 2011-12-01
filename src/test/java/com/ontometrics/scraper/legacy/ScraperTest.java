@@ -40,7 +40,7 @@ public class ScraperTest {
 	private String eligibilityCodeId = "dnf_class_values_cfda__applicant_eligibility__widget";
 
 	private String eligibilityClassName = "fld_applicant_eligibility";
-
+	
 	@Before
 	public void setup() {
 		scraper = new Scraper();
@@ -382,4 +382,5 @@ public class ScraperTest {
 		log.info("contactinfo: {}", contactInfo);
 		assertThat(contactInfo.contains(contactInfoFromPage), is(true));
 	}
+	
 }

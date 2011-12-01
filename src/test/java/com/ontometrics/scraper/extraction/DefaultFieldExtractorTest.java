@@ -13,6 +13,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
@@ -33,6 +34,8 @@ import com.ontometrics.scraper.util.ScraperUtil;
 public class DefaultFieldExtractorTest {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultFieldExtractorTest.class);
+
+	private static final String URL_FOR_SITE_REQUIRING_COOKIE = "https://www.dibbs.bsm.dla.mil/RFQ/RfqRecs.aspx?category=issue&TypeSrch=dt&scope=all&value=9%2F20%2F2011&bPg=1&cPg=1";
 
 	private FieldExtractor<?> fieldExtractor = new DefaultFieldExtractor();
 
@@ -148,7 +151,9 @@ public class DefaultFieldExtractorTest {
 
 		assertThat(fields.size(), greaterThan(0));
 		assertThat(ScraperUtil.getFieldValue(fields, "REQUEST NO."), is("SPM1C111T5504"));
-		assertThat(ScraperUtil.getFieldValue(fields, "col0").contains("QUESTIONS REGARDING THE DLA-BSM INTERNET BID BOARD SYSTEM"), is(true));
+		assertThat(
+				ScraperUtil.getFieldValue(fields, "col0").contains(
+						"QUESTIONS REGARDING THE DLA-BSM INTERNET BID BOARD SYSTEM"), is(true));
 	}
 
 	@Test
@@ -179,11 +184,22 @@ public class DefaultFieldExtractorTest {
 				.source(html().url(ListingWithNumberedPaging.getUrl()))
 				.field("pagingInfo", ElementIdentifierType.cssClass, "RecordsDisplay")
 				.getFields();
-		
+
 		Field pagingInfo = new ScrapedField("pagingInfo", "Records 1 thru 75 of 3532 Records.");
 		assertThat(fields.contains(pagingInfo), is(true));
 		log.info("found fields: {}", fields);
 
+	}
+
+	@Test
+	public void canPassACookie() throws MalformedURLException {
+		URL targetUrl = new URL(URL_FOR_SITE_REQUIRING_COOKIE);
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(targetUrl)
+						.addRequestProperty("Cookie", "DIBBSDoDWarning=AGREE")
+						.tableWithID("tblSearchResults")).getFields();
+
+		assertThat(fields.size(), greaterThan(0));
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {

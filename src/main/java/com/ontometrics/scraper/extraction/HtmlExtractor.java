@@ -1,8 +1,12 @@
 package com.ontometrics.scraper.extraction;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
@@ -20,13 +24,10 @@ import org.slf4j.LoggerFactory;
 import com.ontometrics.scraper.TagOccurrence;
 
 /**
- * Provides a means of collecting {@link Manipulator}s and performing
- * progressive harvesting of html from an original source. This is done through
- * an implementation of the Chain of Responsibility Pattern: the manipulators
- * are held in a LinkedList and when new ones are added, they are bolted on to
- * the end, then, when the source is requested, the first {@link Manipulator} is
- * invoked, setting off the chain of operations. Then the resulting source is
- * extracted.
+ * Provides a means of collecting {@link Manipulator}s and performing progressive harvesting of html from an original
+ * source. This is done through an implementation of the Chain of Responsibility Pattern: the manipulators are held in a
+ * LinkedList and when new ones are added, they are bolted on to the end, then, when the source is requested, the first
+ * {@link Manipulator} is invoked, setting off the chain of operations. Then the resulting source is extracted.
  * 
  * @author Rob
  * 
@@ -40,35 +41,32 @@ public class HtmlExtractor extends BaseExtractor {
 	private Source source;
 
 	/**
-	 * Typical starting point for beginning the process of getting html to
-	 * manipulate.
+	 * Typical starting point for beginning the process of getting html to manipulate.
 	 */
 	private URL url;
 
 	/**
-	 * The chain of collaborators who will do the work of transforming the html
-	 * source.
+	 * The chain of collaborators who will do the work of transforming the html source.
 	 */
 	private LinkedList<Manipulator> manipulators;
 
 	/**
-	 * Some sites require session-like behavior to navigate to certain pages.
-	 * For example, on CFDA.gov, you have to visit the initial listing page
-	 * before navigating to other pages. <br>
+	 * Some sites require session-like behavior to navigate to certain pages. For example, on CFDA.gov, you have to
+	 * visit the initial listing page before navigating to other pages. <br>
 	 * <br>
-	 * If {@code isUsingSessionSupport} is set, we will visit this the initial
-	 * page before navigating to the target URL.
+	 * If {@code isUsingSessionSupport} is set, we will visit this the initial page before navigating to the target URL.
 	 */
 	private String sessionSupportUrl;
+
+	private Map<String, String> httpRequestProperties = new HashMap<String, String>();
 
 	public static HtmlExtractor html() {
 		return new HtmlExtractor();
 	}
 
 	/**
-	 * The idea here is that the various static methods that are used to present
-	 * the syntax of the DSL will ultimately enqueue a corresponding command by
-	 * calling this method, so for instance, the method:
+	 * The idea here is that the various static methods that are used to present the syntax of the DSL will ultimately
+	 * enqueue a corresponding command by calling this method, so for instance, the method:
 	 * <p>
 	 * <code>
 	 * public HtmlExtractor table(int occurrence)
@@ -79,8 +77,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * in the chain.
 	 * 
 	 * @param manipulator
-	 *            the command to be enqueued at this point in the progressive
-	 *            operation of extracting the html source
+	 *            the command to be enqueued at this point in the progressive operation of extracting the html source
 	 */
 	public void addManipulator(Manipulator manipulator) {
 		if (manipulators == null) {
@@ -92,12 +89,27 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * Call this when it's time to actually perform the operations on the
-	 * source.
+	 * Call this when it's time to actually perform the operations on the source.
 	 */
 	public void performManipulations() {
 		try {
-			source = isUsingSessionSupport() ? getSessionSupportedSource() : new Source(url);
+
+			if (isUsingSessionSupport()) {
+				log.debug("Using session support.");
+				source = getSessionSupportedSource();
+			} else if (httpRequestProperties.size() > 0) {
+				log.debug("Passing a cookie while getting source.");
+				HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
+
+				Set<String> requestPropertiesKeys = httpRequestProperties.keySet();
+				for (String key : requestPropertiesKeys) {
+					httpUrlConnection.setRequestProperty(key, httpRequestProperties.get(key));
+				}
+				source = new Source(httpUrlConnection);
+			} else {
+				log.debug("Getting source normally.");
+				source = new Source(url);
+			}
 
 			if (hasManipulators()) {
 				manipulators.getFirst().execute(source);
@@ -110,8 +122,8 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * This method connects first to the initial URL, then to the target URL. It
-	 * then returns the {@code Source} for the target URL.
+	 * This method connects first to the initial URL, then to the target URL. It then returns the {@code Source} for the
+	 * target URL.
 	 * 
 	 * @return
 	 */
@@ -160,8 +172,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * Provides means of extracting a specific table.
 	 * 
 	 * @param occurrence
-	 *            this would refer to the index in the list of all table tags
-	 *            found in the passed html
+	 *            this would refer to the index in the list of all table tags found in the passed html
 	 * @return the table tag and all its contents
 	 */
 	public HtmlExtractor table(int occurrence) {
@@ -190,9 +201,8 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * Provides a simple means of adding matching to the prior operation. For
-	 * example, if you want to find a table that contains a given string, you
-	 * would do:
+	 * Provides a simple means of adding matching to the prior operation. For example, if you want to find a table that
+	 * contains a given string, you would do:
 	 * <p>
 	 * <code>
 	 * table().matching(targetString)
@@ -201,8 +211,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * How the matching is done is going to be based on the manipulator.
 	 * 
 	 * @param matcher
-	 *            just a simple string to use for matching, or could be a regex
-	 *            expression
+	 *            just a simple string to use for matching, or could be a regex expression
 	 * @return the current HtmlExtractor for call chaining
 	 */
 	public HtmlExtractor matching(String matcher) {
@@ -211,9 +220,8 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * Usually the starting point: provides the path to a file that would be the
-	 * original source that is then progressively transformed by any additional
-	 * {@link Manipulator}s.
+	 * Usually the starting point: provides the path to a file that would be the original source that is then
+	 * progressively transformed by any additional {@link Manipulator}s.
 	 * 
 	 * @param url
 	 *            valid url point to a page that has html in it
@@ -257,6 +265,15 @@ public class HtmlExtractor extends BaseExtractor {
 		return this;
 	}
 
+	public HtmlExtractor spanWithID(String id) {
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
+				.tag(HTMLElementName.SPAN)
+				.elementIdentifierType(ElementIdentifierType.ID)
+				.identifier(id)
+				.build()));
+		return this;
+	}
+
 	public HtmlExtractor add(Manipulator manipulator) {
 		addManipulator(manipulator);
 		return this;
@@ -284,5 +301,14 @@ public class HtmlExtractor extends BaseExtractor {
 				.occurrence(occurrence)
 				.build()));
 		return this;
+	}
+
+	public HtmlExtractor addRequestProperty(String key, String value) {
+		httpRequestProperties.put(key, value);
+		return this;
+	}
+
+	public Map<String, String> getHttpRequestProperties() {
+		return httpRequestProperties;
 	}
 }

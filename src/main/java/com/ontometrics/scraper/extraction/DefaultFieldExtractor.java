@@ -350,7 +350,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	public DefaultFieldExtractor field(String label, ElementIdentifierType identierType, String id) {
 		this.fieldsToGet.add(new DesignatedField(label, new TagOccurrence.Builder()
-				.elementIdentifierType(ElementIdentifierType.cssClass)
+				.elementIdentifierType(identierType)
 				.identifier(id)
 				.build()));
 		return this;

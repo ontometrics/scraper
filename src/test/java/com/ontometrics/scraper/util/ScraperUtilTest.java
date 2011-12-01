@@ -5,10 +5,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
@@ -108,4 +118,46 @@ public class ScraperUtilTest {
 		result = ScraperUtil.getBaseUrl(oneDirectoryDeep);
 		assertThat(result.toString(), is("http://www.google.com/about/"));
 	}
+
+	@Test
+	public void simulateFormSubmission() throws Exception {
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("__EVENTTARGET", "ctl00_cph1_mnuPagerBottom");
+		data.put("__EVENTARGUMENT", "b10");
+
+		doSubmit("https://www.dibbs.bsm.dla.mil/RFQ/RfqRecs.aspx?category=issue&TypeSrch=dt&Value=11-30-2011", data);
+	}
+
+	private void doSubmit(String url, Map<String, String> data) throws Exception {
+		URL siteUrl = new URL(url);
+		HttpsURLConnection conn = (HttpsURLConnection) siteUrl.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setRequestProperty("Cookie", "DIBBSDoDWarning=AGREE");
+		conn.setDoOutput(true);
+		conn.setDoInput(true);
+
+		DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+
+		Set keys = data.keySet();
+		Iterator keyIter = keys.iterator();
+		String content = "";
+		for (int i = 0; keyIter.hasNext(); i++) {
+			Object key = keyIter.next();
+			if (i != 0) {
+				content += "&";
+			}
+			content += key + "=" + URLEncoder.encode(data.get(key), "UTF-8");
+		}
+		System.out.println(content);
+		out.writeBytes(content);
+		out.flush();
+		out.close();
+		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		String line = "";
+		while ((line = in.readLine()) != null) {
+			System.out.println(line);
+		}
+		in.close();
+	}
+
 }
