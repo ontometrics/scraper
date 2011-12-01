@@ -127,6 +127,8 @@ public class ScraperUtil {
 		Element result = null;
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.cssClass) {
 			result = source.getAllElementsByClass(tagOccurrence.getIdentifier()).get(0);
+		} else if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
+			result = source.getElementById(tagOccurrence.getIdentifier());
 		} else {
 			List<Element> elements = source.getAllElements(tagOccurrence.getTag());
 			result = elements.get(tagOccurrence.getOccurrence());
@@ -157,14 +159,18 @@ public class ScraperUtil {
 		String found = null;
 		Source source = new Source(html);
 		source.fullSequentialParse();
+		log.debug("source = {}", source);
 		List<Element> elements = source.getAllElements(HTMLElementName.TABLE);
 		for (Element element : elements) {
+			log.debug("this element = {}", element);
 			String elementText = element.getTextExtractor().toString();
 			if (elementText.contains(toGet.getMatching())) {
 				found = element.toString();
+				log.debug("found element text containing matching text, found = {}", found);
 				break;
 			}
 		}
+		log.debug("found = {}", found);
 		return found.toString();
 	}
 
