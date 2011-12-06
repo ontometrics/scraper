@@ -20,13 +20,12 @@ import com.ontometrics.scraper.util.ScraperUtil;
 /**
  * Provides a means of pulling fields out of a page.
  * <p>
- * This extractor will work on tables and on DLs. The tables have to have 2
- * columns (TDs). This will take the first as the label and the second as the
- * value. Same is done with the DLs: the DT is read as the label and the DD as
- * the value.
+ * This extractor will work on tables and on DLs. The tables have to have 2 columns (TDs). This will take the first as
+ * the label and the second as the value. Same is done with the DLs: the DT is read as the label and the DD as the
+ * value.
  * <p>
- * One way to use this tool is to just start with this default extractor and
- * then start removing the the elements that are not helping.
+ * One way to use this tool is to just start with this default extractor and then start removing the the elements that
+ * are not helping.
  * 
  * @author Rob
  */
@@ -107,9 +106,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics
-	 * .scraper.extraction.HtmlExtractor)
+	 * @see com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics .scraper.extraction.HtmlExtractor)
 	 */
 	public DefaultFieldExtractor source(HtmlExtractor htmlExtractor) {
 		super.source(htmlExtractor);
@@ -139,10 +136,10 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	private List<Field> extractFieldsFromTables() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> tables = getSource().getAllElements(HTMLElementName.TABLE);
-		// log.debug("found {} tables to try and find fields in {}",
-		// tables.size(), getSource().toString());
+		log.debug("found {} tables to try and find fields in {}", tables.size(), getSource().toString());
 
 		for (Element table : tables) {
+			log.debug("this table = {}", table.getContent());
 			extractedFields.addAll(extractFieldsFromTable(table.toString()));
 		}
 		return extractedFields;
@@ -246,7 +243,11 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			} else if (tagsWithSpecificTagRemoved(HTMLElementName.BR, li.getAllTags()).size() == 4) {
 				Tag enclosingTag = li.getAllTags().get(1);
 				log.debug("enclosing tag: {}", enclosingTag);
-				log.debug("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
+				log
+						.debug("first element of enclosing tag: {}", enclosingTag
+								.getElement()
+								.getTextExtractor()
+								.toString());
 				String tagText = enclosingTag
 						.getElement()
 						.getRenderer()
