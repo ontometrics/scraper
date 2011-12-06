@@ -18,6 +18,8 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +50,7 @@ public class HtmlExtractor extends BaseExtractor {
 	/**
 	 * The chain of collaborators who will do the work of transforming the html source.
 	 */
-	private LinkedList<Manipulator> manipulators;
+	private LinkedList<Manipulator> manipulators = new LinkedList<Manipulator>();
 
 	/**
 	 * Some sites require session-like behavior to navigate to certain pages. For example, on CFDA.gov, you have to
@@ -80,12 +82,19 @@ public class HtmlExtractor extends BaseExtractor {
 	 *            the command to be enqueued at this point in the progressive operation of extracting the html source
 	 */
 	public void addManipulator(Manipulator manipulator) {
-		if (manipulators == null) {
-			manipulators = new LinkedList<Manipulator>();
-		} else {
+		if (hasManipulators()) {
 			manipulators.getLast().setSuccessor(manipulator);
 		}
 		manipulators.add(manipulator);
+	}
+
+	public HtmlExtractor clean() {
+		Manipulator cleaner = new CleanManipulator();
+		if (hasManipulators()) {
+			cleaner.setSuccessor(manipulators.getFirst());
+		}
+		manipulators.add(0, cleaner);
+		return this;
 	}
 
 	/**
@@ -244,7 +253,7 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	private boolean hasManipulators() {
-		return this.manipulators != null;
+		return this.manipulators.size() > 0;
 	}
 
 	public HtmlExtractor tableWithID(String id) {
@@ -311,4 +320,5 @@ public class HtmlExtractor extends BaseExtractor {
 	public Map<String, String> getHttpRequestProperties() {
 		return httpRequestProperties;
 	}
+
 }
