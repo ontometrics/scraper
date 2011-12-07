@@ -245,8 +245,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 				log.debug("found <li> to process: {}, added field: {}", li, field);
 			} else if (tagsWithSpecificTagRemoved(HTMLElementName.BR, li.getAllTags()).size() == 4) {
 				Tag enclosingTag = li.getAllTags().get(1);
-				log.info("enclosing tag: {}", enclosingTag);
-				log.info("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
+				log.debug("enclosing tag: {}", enclosingTag);
+				log.debug("first element of enclosing tag: {}", enclosingTag.getElement().getTextExtractor().toString());
 				String tagText = enclosingTag
 						.getElement()
 						.getRenderer()
@@ -260,7 +260,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 						.toString()
 						.trim()
 						.replaceAll(":$", "");
-				log.info("enclosing tag text starts at: {}", allText.indexOf(tagText));
+				log.debug("enclosing tag text starts at: {}", allText.indexOf(tagText));
 				log.debug("tagText (length = {}): {} alltext (length = {}): {}", new Object[] { tagText.length(),
 						tagText, allText.length(), allText });
 				if (allText.startsWith(tagText)) {
