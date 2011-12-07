@@ -95,12 +95,21 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>0.9</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
 			<id>onto-repo</id>
 			<name>Corporate repo for onto resources..</name>
 			<url>https://maven.ontometrics.com</url>
+		</repository>
+		<repository>
+			<id>onto nexus repo</id>
+			<url>http://www.ontometrics.com:8080/nexus/content/groups/ontorepogroup/</url>
 		</repository>
 	</repositories>
 </project>
