@@ -6,7 +6,7 @@
 	<artifactId>scraper</artifactId>
 	<packaging>jar</packaging>
 	<name>scraper</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.21-SNAPSHOT</version>
 	<description></description>
 	<build>
 		<finalName>scraper</finalName>
@@ -42,6 +42,11 @@
 	</build>
 	<dependencies>
 		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.1.2</version>
@@ -51,7 +56,7 @@
 			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.5.2</version>
+			<version>1.6.1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.htmlparser.jericho</groupId>

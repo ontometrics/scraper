@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
@@ -34,6 +35,8 @@ import com.ontometrics.scraper.util.ScraperUtil;
 public class DefaultFieldExtractorTest {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultFieldExtractorTest.class);
+
+	private static final String URL_FOR_SITE_REQUIRING_COOKIE = "https://www.dibbs.bsm.dla.mil/RFQ/RfqRecs.aspx?category=issue&TypeSrch=dt&scope=all&value=9%2F20%2F2011&bPg=1&cPg=1";
 
 	private FieldExtractor<?> fieldExtractor = new DefaultFieldExtractor();
 
@@ -198,6 +201,17 @@ public class DefaultFieldExtractorTest {
 		log.info("first contact field: {}", firstContact);
 		assertThat(firstContact.contains("2103421156"), is(true));
 
+	}
+
+	@Test
+	public void canPassACookie() throws MalformedURLException {
+		URL targetUrl = new URL(URL_FOR_SITE_REQUIRING_COOKIE);
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(targetUrl)
+						.addRequestProperty("Cookie", "DIBBSDoDWarning=AGREE")
+						.tableWithID("tblSearchResults")).getFields();
+
+		assertThat(fields.size(), greaterThan(0));
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
