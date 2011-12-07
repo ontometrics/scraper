@@ -295,24 +295,30 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		List<Element> preTags = valueElement.getAllElements(HTMLElementName.PRE);
 		if (preTags.size() > 0) {
 			result = preTags.get(0).getContent().toString();
+			/*
+			  } else {
+			 
+			 log.debug("found anchorSubElements on: {}",
+			 valueElement.getTextExtractor().toString()); List<Element>
+			 anchorSubElements =
+			 valueElement.getAllElements(HTMLElementName.A); /* if
+			 (anchorSubElements.size() > 0) {
+			 log.debug("found a tag inside field!"); for (Element element :
+			 anchorSubElements) { if
+			 (element.getName().equals(HTMLElementName.A)) { if
+			 (element.getAttributeValue("href") != null) {
+			 log.debug("found href"); result =
+			 element.getAttributeValue("href"); } } else { result =
+			 element.getTextExtractor().toString();
+			 log.debug("found {} inside anchorSubElements", result); } }
+			 log.debug("done looking at anchorSubElements, result: {}",
+			 result);
+			 */
+			 
 		} else {
-			List<Element> anchorSubElements = valueElement.getAllElements(HTMLElementName.A);
-			if (anchorSubElements.size() > 0) {
-				log.debug("found a tag inside field!");
-				for (Element element : anchorSubElements) {
-					if (element.getName().equals(HTMLElementName.A)) {
-						if (element.getAttributeValue("href") != null) {
-							log.debug("found href");
-							result = element.getAttributeValue("href");
-						}
-					} else {
-						result = element.getTextExtractor().toString();
-					}
-				}
-			} else {
-				result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).setNewLine("\n").toString();
-				log.debug("returning value = {}", result);
-			}
+//			result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).setNewLine("\n").toString();
+			result = valueElement.getTextExtractor().toString();
+			log.debug("returning value = {}", result);
 		}
 		return result;
 	}

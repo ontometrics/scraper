@@ -5,6 +5,7 @@ import static com.ontometrics.scraper.HtmlSample.ListingWithNumberedPaging;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
 import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
 import static com.ontometrics.scraper.HtmlSample.TableWithULs;
+import static com.ontometrics.scraper.HtmlSample.TableWithCompoundContactInfo;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -151,9 +152,7 @@ public class DefaultFieldExtractorTest {
 
 		assertThat(fields.size(), greaterThan(0));
 		assertThat(ScraperUtil.getFieldValue(fields, "REQUEST NO."), is("SPM1C111T5504"));
-		assertThat(
-				ScraperUtil.getFieldValue(fields, "col0").contains(
-						"QUESTIONS REGARDING THE DLA-BSM INTERNET BID BOARD SYSTEM"), is(true));
+		assertThat(ScraperUtil.getFieldValue(fields, "col0").contains("QUESTIONS REGARDING THE DLA-BSM INTERNET BID BOARD SYSTEM"), is(true));
 	}
 
 	@Test
@@ -170,11 +169,12 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void canExtractFieldsFromTableAtSpecificOccurrence() {
 		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl()).table(4)).getFields();
-		log.debug("Detail fields = {}", fields);
+		String cfdaNumbersField = ScraperUtil.getFieldValue(fields, "CFDA Number(s)");
+		log.debug("CFDA #s field: {}", cfdaNumbersField);
 		assertThat(ScraperUtil.getFieldValue(fields, "Funding Opportunity Number"), is("663-A-08-002"));
 		assertThat(
-				ScraperUtil.getFieldValue(fields, "CFDA Number(s)").contains(
-						"98.001  --  USAID Foreign Assistance for Programs Overseas; 47.049  --  Mathematical"),
+				cfdaNumbersField .contains(
+						"98.001  --  USAID Foreign Assistance for Programs Overseas;47.049  --  Mathematical"),
 				is(true));
 	}
 
@@ -188,6 +188,18 @@ public class DefaultFieldExtractorTest {
 		Field pagingInfo = new ScrapedField("pagingInfo", "Records 1 thru 75 of 3532 Records.");
 		assertThat(fields.contains(pagingInfo), is(true));
 		log.info("found fields: {}", fields);
+
+	}
+
+	@Test
+	public void canExtractCompoundFieldsIncludingMailto() {
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(TableWithCompoundContactInfo.getUrl()).ofClass("list", 0))
+				.getFields();
+		
+		String firstContact = fields.get(2).getValue();
+		log.info("first contact field: {}", firstContact);
+		assertThat(firstContact.contains("2103421156"), is(true));
 
 	}
 

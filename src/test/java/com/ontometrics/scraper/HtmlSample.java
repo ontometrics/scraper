@@ -61,6 +61,12 @@ public enum HtmlSample {
 	TableWithULs("/testpages/table-with-uls.html"),
 
 	/**
+	 * Sometimes a label with multiple values is done as one or more follow on
+	 * rows that have no label.
+	 */
+	TableWithCompoundContactInfo("/testpages/fbo-interestedvendors-list.html"),
+
+	/**
 	 * It's legal to have alternating TRs with THs on one row and TDs in the
 	 * other.
 	 */
