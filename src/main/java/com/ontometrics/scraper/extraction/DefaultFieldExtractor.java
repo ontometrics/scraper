@@ -309,6 +309,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			 */
 
 		} else {
+
 			log.debug("parsing element: {}", valueElement.toString());
 			Segment valueText = valueElement.getContent();
 			int elementsSize = valueText.getAllElements().size();
@@ -329,6 +330,21 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 			} else {
 				fieldText = valueText.getTextExtractor().toString();
+			}
+			// check for links..
+			List<Element> links = valueElement.getAllElements(HTMLElementName.A);
+			if (links.size() > 0) {
+				for (Element link : links) {
+					int linkcount = 0;
+					log.debug("found link inside field: {}", link);
+					if (link.getAttributeValue("href") != null) {
+						if (linkcount > 0) {
+							fieldText += ";";
+						}
+						fieldText += link.getAttributeValue("href");
+						linkcount++;
+					}
+				}
 			}
 
 			result = fieldText;

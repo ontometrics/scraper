@@ -207,12 +207,12 @@ public class DefaultFieldExtractorTest {
 		List<Field> fields = new DefaultFieldExtractor()
 				.source(html().url(TableWithAlternatingRowsOfHeaders.getUrl()))
 				.getFields();
-		
+
 		String contactInfo = ScraperUtil.getFieldValue(fields, "REQUEST FOR QUOTATION (THIS IS NOT AN ORDER)");
 		log.info("contact info: {}", contactInfo);
 
 		assertThat(contactInfo.contains(";"), is(true));
-		
+
 	}
 
 	@Test
