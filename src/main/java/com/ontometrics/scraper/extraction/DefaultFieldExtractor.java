@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Segment;
 import net.htmlparser.jericho.Source;
 import net.htmlparser.jericho.Tag;
 
@@ -319,15 +320,25 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			 */
 
 		} else {
-			log.debug("about to split up: {} using MAX_VALUE of: {}", valueElement.getTextExtractor().toString(),
-					Integer.MAX_VALUE);
-			String valueText = valueElement.getTextExtractor().toString();
-			if (valueText.length() > 4000) {
-				log.debug("value text size is: {}", valueText.length());
-				result = valueElement.getRenderer().setMaxLineLength(Integer.MAX_VALUE).setNewLine("\n").toString();
+			log.debug("parsing element: {}", valueElement.toString());
+			Segment valueText = valueElement.getContent();
+			int elementsSize = valueText.getAllElements().size();
+			String fieldText = "";
+			if (elementsSize > 0) {
+				if (valueText.toString().contains("<br")) {
+					String delimitedText = valueText.toString().replace("<br>", ";").replace("<br/>", ";");
+					log.debug("delimited text: {}", delimitedText);
+					Source newElement = new Source(delimitedText);
+					fieldText = newElement.getTextExtractor().toString();
+				} else {
+					fieldText = valueText.getTextExtractor().toString();
+				}
+
 			} else {
-				result = valueElement.getTextExtractor().toString();
+				fieldText = valueText.getTextExtractor().toString();
 			}
+
+			result = fieldText;
 			log.debug("returning value = {}", result);
 		}
 		return result;
