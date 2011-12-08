@@ -36,13 +36,11 @@ public class DefaultFieldExtractorTest {
 
 	private static final Logger log = LoggerFactory.getLogger(DefaultFieldExtractorTest.class);
 
-	private static final String URL_FOR_SITE_REQUIRING_COOKIE = "https://www.dibbs.bsm.dla.mil/RFQ/RfqRecs.aspx?category=issue&TypeSrch=dt&scope=all&value=9%2F20%2F2011&bPg=1&cPg=1";
-
 	private FieldExtractor<?> fieldExtractor = new DefaultFieldExtractor();
 
 	@Test
 	public void extractFieldsAfterTablePairedTags() throws MalformedURLException, IOException {
-		List<Field> fields = fieldExtractor.source(html().url(DetailPage.getUrl())).getFields();
+		List<Field> fields = fieldExtractor.source(html().url(DetailPage.getUrl()).table(3)).getFields();
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		log.debug("fields = {}", fields);
@@ -181,7 +179,7 @@ public class DefaultFieldExtractorTest {
 	@Test
 	public void canFindFieldByCSSClass() {
 		List<Field> fields = new DefaultFieldExtractor()
-				.source(html().url(ListingWithNumberedPaging.getUrl()))
+				.source(html().url(ListingWithNumberedPaging.getUrl()).ofClass("RecordsDisplay", 0))
 				.field("pagingInfo", ElementIdentifierType.cssClass, "RecordsDisplay")
 				.getFields();
 
@@ -201,17 +199,6 @@ public class DefaultFieldExtractorTest {
 		log.info("first contact field: {}", firstContact);
 		assertThat(firstContact.contains("2103421156"), is(true));
 
-	}
-
-	@Test
-	public void canPassACookie() throws MalformedURLException {
-		URL targetUrl = new URL(URL_FOR_SITE_REQUIRING_COOKIE);
-		List<Field> fields = new DefaultFieldExtractor().source(
-				html().url(targetUrl)
-						.addRequestProperty("Cookie", "DIBBSDoDWarning=AGREE")
-						.tableWithID("tblSearchResults")).getFields();
-
-		assertThat(fields.size(), greaterThan(0));
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
