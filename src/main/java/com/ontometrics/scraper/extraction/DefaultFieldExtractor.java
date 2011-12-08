@@ -345,10 +345,10 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 					int linkcount = 0;
 					log.debug("found link inside field: {}", link);
 					if (link.getAttributeValue("href") != null) {
-						fieldText += link.getAttributeValue("href");
 						if (linkcount > 0) {
 							fieldText += ";";
 						}
+						fieldText += link.getAttributeValue("href");
 						linkcount++;
 					}
 				}
