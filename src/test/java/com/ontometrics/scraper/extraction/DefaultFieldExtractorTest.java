@@ -150,7 +150,9 @@ public class DefaultFieldExtractorTest {
 
 		assertThat(fields.size(), greaterThan(0));
 		assertThat(ScraperUtil.getFieldValue(fields, "REQUEST NO."), is("SPM1C111T5504"));
-		assertThat(ScraperUtil.getFieldValue(fields, "col0").contains("QUESTIONS REGARDING THE DLA-BSM INTERNET BID BOARD SYSTEM"), is(true));
+		assertThat(
+				ScraperUtil.getFieldValue(fields, "col0").contains(
+						"QUESTIONS REGARDING THE DLA-BSM INTERNET BID BOARD SYSTEM"), is(true));
 	}
 
 	@Test
@@ -171,8 +173,8 @@ public class DefaultFieldExtractorTest {
 		log.debug("CFDA #s field: {}", cfdaNumbersField);
 		assertThat(ScraperUtil.getFieldValue(fields, "Funding Opportunity Number"), is("663-A-08-002"));
 		assertThat(
-				cfdaNumbersField .contains(
-						"98.001  --  USAID Foreign Assistance for Programs Overseas;47.049  --  Mathematical"),
+				cfdaNumbersField
+						.contains("98.001  --  USAID Foreign Assistance for Programs Overseas;47.049  --  Mathematical"),
 				is(true));
 	}
 
@@ -191,14 +193,26 @@ public class DefaultFieldExtractorTest {
 
 	@Test
 	public void canExtractCompoundFieldsIncludingMailto() {
-		List<Field> fields = new DefaultFieldExtractor()
-				.source(html().url(TableWithCompoundContactInfo.getUrl()).ofClass("list", 0))
-				.getFields();
-		
+		List<Field> fields = new DefaultFieldExtractor().source(
+				html().url(TableWithCompoundContactInfo.getUrl()).ofClass("list", 0)).getFields();
+
 		String firstContact = fields.get(2).getValue();
 		log.info("first contact field: {}", firstContact);
 		assertThat(firstContact.contains("2103421156"), is(true));
 
+	}
+
+	@Test
+	public void willPreserveNewLinesInFields() {
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(TableWithAlternatingRowsOfHeaders.getUrl()))
+				.getFields();
+		
+		String contactInfo = ScraperUtil.getFieldValue(fields, "REQUEST FOR QUOTATION (THIS IS NOT AN ORDER)");
+		log.info("contact info: {}", contactInfo);
+
+		assertThat(contactInfo.contains(";"), is(true));
+		
 	}
 
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
