@@ -24,10 +24,13 @@ import org.slf4j.LoggerFactory;
 import com.ontometrics.scraper.TagOccurrence;
 
 /**
- * Provides a means of collecting {@link Manipulator}s and performing progressive harvesting of html from an original
- * source. This is done through an implementation of the Chain of Responsibility Pattern: the manipulators are held in a
- * LinkedList and when new ones are added, they are bolted on to the end, then, when the source is requested, the first
- * {@link Manipulator} is invoked, setting off the chain of operations. Then the resulting source is extracted.
+ * Provides a means of collecting {@link Manipulator}s and performing
+ * progressive harvesting of html from an original source. This is done through
+ * an implementation of the Chain of Responsibility Pattern: the manipulators
+ * are held in a LinkedList and when new ones are added, they are bolted on to
+ * the end, then, when the source is requested, the first {@link Manipulator} is
+ * invoked, setting off the chain of operations. Then the resulting source is
+ * extracted.
  * 
  * @author Rob
  * 
@@ -41,20 +44,24 @@ public class HtmlExtractor extends BaseExtractor {
 	private Source source;
 
 	/**
-	 * Typical starting point for beginning the process of getting html to manipulate.
+	 * Typical starting point for beginning the process of getting html to
+	 * manipulate.
 	 */
 	private URL url;
 
 	/**
-	 * The chain of collaborators who will do the work of transforming the html source.
+	 * The chain of collaborators who will do the work of transforming the html
+	 * source.
 	 */
 	private LinkedList<Manipulator> manipulators = new LinkedList<Manipulator>();
 
 	/**
-	 * Some sites require session-like behavior to navigate to certain pages. For example, on CFDA.gov, you have to
-	 * visit the initial listing page before navigating to other pages. <br>
+	 * Some sites require session-like behavior to navigate to certain pages.
+	 * For example, on CFDA.gov, you have to visit the initial listing page
+	 * before navigating to other pages. <br>
 	 * <br>
-	 * If {@code isUsingSessionSupport} is set, we will visit this the initial page before navigating to the target URL.
+	 * If {@code isUsingSessionSupport} is set, we will visit this the initial
+	 * page before navigating to the target URL.
 	 */
 	private String sessionSupportUrl;
 
@@ -65,8 +72,9 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * The idea here is that the various static methods that are used to present the syntax of the DSL will ultimately
-	 * enqueue a corresponding command by calling this method, so for instance, the method:
+	 * The idea here is that the various static methods that are used to present
+	 * the syntax of the DSL will ultimately enqueue a corresponding command by
+	 * calling this method, so for instance, the method:
 	 * <p>
 	 * <code>
 	 * public HtmlExtractor table(int occurrence)
@@ -77,7 +85,8 @@ public class HtmlExtractor extends BaseExtractor {
 	 * in the chain.
 	 * 
 	 * @param manipulator
-	 *            the command to be enqueued at this point in the progressive operation of extracting the html source
+	 *            the command to be enqueued at this point in the progressive
+	 *            operation of extracting the html source
 	 */
 	public void addManipulator(Manipulator manipulator) {
 		if (hasManipulators()) {
@@ -96,7 +105,8 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * Call this when it's time to actually perform the operations on the source.
+	 * Call this when it's time to actually perform the operations on the
+	 * source.
 	 */
 	public void performManipulations() {
 		try {
@@ -123,14 +133,14 @@ public class HtmlExtractor extends BaseExtractor {
 				source = manipulators.getLast().getSource();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("IO Error while performing manipulations", e);
 		}
 
 	}
 
 	/**
-	 * This method connects first to the initial URL, then to the target URL. It then returns the {@code Source} for the
-	 * target URL.
+	 * This method connects first to the initial URL, then to the target URL. It
+	 * then returns the {@code Source} for the target URL.
 	 * 
 	 * @return
 	 */
@@ -158,9 +168,9 @@ public class HtmlExtractor extends BaseExtractor {
 			httpClient.getConnectionManager().shutdown();
 		}
 
-		Source source = new Source(responseBody);
-		log.info("Source = {}", source.toString());
-		return source;
+		Source newSource = new Source(responseBody);
+		log.info("Source = {}", newSource.toString());
+		return newSource;
 	}
 
 	/*
@@ -179,7 +189,8 @@ public class HtmlExtractor extends BaseExtractor {
 	 * Provides means of extracting a specific table.
 	 * 
 	 * @param occurrence
-	 *            this would refer to the index in the list of all table tags found in the passed html
+	 *            this would refer to the index in the list of all table tags
+	 *            found in the passed html
 	 * @return the table tag and all its contents
 	 */
 	public HtmlExtractor table(int occurrence) {
@@ -208,8 +219,9 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * Provides a simple means of adding matching to the prior operation. For example, if you want to find a table that
-	 * contains a given string, you would do:
+	 * Provides a simple means of adding matching to the prior operation. For
+	 * example, if you want to find a table that contains a given string, you
+	 * would do:
 	 * <p>
 	 * <code>
 	 * table().matching(targetString)
@@ -218,7 +230,8 @@ public class HtmlExtractor extends BaseExtractor {
 	 * How the matching is done is going to be based on the manipulator.
 	 * 
 	 * @param matcher
-	 *            just a simple string to use for matching, or could be a regex expression
+	 *            just a simple string to use for matching, or could be a regex
+	 *            expression
 	 * @return the current HtmlExtractor for call chaining
 	 */
 	public HtmlExtractor matching(String matcher) {
@@ -227,8 +240,9 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
-	 * Usually the starting point: provides the path to a file that would be the original source that is then
-	 * progressively transformed by any additional {@link Manipulator}s.
+	 * Usually the starting point: provides the path to a file that would be the
+	 * original source that is then progressively transformed by any additional
+	 * {@link Manipulator}s.
 	 * 
 	 * @param url
 	 *            valid url point to a page that has html in it

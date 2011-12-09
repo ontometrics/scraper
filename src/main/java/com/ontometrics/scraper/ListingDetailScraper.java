@@ -22,9 +22,7 @@ public class ListingDetailScraper extends RecordScraper {
 	private List<Link> links = new ArrayList<Link>();
 
 	private boolean convertURLs = true;
-	
-	private int DEBUG_numberOfDetailPagesToReturnAfter;
-	
+
 	public ListingDetailScraper listing(LinkExtractor linkExtractor) throws MalformedURLException {
 		if (iterator != null) {
 			while (iterator.hasNext()) {
@@ -55,8 +53,8 @@ public class ListingDetailScraper extends RecordScraper {
 		if (shouldConvertURLs()) {
 			setBaseUrl(iterator.getBaseUrl());
 		}
-		
-		if (links==null || links.size() == 0) {
+
+		if (links == null || links.size() == 0) {
 			throw new IllegalStateException("No links found, can't extract detail pages.");
 		}
 		log.debug("extracting details from {} links.", links.size());
@@ -78,11 +76,6 @@ public class ListingDetailScraper extends RecordScraper {
 				List<Field> fields = new ArrayList<Field>(detailExtractor.url(new URL(builtUrl)).getFields());
 				log.debug("returned fields = {}", fields);
 				addRecord(new ScrapedRecord(fields));
-				
-				if (DEBUG_numberOfDetailPagesToReturnAfter > 0 && counter == DEBUG_numberOfDetailPagesToReturnAfter) {
-					log.debug("DEBUG: Exiting after processing {} detail links because debug variable has been set.", DEBUG_numberOfDetailPagesToReturnAfter);
-					break;
-				}
 			} catch (MalformedURLException e) {
 				log.info("Bad URL in looping detail page for listing links: {}", e.toString());
 			}
@@ -99,9 +92,5 @@ public class ListingDetailScraper extends RecordScraper {
 		this.convertURLs = convertURLs;
 		return this;
 	}
-	
-	public ListingDetailScraper DEBUG_setNumberOfDetailPagesToReturnAfter(int dEBUG_numberOfDetailPagesToReturnAfter) {
-		DEBUG_numberOfDetailPagesToReturnAfter = dEBUG_numberOfDetailPagesToReturnAfter;
-		return this;
-	}
+
 }

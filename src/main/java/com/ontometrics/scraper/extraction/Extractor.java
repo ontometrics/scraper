@@ -250,13 +250,10 @@ public class Extractor {
 		for (int i = 0; i < afterTagOccurrence.getOccurrence(); i++) {
 			sourceHtml = sourceHtml.substring(sourceHtml.indexOf(endAfterTag) + 1);
 		}
-		// log.debug("pruned after count {} of tag {}: {}", new Object[] {
-		// afterTagOccurrence.getOccurrence(),
-		// afterTagOccurrence.getTag(), sourceHtml });
 		String afterSource = sourceHtml;
-		source = new Source(afterSource);
-		source.fullSequentialParse();
-		return source;
+		Source newSource = new Source(afterSource);
+		newSource.fullSequentialParse();
+		return newSource;
 	}
 
 	public Extractor asText() {
@@ -430,7 +427,7 @@ public class Extractor {
 				found = element.toString();
 			}
 		}
-		return found.toString();
+		return found;
 	}
 
 	private void addTagToGet(String tag, int occurrence, String match) {

@@ -1,6 +1,7 @@
 package com.ontometrics.scraper.extraction;
 
 import java.net.URL;
+import java.util.Deque;
 import java.util.LinkedList;
 
 import net.htmlparser.jericho.Source;
@@ -34,7 +35,7 @@ public abstract class BaseExtractor {
 	/**
 	 * Does the work of actually honing in on the source we are interested in.
 	 */
-	private LinkedList<HtmlExtractor> htmlExtractors = new LinkedList<HtmlExtractor>();
+	private Deque<HtmlExtractor> htmlExtractors = new LinkedList<HtmlExtractor>();
 
 	/**
 	 * Provides access to the source from the {@link #htmlExtractor} which derived classes will then perform their

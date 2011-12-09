@@ -331,6 +331,9 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 					log.debug("delimited text: {}", delimitedText);
 					Source newElement = new Source(delimitedText);
 					fieldText = newElement.getTextExtractor().toString();
+					if (fieldText.endsWith(";")){
+						fieldText = fieldText.substring(0, fieldText.length()-1).trim();
+					}
 				} else {
 					fieldText = valueText.getTextExtractor().toString();
 				}

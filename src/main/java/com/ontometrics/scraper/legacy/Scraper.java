@@ -93,14 +93,15 @@ public class Scraper {
 	 */
 	public List<URL> getLinks() throws IOException {
 		List<URL> links = new ArrayList<URL>();
-		
+
 		Source source = new Source(url);
 		source.fullSequentialParse();
 		List<Element> linkElements = source.getAllElements(HTMLElementName.A);
 		for (Element linkElement : linkElements) {
 			String href = linkElement.getAttributeValue("href");
-			if (href == null)
+			if (href == null) {
 				continue;
+			}
 			// A element can contain other tags so need to extract the text from
 			// it:
 			String label = linkElement.getContent().getTextExtractor().toString();
@@ -163,7 +164,7 @@ public class Scraper {
 				e.printStackTrace();
 			}
 		}
-		String hostName = new String().concat("http://").concat(url.getHost());
+		String hostName = "http://".concat(url.getHost());
 		baseUrl = new URL(hostName);
 		return this;
 	}

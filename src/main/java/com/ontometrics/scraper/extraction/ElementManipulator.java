@@ -15,7 +15,7 @@ public class ElementManipulator extends Manipulator {
 
 	public ElementManipulator(TagOccurrence tagOccurrence) {
 		this.tagOccurrence = tagOccurrence;
-		this.type = OperationType.Manipulator;
+		setType(OperationType.Manipulator);
 	}
 
 	@Override

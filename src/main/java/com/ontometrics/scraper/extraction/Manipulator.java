@@ -20,7 +20,7 @@ public abstract class Manipulator implements Manipulation {
 	 * Refers to whether this thing operates on the original source, or
 	 * transforms what it was passed.
 	 */
-	protected OperationType type = OperationType.Manipulator;
+	private OperationType type = OperationType.Manipulator;
 
 	/**
 	 * The html we are transforming here.
@@ -52,13 +52,14 @@ public abstract class Manipulator implements Manipulation {
 	public final void execute(Source source) {
 		this.source = source;
 		String result = performExtraction();
-		if (result == null)
+		if (result == null) {
 			throw new IllegalStateException("Manipulator " + this.getClass().getName() + " returned null.");
+		}
 		if (type == OperationType.Manipulator) {
 			log.debug("reassigning source..");
-			source = new Source(result);
-			source.fullSequentialParse();
-			this.source = source;
+			Source newSource = new Source(result);
+			newSource.fullSequentialParse();
+			this.source = newSource;
 		}
 		if (successor != null) {
 			successor.execute(source);
@@ -74,6 +75,14 @@ public abstract class Manipulator implements Manipulation {
 	 * @return the resulting html transformed by the specific manipulation
 	 */
 	public abstract String performExtraction();
+
+	public OperationType getType() {
+		return type;
+	}
+
+	protected void setType(OperationType type) {
+		this.type = type;
+	}
 
 	public Source getSource() {
 		return source;

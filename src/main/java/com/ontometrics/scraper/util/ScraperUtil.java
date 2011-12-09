@@ -25,6 +25,9 @@ public class ScraperUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
 
+	private ScraperUtil() {
+	};
+
 	/**
 	 * Get first occurrence of field value
 	 * 
@@ -91,7 +94,7 @@ public class ScraperUtil {
 	}
 
 	public static String extract(String source, String tag, int occurrence) {
-		log.debug("extracting occurrence {} of tag: {} from: {}", new Object[] { occurrence, tag, source.toString() });
+		log.debug("extracting occurrence {} of tag: {} from: {}", new Object[] { occurrence, tag, source });
 		tag = tag.startsWith("<") ? tag : "<" + tag;
 		tag = (tag.endsWith(">")) ? tag.substring(0, tag.length() - 1) : tag;
 		String endTag = "</" + tag.substring(1) + ">";
@@ -171,7 +174,7 @@ public class ScraperUtil {
 			}
 		}
 		log.debug("found = {}", found);
-		return found.toString();
+		return found;
 	}
 
 	private static String cleanupTag(String tag) {
@@ -224,7 +227,7 @@ public class ScraperUtil {
 		try {
 			result = new URL(baseUrlString);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			log.error("malformed base url", e);
 		}
 		return result;
 	}

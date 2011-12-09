@@ -13,7 +13,7 @@ public class SplicingExtractor extends Manipulator {
 	private TagOccurrence tagOccurrence;
 
 	public SplicingExtractor(SpliceOperation operation, TagOccurrence tagOccurrence) {
-		this.type = OperationType.Manipulator;
+		setType(OperationType.Manipulator);
 		this.operation = operation;
 		this.tagOccurrence = tagOccurrence;
 	}
