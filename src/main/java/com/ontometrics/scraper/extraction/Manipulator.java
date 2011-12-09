@@ -62,7 +62,7 @@ public abstract class Manipulator implements Manipulation {
 			this.source = newSource;
 		}
 		if (successor != null) {
-			successor.execute(source);
+			successor.execute(this.source);
 		}
 	}
 
