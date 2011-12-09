@@ -11,10 +11,6 @@ public class HtmlTable extends Manipulator {
 
 	private List<Integer> columnsToGet;
 
-	private String className;
-
-	private String containsText;
-
 	public static HtmlTable table() {
 		return new HtmlTable();
 	}
@@ -45,7 +41,7 @@ public class HtmlTable extends Manipulator {
 	@Override
 	public String performExtraction() {
 		String result = null;
-		if (id!=null){
+		if (id != null) {
 			result = getSource().getElementById(id).toString();
 		}
 		return result;
@@ -53,7 +49,7 @@ public class HtmlTable extends Manipulator {
 
 	@Override
 	public void setMatcher(String matcher) {
-		
+
 	}
 
 }

@@ -111,7 +111,7 @@ public class Scraper {
 				currentUrl = new URL(href);
 				links.add(currentUrl);
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				log.error("malformed url", e);
 			}
 		}
 		return links;
@@ -161,7 +161,7 @@ public class Scraper {
 			try {
 				this.sessionIDName = ScraperUtil.extractSessionId(this.url, sessionIDName);
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(MessageFormat.format("io error scraping url: {0}", url), e);
 			}
 		}
 		String hostName = "http://".concat(url.getHost());
@@ -203,7 +203,7 @@ public class Scraper {
 				List<Field> fields = extractor.getFields();
 				this.extractedFields.addAll(fields);
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("IO getting fields", e);
 			}
 		}
 		return extractedFields;

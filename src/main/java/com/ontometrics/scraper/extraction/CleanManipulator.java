@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CleanManipulator extends Manipulator {
+	
 	private static final Logger log = LoggerFactory.getLogger(CleanManipulator.class);
 
 	@Override
@@ -18,6 +19,7 @@ public class CleanManipulator extends Manipulator {
 
 	@Override
 	public void setMatcher(String matcher) {
+		log.debug("someone attempted to call setMatcher on cleanupManipulator.");
 		throw new UnsupportedOperationException();
 	}
 
