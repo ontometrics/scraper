@@ -220,6 +220,19 @@ public class DefaultFieldExtractorTest {
 
 	}
 
+	@Test
+	public void willPreserveNewLinesInFieldsWithClean() {
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(TableWithAlternatingRowsOfHeaders.getUrl()).clean())
+				.getFields();
+		
+		String contactInfo = ScraperUtil.getFieldValue(fields, "REQUEST FOR QUOTATION (THIS IS NOT AN ORDER)");
+		log.info("contact info: {}", contactInfo);
+
+		assertThat(contactInfo.contains(";"), is(true));
+		
+	}
+	
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
 		Field found = null;
 		if (liElement.getAllTags().size() == 4) {
