@@ -228,4 +228,12 @@ public class ScraperUtil {
 		}
 		return result;
 	}
+
+	public static String safeReplaceSemicolonsWithNewLinesWithTrim(String text) {
+		String result = text;
+		if (result != null) {
+			result = result.replace(";", "\n").trim();
+		}
+		return result;
+	}
 }
