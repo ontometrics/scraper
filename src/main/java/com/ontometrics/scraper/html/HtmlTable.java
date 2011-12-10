@@ -3,6 +3,9 @@ package com.ontometrics.scraper.html;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.HTMLElementName;
+
 import com.ontometrics.scraper.extraction.Manipulator;
 
 public class HtmlTable extends Manipulator {
@@ -10,6 +13,10 @@ public class HtmlTable extends Manipulator {
 	private String id;
 
 	private List<Integer> columnsToGet;
+
+	private String className;
+
+	private String containsText;
 
 	public static HtmlTable table() {
 		return new HtmlTable();
@@ -43,6 +50,16 @@ public class HtmlTable extends Manipulator {
 		String result = null;
 		if (id != null) {
 			result = getSource().getElementById(id).toString();
+		} else if (className != null) {
+			List<Element> elements = getSource().getAllElementsByClass(className);
+			result = elements.get(0).toString();
+		} else if (containsText != null) {
+			List<Element> tables = getSource().getAllElements(HTMLElementName.TABLE);
+			for (Element element : tables) {
+				if (element.toString().contains(containsText)) {
+					return element.toString();
+				}
+			}
 		}
 		return result;
 	}
