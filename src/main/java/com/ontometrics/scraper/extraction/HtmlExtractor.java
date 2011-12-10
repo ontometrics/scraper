@@ -3,6 +3,7 @@ package com.ontometrics.scraper.extraction;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * The chain of collaborators who will do the work of transforming the html
 	 * source.
 	 */
-	private LinkedList<Manipulator> manipulators = new LinkedList<Manipulator>();
+	private Deque<Manipulator> manipulators = new LinkedList<Manipulator>();
 
 	/**
 	 * Some sites require session-like behavior to navigate to certain pages.
@@ -100,7 +101,7 @@ public class HtmlExtractor extends BaseExtractor {
 		if (hasManipulators()) {
 			cleaner.setSuccessor(manipulators.getFirst());
 		}
-		manipulators.add(0, cleaner);
+		manipulators.addFirst(cleaner);
 		return this;
 	}
 

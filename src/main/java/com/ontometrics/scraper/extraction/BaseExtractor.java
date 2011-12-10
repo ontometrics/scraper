@@ -6,9 +6,6 @@ import java.util.LinkedList;
 
 import net.htmlparser.jericho.Source;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-
 /**
  * The one thing all Extractors will have in common is the need to marshall some html to perform their specialized
  * extractions on. This class provides a means of getting that source by calling a chain of {@link Manipulator}s that
