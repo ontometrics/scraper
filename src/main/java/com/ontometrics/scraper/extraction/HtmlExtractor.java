@@ -111,7 +111,6 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public void performManipulations() {
 		try {
-
 			if (isUsingSessionSupport()) {
 				log.debug("Using session support.");
 				source = getSessionSupportedSource();
