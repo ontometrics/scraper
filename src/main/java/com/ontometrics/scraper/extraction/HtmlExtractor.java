@@ -324,6 +324,11 @@ public class HtmlExtractor extends BaseExtractor {
 		return this;
 	}
 
+	public HtmlExtractor ofClass(String className) {
+		ofClass(className, 0);
+		return this;
+	}
+
 	public HtmlExtractor addRequestProperty(String key, String value) {
 		httpRequestProperties.put(key, value);
 		return this;
@@ -331,6 +336,11 @@ public class HtmlExtractor extends BaseExtractor {
 
 	public Map<String, String> getHttpRequestProperties() {
 		return httpRequestProperties;
+	}
+
+	public HtmlExtractor attribute(Object attributeName) {
+		
+		return this;
 	}
 
 }

@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
  * Provides a means of transforming html based on a set of conditions, then it
  * passes on its transformed code to the next manipulator in line (
  * {@link #successor}). This is how the Chain of Responsibility Pattern works.
+ * <p>
+ * Note: takes its name from the stream operations in C++.
  * 
- * @author Rob Note: takes its name from the stream operations in C++.
+ * @author Rob 
  */
 public abstract class Manipulator implements Manipulation {
 
