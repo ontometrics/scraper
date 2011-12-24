@@ -124,7 +124,7 @@ public class HtmlExtractor extends BaseExtractor {
 				}
 				source = new Source(httpUrlConnection);
 			} else {
-				log.debug("Getting source normally.");
+				log.debug("Getting source normally, URL = {}", url);
 				source = new Source(url);
 			}
 
@@ -169,7 +169,6 @@ public class HtmlExtractor extends BaseExtractor {
 		}
 
 		Source newSource = new Source(responseBody);
-		log.info("Source = {}", newSource.toString());
 		return newSource;
 	}
 
@@ -321,6 +320,7 @@ public class HtmlExtractor extends BaseExtractor {
 				.ofClass(className)
 				.occurrence(occurrence)
 				.build()));
+		
 		return this;
 	}
 

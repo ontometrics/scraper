@@ -6,6 +6,9 @@ import java.util.LinkedList;
 
 import net.htmlparser.jericho.Source;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The one thing all Extractors will have in common is the need to marshall some html to perform their specialized
  * extractions on. This class provides a means of getting that source by calling a chain of {@link Manipulator}s that
@@ -28,6 +31,7 @@ import net.htmlparser.jericho.Source;
  * 
  */
 public abstract class BaseExtractor {
+	private static final Logger log = LoggerFactory.getLogger(BaseExtractor.class);
 
 	/**
 	 * Does the work of actually honing in on the source we are interested in.
