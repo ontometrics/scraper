@@ -22,4 +22,19 @@ public class TextExtractorTest {
 
 	}
 
+	@Test
+	public void canGetAttributeOfElement() {
+		String className = "lst-pp";
+		Object attributeName = "onchange";
+		String text = new TextExtractor()
+				.source(html()
+						.url(ProgramDetailPage.getUrl())
+						.ofClass(eligibilityClassName, 1)
+						.attribute(attributeName))
+				.getText();
+
+		log.info("attribute {} from class: {} is: {}", new Object[] { className, attributeName, text });
+
+	}
+
 }
