@@ -170,7 +170,6 @@ public class HtmlExtractor extends BaseExtractor {
 		}
 
 		Source newSource = new Source(responseBody);
-		log.info("Source = {}", newSource.toString());
 		return newSource;
 	}
 
