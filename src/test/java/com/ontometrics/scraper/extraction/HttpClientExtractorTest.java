@@ -46,6 +46,7 @@ public class HttpClientExtractorTest {
 				break;
 			}
 		}
-		assertThat(foundLastVendor, is(true));
+		assertThat(foundLastVendor, is(true)); // this last vendor will only show up if cookie state works properly due
+												// to the paging mechanism
 	}
 }

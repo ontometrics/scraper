@@ -58,16 +58,6 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	private Deque<Manipulator> manipulators = new LinkedList<Manipulator>();
 
-	/**
-	 * Some sites require session-like behavior to navigate to certain pages.
-	 * For example, on CFDA.gov, you have to visit the initial listing page
-	 * before navigating to other pages. <br>
-	 * <br>
-	 * If {@code isUsingSessionSupport} is set, we will visit this the initial
-	 * page before navigating to the target URL.
-	 */
-	private String sessionSupportUrl;
-
 	private Map<String, String> httpRequestProperties = new HashMap<String, String>();
 
 	public HtmlExtractor from(SourceExtractor sourceExtractor) {
@@ -86,7 +76,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * <p>
 	 * <code>
 	 * public HtmlExtractor table(int occurrence)
-	 * <code>
+	 * </code>
 	 * <p>
 	 * will be turned into a request to take the html that was passed in, parse it,
 	 * get the nth occurrence of a table tag, then pass it on to the next Manipulator
@@ -118,10 +108,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public void performManipulations() {
 		try {
-			if (isUsingSessionSupport()) {
-				log.debug("Using session support.");
-				source = getSessionSupportedSource();
-			} else if (httpRequestProperties.size() > 0) {
+			if (httpRequestProperties.size() > 0) {
 				log.debug("Passing a cookie while getting source.");
 				HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
 
@@ -149,40 +136,6 @@ public class HtmlExtractor extends BaseExtractor {
 			this.sourceExtractor = new SimpleSourceExtractor();
 		}
 		return this.sourceExtractor;
-	}
-
-	/**
-	 * This method connects first to the initial URL, then to the target URL. It
-	 * then returns the {@code Source} for the target URL.
-	 * 
-	 * @return
-	 */
-	private Source getSessionSupportedSource() {
-		String initialUrl = sessionSupportUrl;
-		String targetUrl = url.toString();
-
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		String responseBody = null;
-		try {
-			HttpGet firstHttpGet = new HttpGet(initialUrl);
-			HttpGet secondHttpGet = new HttpGet(targetUrl);
-
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			httpClient.execute(firstHttpGet, responseHandler);
-			responseBody = httpClient.execute(secondHttpGet, responseHandler);
-		} catch (ClientProtocolException e) {
-			log.error("Error getting source in session mode: {}", e);
-		} catch (IOException e) {
-			log.error("Error getting source in session mode: {}", e);
-		} finally {
-			// When HttpClient instance is no longer needed,
-			// shut down the connection manager to ensure
-			// immediate deallocation of all system resources
-			httpClient.getConnectionManager().shutdown();
-		}
-
-		Source newSource = new Source(responseBody);
-		return newSource;
 	}
 
 	/*
@@ -307,20 +260,6 @@ public class HtmlExtractor extends BaseExtractor {
 		return this;
 	}
 
-	public HtmlExtractor addSessionSupport(String initialPageUrl) {
-		sessionSupportUrl = initialPageUrl;
-		return this;
-	}
-
-	public HtmlExtractor clearSessionSupport() {
-		sessionSupportUrl = null;
-		return this;
-	}
-
-	private boolean isUsingSessionSupport() {
-		return !StringUtils.isEmpty(sessionSupportUrl);
-	}
-
 	public HtmlExtractor ofClass(String className, int occurrence) {
 		addManipulator(new ElementManipulator(new TagOccurrence.Builder().elementIdentifierType(
 				ElementIdentifierType.cssClass)
@@ -347,8 +286,6 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	public HtmlExtractor attribute(Object attributeName) {
-		
 		return this;
 	}
-
 }
