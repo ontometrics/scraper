@@ -21,12 +21,13 @@ import com.ontometrics.scraper.util.ScraperUtil;
 /**
  * Provides a means of pulling fields out of a page.
  * <p>
- * This extractor will work on tables and on DLs. The tables have to have 2 columns (TDs). This will take the first as
- * the label and the second as the value. Same is done with the DLs: the DT is read as the label and the DD as the
- * value.
+ * This extractor will work on tables and on DLs. The tables have to have 2
+ * columns (TDs). This will take the first as the label and the second as the
+ * value. Same is done with the DLs: the DT is read as the label and the DD as
+ * the value.
  * <p>
- * One way to use this tool is to just start with this default extractor and then start removing the the elements that
- * are not helping.
+ * One way to use this tool is to just start with this default extractor and
+ * then start removing the the elements that are not helping.
  * 
  * @author Rob
  */
@@ -107,7 +108,9 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics .scraper.extraction.HtmlExtractor)
+	 * @see
+	 * com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics
+	 * .scraper.extraction.HtmlExtractor)
 	 */
 	public DefaultFieldExtractor source(HtmlExtractor htmlExtractor) {
 		super.source(htmlExtractor);
@@ -299,13 +302,21 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 			/*
 			 * } else {
 			 * 
-			 * log.debug("found anchorSubElements on: {}", valueElement.getTextExtractor().toString()); List<Element>
-			 * anchorSubElements = valueElement.getAllElements(HTMLElementName.A); /* if (anchorSubElements.size() > 0)
-			 * { log.debug("found a tag inside field!"); for (Element element : anchorSubElements) { if
-			 * (element.getName().equals(HTMLElementName.A)) { if (element.getAttributeValue("href") != null) {
-			 * log.debug("found href"); result = element.getAttributeValue("href"); } } else { result =
-			 * element.getTextExtractor().toString(); log.debug("found {} inside anchorSubElements", result); } }
-			 * log.debug("done looking at anchorSubElements, result: {}", result);
+			 * log.debug("found anchorSubElements on: {}",
+			 * valueElement.getTextExtractor().toString()); List<Element>
+			 * anchorSubElements =
+			 * valueElement.getAllElements(HTMLElementName.A); /* if
+			 * (anchorSubElements.size() > 0) {
+			 * log.debug("found a tag inside field!"); for (Element element :
+			 * anchorSubElements) { if
+			 * (element.getName().equals(HTMLElementName.A)) { if
+			 * (element.getAttributeValue("href") != null) {
+			 * log.debug("found href"); result =
+			 * element.getAttributeValue("href"); } } else { result =
+			 * element.getTextExtractor().toString();
+			 * log.debug("found {} inside anchorSubElements", result); } }
+			 * log.debug("done looking at anchorSubElements, result: {}",
+			 * result);
 			 */
 
 		} else {
@@ -324,8 +335,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 					log.debug("delimited text: {}", delimitedText);
 					Source newElement = new Source(delimitedText);
 					fieldText = newElement.getTextExtractor().toString();
-					if (fieldText.endsWith(";")){
-						fieldText = fieldText.substring(0, fieldText.length()-1).trim();
+					if (fieldText.endsWith(";")) {
+						fieldText = fieldText.substring(0, fieldText.length() - 1).trim();
 					}
 				} else {
 					fieldText = valueText.getTextExtractor().toString();
@@ -341,9 +352,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 					int linkcount = 0;
 					log.debug("found link inside field: {}", link);
 					if (link.getAttributeValue("href") != null) {
-						if (linkcount > 0) {
-							fieldText += ";";
-						}
+						fieldText += (linkcount > 0) ? ";" : " ";
 						fieldText += link.getAttributeValue("href");
 						linkcount++;
 					}
