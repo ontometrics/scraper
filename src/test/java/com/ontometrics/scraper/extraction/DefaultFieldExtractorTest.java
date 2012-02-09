@@ -4,8 +4,8 @@ import static com.ontometrics.scraper.HtmlSample.DetailPage;
 import static com.ontometrics.scraper.HtmlSample.ListingWithNumberedPaging;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
 import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
-import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.HtmlSample.TableWithCompoundContactInfo;
+import static com.ontometrics.scraper.HtmlSample.TableWithULs;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,7 +14,6 @@ import static org.hamcrest.Matchers.is;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import net.htmlparser.jericho.Element;
