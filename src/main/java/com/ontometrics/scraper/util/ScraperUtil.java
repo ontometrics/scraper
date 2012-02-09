@@ -25,6 +25,9 @@ public class ScraperUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
 
+	private ScraperUtil() {
+	};
+
 	/**
 	 * Get first occurrence of field value
 	 * 
@@ -75,9 +78,9 @@ public class ScraperUtil {
 
 	public static String extractParameter(String uri, String parameter) {
 		String paramDelimiter = (uri.contains("?")) ? "?" : ";";
+		String finalUri = uri.substring(uri.indexOf(paramDelimiter) + 1);
 		String found = null;
-		uri = uri.substring(uri.indexOf(paramDelimiter) + 1);
-		String[] parameterSets = uri.split("&");
+		String[] parameterSets = finalUri.split("&");
 		for (String parameterSet : parameterSets) {
 			String[] pnv = parameterSet.split("=");
 			if (pnv.length == 2) {
@@ -90,9 +93,9 @@ public class ScraperUtil {
 		return found;
 	}
 
-	public static String extract(String source, String tag, int occurrence) {
-		log.debug("extracting occurrence {} of tag: {} from: {}", new Object[] { occurrence, tag, source.toString() });
-		tag = tag.startsWith("<") ? tag : "<" + tag;
+	public static String extract(String source, String sourceTag, int occurrence) {
+		log.debug("extracting occurrence {} of tag: {} from: {}", new Object[] { occurrence, sourceTag, source });
+		String tag = sourceTag.startsWith("<") ? sourceTag : "<" + sourceTag;
 		tag = (tag.endsWith(">")) ? tag.substring(0, tag.length() - 1) : tag;
 		String endTag = "</" + tag.substring(1) + ">";
 		log.debug("extracting using tags: {} and {}", tag, endTag);
@@ -171,11 +174,11 @@ public class ScraperUtil {
 			}
 		}
 		log.debug("found = {}", found);
-		return found.toString();
+		return found;
 	}
 
-	private static String cleanupTag(String tag) {
-		tag = tag.startsWith("<") ? tag : "<" + tag;
+	private static String cleanupTag(String sourceTag) {
+		String tag = sourceTag.startsWith("<") ? sourceTag : "<".concat(sourceTag);
 		tag = (tag.endsWith(">")) ? tag.substring(0, tag.length() - 1) : tag;
 		return tag;
 	}
@@ -224,7 +227,7 @@ public class ScraperUtil {
 		try {
 			result = new URL(baseUrlString);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			log.error("malformed base url", e);
 		}
 		return result;
 	}

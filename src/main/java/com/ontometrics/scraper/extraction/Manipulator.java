@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
  * Provides a means of transforming html based on a set of conditions, then it
  * passes on its transformed code to the next manipulator in line (
  * {@link #successor}). This is how the Chain of Responsibility Pattern works.
+ * <p>
+ * Note: takes its name from the stream operations in C++.
  * 
- * @author Rob Note: takes its name from the stream operations in C++.
+ * @author Rob 
  */
 public abstract class Manipulator implements Manipulation {
 
@@ -20,7 +22,7 @@ public abstract class Manipulator implements Manipulation {
 	 * Refers to whether this thing operates on the original source, or
 	 * transforms what it was passed.
 	 */
-	protected OperationType type = OperationType.Manipulator;
+	private OperationType type = OperationType.Manipulator;
 
 	/**
 	 * The html we are transforming here.
@@ -52,16 +54,17 @@ public abstract class Manipulator implements Manipulation {
 	public final void execute(Source source) {
 		this.source = source;
 		String result = performExtraction();
-		if (result == null)
+		if (result == null) {
 			throw new IllegalStateException("Manipulator " + this.getClass().getName() + " returned null.");
+		}
 		if (type == OperationType.Manipulator) {
 			log.debug("reassigning source..");
-			source = new Source(result);
-			source.fullSequentialParse();
-			this.source = source;
+			Source newSource = new Source(result);
+			newSource.fullSequentialParse();
+			this.source = newSource;
 		}
 		if (successor != null) {
-			successor.execute(source);
+			successor.execute(this.source);
 		}
 	}
 
@@ -74,6 +77,14 @@ public abstract class Manipulator implements Manipulation {
 	 * @return the resulting html transformed by the specific manipulation
 	 */
 	public abstract String performExtraction();
+
+	public OperationType getType() {
+		return type;
+	}
+
+	protected void setType(OperationType type) {
+		this.type = type;
+	}
 
 	public Source getSource() {
 		return source;

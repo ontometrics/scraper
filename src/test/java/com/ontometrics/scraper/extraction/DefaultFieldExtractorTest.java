@@ -177,6 +177,11 @@ public class DefaultFieldExtractorTest {
 						.contains("98.001  --  USAID Foreign Assistance for Programs Overseas;47.049  --  Mathematical"),
 				is(true));
 	}
+	
+	@Test
+	public void mustTrimTrailingSemiColons(){
+		
+	}
 
 	@Test
 	public void canFindFieldByCSSClass() {

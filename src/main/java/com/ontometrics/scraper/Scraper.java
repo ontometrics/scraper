@@ -2,6 +2,9 @@ package com.ontometrics.scraper;
 
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Base class, meant to be extended for specific Builder requirements (e.g.
  * extracting Fields or Records).
@@ -10,9 +13,11 @@ import java.net.URL;
  * 
  */
 public class Scraper {
+
+	public static final String sessionIdKeyword = "$SESSION_ID$";
 	
-	public static final String sessionIdKeyword = "$SESSION_ID$";;
-	
+	private static final Logger log = LoggerFactory.getLogger(Scraper.class);
+
 	/**
 	 * Used for relative links. At the moment, this will be just the host name.
 	 */
@@ -32,11 +37,11 @@ public class Scraper {
 	public String getSessionIDName() {
 		return sessionIDName;
 	}
-	
+
 	public URL getBaseUrl() {
 		return baseUrl;
 	}
-	
+
 	public void setBaseUrl(URL baseUrl) {
 		this.baseUrl = baseUrl;
 	}
@@ -50,7 +55,8 @@ public class Scraper {
 	}
 
 	protected String convertToAbsoluteUrl(String link) {
-		String absoluteUrlString = (getBaseUrl().toString())+"/"+link;
+		String absoluteUrlString = (getBaseUrl().toString()) + "/" + link;
+		log.debug("absolute url: {}", absoluteUrlString);
 		return absoluteUrlString;
 	}
 

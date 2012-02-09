@@ -93,14 +93,15 @@ public class Scraper {
 	 */
 	public List<URL> getLinks() throws IOException {
 		List<URL> links = new ArrayList<URL>();
-		
+
 		Source source = new Source(url);
 		source.fullSequentialParse();
 		List<Element> linkElements = source.getAllElements(HTMLElementName.A);
 		for (Element linkElement : linkElements) {
 			String href = linkElement.getAttributeValue("href");
-			if (href == null)
+			if (href == null) {
 				continue;
+			}
 			// A element can contain other tags so need to extract the text from
 			// it:
 			String label = linkElement.getContent().getTextExtractor().toString();
@@ -110,7 +111,7 @@ public class Scraper {
 				currentUrl = new URL(href);
 				links.add(currentUrl);
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				log.error("malformed url", e);
 			}
 		}
 		return links;
@@ -160,10 +161,10 @@ public class Scraper {
 			try {
 				this.sessionIDName = ScraperUtil.extractSessionId(this.url, sessionIDName);
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(MessageFormat.format("io error scraping url: {0}", url), e);
 			}
 		}
-		String hostName = new String().concat("http://").concat(url.getHost());
+		String hostName = "http://".concat(url.getHost());
 		baseUrl = new URL(hostName);
 		return this;
 	}
@@ -202,7 +203,7 @@ public class Scraper {
 				List<Field> fields = extractor.getFields();
 				this.extractedFields.addAll(fields);
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("IO getting fields", e);
 			}
 		}
 		return extractedFields;
