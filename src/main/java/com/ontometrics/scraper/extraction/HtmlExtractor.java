@@ -13,7 +13,6 @@ import net.htmlparser.jericho.Source;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -33,12 +32,15 @@ import com.ontometrics.scraper.TagOccurrence;
  * 
  */
 public class HtmlExtractor extends BaseExtractor {
+
 	private static final Logger log = LoggerFactory.getLogger(HtmlExtractor.class);
 
 	/**
 	 * This holds the source that we are manipulating.
 	 */
 	private Source source;
+
+	private SourceExtractor sourceExtractor;
 
 	/**
 	 * Typical starting point for beginning the process of getting html to manipulate.
@@ -59,6 +61,11 @@ public class HtmlExtractor extends BaseExtractor {
 	private String sessionSupportUrl;
 
 	private Map<String, String> httpRequestProperties = new HashMap<String, String>();
+
+	public HtmlExtractor from(SourceExtractor sourceExtractor) {
+		this.sourceExtractor = sourceExtractor;
+		return this;
+	}
 
 	public static HtmlExtractor html() {
 		return new HtmlExtractor();
@@ -100,7 +107,6 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public void performManipulations() {
 		try {
-
 			if (isUsingSessionSupport()) {
 				log.debug("Using session support.");
 				source = getSessionSupportedSource();
@@ -115,7 +121,7 @@ public class HtmlExtractor extends BaseExtractor {
 				source = new Source(httpUrlConnection);
 			} else {
 				log.debug("Getting source normally.");
-				source = new Source(url);
+				source = getSourceExtractor().getSource(this.url);
 			}
 
 			if (hasManipulators()) {
@@ -125,7 +131,13 @@ public class HtmlExtractor extends BaseExtractor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
 
+	private SourceExtractor getSourceExtractor() {
+		if (this.sourceExtractor == null) {
+			this.sourceExtractor = new SimpleSourceExtractor();
+		}
+		return this.sourceExtractor;
 	}
 
 	/**
@@ -138,7 +150,7 @@ public class HtmlExtractor extends BaseExtractor {
 		String initialUrl = sessionSupportUrl;
 		String targetUrl = url.toString();
 
-		HttpClient httpClient = new DefaultHttpClient();
+		DefaultHttpClient httpClient = new DefaultHttpClient();
 		String responseBody = null;
 		try {
 			HttpGet firstHttpGet = new HttpGet(initialUrl);
@@ -183,8 +195,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @return the table tag and all its contents
 	 */
 	public HtmlExtractor table(int occurrence) {
-		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
-				.tag(HTMLElementName.TABLE)
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.TABLE)
 				.occurrence(occurrence)
 				.build()));
 		return this;
@@ -200,8 +211,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * @return all the html after (and including) the element
 	 */
 	public HtmlExtractor after(String tag, int occurrence) {
-		addManipulator(new SplicingExtractor(SpliceOperation.After, new TagOccurrence.Builder()
-				.tag(tag)
+		addManipulator(new SplicingExtractor(SpliceOperation.After, new TagOccurrence.Builder().tag(tag)
 				.occurrence(occurrence)
 				.build()));
 		return this;
@@ -255,8 +265,7 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	public HtmlExtractor tableWithID(String id) {
-		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
-				.tag(HTMLElementName.TABLE)
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.TABLE)
 				.elementIdentifierType(ElementIdentifierType.ID)
 				.identifier(id)
 				.build()));
@@ -264,8 +273,7 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	public HtmlExtractor divWithID(String id) {
-		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
-				.tag(HTMLElementName.DIV)
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.DIV)
 				.elementIdentifierType(ElementIdentifierType.ID)
 				.identifier(id)
 				.build()));
@@ -273,8 +281,7 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	public HtmlExtractor spanWithID(String id) {
-		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
-				.tag(HTMLElementName.SPAN)
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.SPAN)
 				.elementIdentifierType(ElementIdentifierType.ID)
 				.identifier(id)
 				.build()));
@@ -301,8 +308,8 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	public HtmlExtractor ofClass(String className, int occurrence) {
-		addManipulator(new ElementManipulator(new TagOccurrence.Builder()
-				.elementIdentifierType(ElementIdentifierType.cssClass)
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().elementIdentifierType(
+				ElementIdentifierType.cssClass)
 				.identifier(className)
 				.ofClass(className)
 				.occurrence(occurrence)
