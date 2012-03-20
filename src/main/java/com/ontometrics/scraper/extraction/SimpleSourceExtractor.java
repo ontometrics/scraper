@@ -18,7 +18,7 @@ public class SimpleSourceExtractor implements SourceExtractor {
 		try {
 			source = new Source(url);
 		} catch (IOException e) {
-			log.error("Error extracting source", e);
+			log.error("Error extracting source: {}", e.toString());
 		}
 		return source;
 	}
