@@ -45,6 +45,7 @@ public class HttpClientExtractor implements SourceExtractor {
 	}
 	
 	public void close() {
+		log.debug("CALLING CLOSE IN HTTP CLIENT EXTRACTOR");
 		client.getConnectionManager().shutdown();
 	}
 }
