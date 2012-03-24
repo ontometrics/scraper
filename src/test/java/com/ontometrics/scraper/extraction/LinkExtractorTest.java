@@ -3,6 +3,7 @@ package com.ontometrics.scraper.extraction;
 import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 import java.util.List;
@@ -11,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ontometrics.scraper.HtmlSample;
 
 public class LinkExtractorTest {
 
@@ -23,6 +26,16 @@ public class LinkExtractorTest {
 	@Before
 	public void setup() {
 		linkExtractor = new LinkExtractor();
+	}
+
+	@Test
+	public void canExtractLinksFromLocalFile() {
+		List<Link> links = linkExtractor.source(html().url(HtmlSample.PageWithLocalAnchorLinks.getUrl())).getLinks();
+		log.info("found {} links: {}", links.size(), links);
+		for (Link link : links) {
+			log.info("{}", link);
+		}
+		assertThat(links.size(), is(greaterThan(0)));
 	}
 
 	@Test
