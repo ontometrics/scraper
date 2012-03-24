@@ -73,7 +73,12 @@ public enum HtmlSample {
 	 * It's legal to have alternating TRs with THs on one row and TDs in the
 	 * other.
 	 */
-	TableWithAlternatingRowsOfHeaders("/testpages/table-with-alternating-rows-of-headers.html");
+	TableWithAlternatingRowsOfHeaders("/testpages/table-with-alternating-rows-of-headers.html"),
+	
+	/**
+	 * Page with local anchor tags
+	 */
+	PageWithLocalAnchorLinks("/testpages/toBeConvertedNicholsDocument.html");
 
 	private String path;
 

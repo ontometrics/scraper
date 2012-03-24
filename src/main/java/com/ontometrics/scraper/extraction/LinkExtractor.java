@@ -32,10 +32,8 @@ public class LinkExtractor extends BaseExtractor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics
-	 * .scraper.extraction.HtmlExtractor) Note: override here so we can do one
-	 * chain of calls..
+	 * @see com.ontometrics.scraper.extraction.BaseExtractor#source(com.ontometrics .scraper.extraction.HtmlExtractor)
+	 * Note: override here so we can do one chain of calls..
 	 */
 	@Override
 	public LinkExtractor source(HtmlExtractor htmlExtractor) {
@@ -46,10 +44,8 @@ public class LinkExtractor extends BaseExtractor {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ontometrics.scraper.extraction.BaseExtractor#section(com.ontometrics
-	 * .scraper.extraction.HtmlExtractor) Note: override here so we can do one
-	 * chain of calls..
+	 * @see com.ontometrics.scraper.extraction.BaseExtractor#section(com.ontometrics .scraper.extraction.HtmlExtractor)
+	 * Note: override here so we can do one chain of calls..
 	 */
 	@Override
 	public LinkExtractor section(HtmlExtractor htmlExtractor) {
@@ -68,9 +64,10 @@ public class LinkExtractor extends BaseExtractor {
 		for (Element linkElement : as) {
 			String text = linkElement.getTextExtractor().toString();
 			String href = linkElement.getAttributeValue("href");
-			if (href != null) {
-				Link link = new Link(text, href);
-				log.debug("constructed link: {} from {} must match: {}", new Object[]{link, linkElement, matcher});
+			String name = linkElement.getAttributeValue("name");
+			if (href != null || name != null) {
+				Link link = new Link.Builder().label(text).href(href).name(name).build();
+				log.debug("constructed link: {} from {} must match: {}", new Object[] { link, linkElement, matcher });
 				if (matcher == null || link.getHref().contains(matcher)) {
 					links.add(link);
 				}
