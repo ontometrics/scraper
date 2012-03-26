@@ -68,7 +68,7 @@ public class LinkExtractor extends BaseExtractor {
 			if (href != null || name != null) {
 				Link link = new Link.Builder().label(text).href(href).name(name).build();
 				log.debug("constructed link: {} from {} must match: {}", new Object[] { link, linkElement, matcher });
-				if (matcher == null || link.getHref().contains(matcher)) {
+				if (matcher == null || (link.getHref() != null && link.getHref().contains(matcher))) {
 					links.add(link);
 				}
 			}
