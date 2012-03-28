@@ -43,7 +43,6 @@ public class DefaultFieldExtractorTest {
 
 		assertThat(fields.size(), is(greaterThan(0)));
 		log.debug("fields = {}", fields);
-
 	}
 
 	@Test
