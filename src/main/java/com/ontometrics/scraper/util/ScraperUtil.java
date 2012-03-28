@@ -144,7 +144,12 @@ public class ScraperUtil {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
-			result = source.getElementById(tagOccurrence.getIdentifier()).toString();
+			Element idElement = source.getElementById(tagOccurrence.getIdentifier());
+			if (idElement != null) {
+				result = idElement.toString();
+			} else {
+				result = "";
+			}
 		} else if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.cssClass) {
 			log.debug("extracting: {}", tagOccurrence);
 			result = source
