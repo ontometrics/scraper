@@ -238,10 +238,20 @@ public class ScraperUtil {
 	}
 
 	public static String safeReplaceSemicolonsWithNewLinesWithTrim(String text) {
-		String result = text;
-		if (result != null) {
-			result = result.replace(";", "\n").trim();
+		if (text == null) {
+			return null;
 		}
-		return result;
+
+		String[] splitString = text.split(";");
+
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < splitString.length; i++) {
+			stringBuilder.append(splitString[i].trim());
+			if (i != splitString.length - 1) {
+				stringBuilder.append(System.getProperty("line.separator"));
+			}
+		}
+
+		return stringBuilder.toString();
 	}
 }
