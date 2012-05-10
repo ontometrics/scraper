@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpClientExtractorTest {
+	@SuppressWarnings("unused")
 	private Logger log = LoggerFactory.getLogger(HttpClientExtractorTest.class);
 
 	private static final String FirstUrlString = "https://www.fbo.gov/index?s=opportunity&mode=form&id=4b04739c57d224a3e6dcea5c0ede9413&tab=ivl&tabmode=list";

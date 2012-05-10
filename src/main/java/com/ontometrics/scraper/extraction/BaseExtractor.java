@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public abstract class BaseExtractor {
+	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(BaseExtractor.class);
 
 	/**
