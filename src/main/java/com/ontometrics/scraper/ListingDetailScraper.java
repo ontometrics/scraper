@@ -28,12 +28,11 @@ public class ListingDetailScraper extends RecordScraper {
 			while (iterator.hasNext()) {
 				log.debug("Inside iterator.hasnext");
 				URL nextUrl = iterator.next();
-				log.debug("nexturl: {}", nextUrl);
+				log.debug("next url = {}", nextUrl);
 				if (nextUrl.toString().contains(sessionIdKeyword)) {
 					String urlString = nextUrl.toString().replace(sessionIdKeyword, getSessionIDName());
 					nextUrl = new URL(urlString);
 				}
-				log.debug("next url = {}", nextUrl);
 				linkExtractor.url(nextUrl);
 				this.links.addAll(linkExtractor.getLinks());
 			}
