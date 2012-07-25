@@ -147,6 +147,7 @@ public class ScraperUtil {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
+			log.debug("extracting tag by id: {}", tagOccurrence.getIdentifier());
 			Element idElement = source.getElementById(tagOccurrence.getIdentifier());
 			if (idElement != null) {
 				result = idElement.toString();

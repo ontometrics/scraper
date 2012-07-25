@@ -256,6 +256,15 @@ public class HtmlExtractor extends BaseExtractor {
 		return this;
 	}
 
+	public HtmlExtractor divWithClassAndOccurrence(String className, int occurrence) {
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.DIV)
+				.elementIdentifierType(ElementIdentifierType.cssClass)
+				.occurrence(occurrence)
+				.identifier(className)
+				.build()));
+		return this;
+	}
+
 	public HtmlExtractor spanWithID(String id) {
 		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.SPAN)
 				.elementIdentifierType(ElementIdentifierType.ID)
