@@ -160,6 +160,21 @@ public class HtmlExtractor extends BaseExtractor {
 	}
 
 	/**
+	 * Provides means of extracting a specific table.
+	 * 
+	 * @param occurrence
+	 *            this would refer to the index in the list of all table tags
+	 *            found in the passed html
+	 * @return the table tag and all its contents
+	 */
+	public HtmlExtractor table(String matching) {
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.TABLE)
+				.matching(matching)
+				.build()));
+		return this;
+	}
+
+	/**
 	 * Provides means of getting the html after a tag.
 	 * 
 	 * @param tag
@@ -237,6 +252,15 @@ public class HtmlExtractor extends BaseExtractor {
 		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.DIV)
 				.elementIdentifierType(ElementIdentifierType.ID)
 				.identifier(id)
+				.build()));
+		return this;
+	}
+
+	public HtmlExtractor divWithClassAndOccurrence(String className, int occurrence) {
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.DIV)
+				.elementIdentifierType(ElementIdentifierType.cssClass)
+				.occurrence(occurrence)
+				.identifier(className)
 				.build()));
 		return this;
 	}

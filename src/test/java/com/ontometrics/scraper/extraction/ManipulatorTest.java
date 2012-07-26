@@ -1,6 +1,6 @@
 package com.ontometrics.scraper.extraction;
 
-import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
+import static com.ontometrics.scraper.HtmlSample.GrantsGovTable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -25,8 +25,7 @@ public class ManipulatorTest {
 	@Before
 	public void setup() {
 		mockExtractionAgent = new MockManipulator();
-		splicingExtractor = new SplicingExtractor(SpliceOperation.After, new TagOccurrence.Builder()
-				.tag("table")
+		splicingExtractor = new SplicingExtractor(SpliceOperation.After, new TagOccurrence.Builder().tag("table")
 				.occurrence(3)
 				.build());
 		splicingExtractor.setSuccessor(mockExtractionAgent);
@@ -36,7 +35,7 @@ public class ManipulatorTest {
 	@Test
 	public void canSpliceSource() {
 
-		Source pageSource = PagedListingTable.getSource();
+		Source pageSource = GrantsGovTable.getSource();
 		assertThat(pageSource, is(notNullValue()));
 		splicingExtractor.execute(pageSource);
 		Source result = mockExtractionAgent.getResult();
@@ -45,6 +44,35 @@ public class ManipulatorTest {
 
 		assertThat(result.length(), is(greaterThan(0)));
 		assertThat(result.toString().startsWith("<table"), is(true));
+
+	}
+
+	@Test
+	public void canSpliceBetweenTwoElements() {
+		mockExtractionAgent = new MockManipulator();
+		SplicingExtractor beginExtractor = new SplicingExtractor(SpliceOperation.After,
+				new TagOccurrence.Builder().tag("tr")
+						.elementIdentifierType(ElementIdentifierType.ID)
+						.identifier("beginPoint")
+						.build());
+		SplicingExtractor endExtractor = new SplicingExtractor(SpliceOperation.Before, new TagOccurrence.Builder().tag(
+				"tr")
+				.elementIdentifierType(ElementIdentifierType.ID)
+				.identifier("endPoint")
+				.build());
+
+		beginExtractor.setSuccessor(endExtractor);
+		endExtractor.setSuccessor(mockExtractionAgent);
+
+		Source pageSource = GrantsGovTable.getSource();
+		assertThat(pageSource, is(notNullValue()));
+		beginExtractor.execute(pageSource);
+		Source result = mockExtractionAgent.getResult();
+
+		log.info("result after splice between: {}", result);
+
+		assertThat(result.length(), is(greaterThan(0)));
+		// assertThat(result.toString().startsWith("<table"), is(true));
 
 	}
 

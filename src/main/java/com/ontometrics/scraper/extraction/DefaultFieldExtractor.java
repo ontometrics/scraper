@@ -160,7 +160,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	}
 
 	private List<Field> extractFieldsFromTable(String html) {
-		// log.debug("extracting fields from table: {}", html);
+		log.debug("extracting fields from table: {}", html);
 		List<Field> extractedFields = new ArrayList<Field>();
 		Source source = new Source(html);
 		source.fullSequentialParse();
