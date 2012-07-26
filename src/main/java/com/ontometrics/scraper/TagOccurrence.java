@@ -100,7 +100,7 @@ public class TagOccurrence {
 
 	@Override
 	public String toString() {
-		return "TagOccurrence [tag=" + tag + ", occurrence=" + occurrence + ", matching=" + matching + "]";
+		return "TagOccurrence [tag=" + tag + ", identifier=" + identifier + ", occurrence=" + occurrence + ", matching=" + matching + "]";
 	}
 
 }

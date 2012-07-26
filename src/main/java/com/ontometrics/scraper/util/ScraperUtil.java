@@ -3,10 +3,13 @@ package com.ontometrics.scraper.util;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
@@ -57,6 +60,12 @@ public class ScraperUtil {
 					foundOccurrenceCount++;
 					if (foundOccurrenceCount == occurrence) {
 						foundValue = field.getValue();
+						
+						// TODO: Need a better method of replacing strange whitespace
+						if (foundValue != null && foundValue.contains("Ê")) {
+							foundValue = foundValue.replace("Ê", "");
+						}
+						
 						break;
 					}
 				}
@@ -144,6 +153,7 @@ public class ScraperUtil {
 		Source source = new Source(html);
 		source.fullSequentialParse();
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
+			log.debug("extracting tag by id: {}", tagOccurrence.getIdentifier());
 			Element idElement = source.getElementById(tagOccurrence.getIdentifier());
 			if (idElement != null) {
 				result = idElement.toString();
@@ -152,8 +162,7 @@ public class ScraperUtil {
 			}
 		} else if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.cssClass) {
 			log.debug("extracting: {}", tagOccurrence);
-			result = source
-					.getAllElementsByClass(tagOccurrence.getIdentifier())
+			result = source.getAllElementsByClass(tagOccurrence.getIdentifier())
 					.get(tagOccurrence.getOccurrence())
 					.toString();
 		}
@@ -253,5 +262,30 @@ public class ScraperUtil {
 		}
 
 		return stringBuilder.toString();
+	}
+
+	public static boolean isAbsoluteURLString(String urlString) {
+		String findResult = getRegexFirstGroupCaseInsensitive("^http[a-z]*:", urlString);
+		if (findResult != null) {
+			return true;
+		}
+		return false;
+	}
+
+	public static String getBaseUrlString(URL url) {
+		String result = MessageFormat.format("{0}://{1}", url.getProtocol(), url.getHost());
+		return result;
+	}
+
+	public static String getRegexFirstGroupCaseInsensitive(String regex, String string) {
+		String result = null;
+
+		Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(string);
+		if (m.find()) {
+			result = m.group(0);
+		}
+
+		return result;
 	}
 }

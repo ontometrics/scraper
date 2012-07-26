@@ -1,12 +1,16 @@
 package com.ontometrics.scraper.extraction;
 
+import net.htmlparser.jericho.Element;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class SplicingExtractor extends Manipulator {
 
-	// private static final Logger log =
-	// LoggerFactory.getLogger(SplicingExtractor.class);
+	private static final Logger log = LoggerFactory.getLogger(SplicingExtractor.class);
 
 	private SpliceOperation operation = SpliceOperation.After;
 
@@ -24,7 +28,16 @@ public class SplicingExtractor extends Manipulator {
 
 	@Override
 	public String performExtraction() {
-		return ScraperUtil.extract(getSource().toString(), tagOccurrence.getTag(), tagOccurrence.getOccurrence());
+		String extractedSource = "";
+		if (!tagOccurrence.getIdentifier().isEmpty()) {
+			log.debug("about to splice: {}", tagOccurrence);
+			Element element = ScraperUtil.extract(getSource(), tagOccurrence);
+			extractedSource = element.toString();
+			log.debug("spliced out: {}", extractedSource);
+		} else {
+			extractedSource = ScraperUtil.extract(getSource().toString(), tagOccurrence.getTag(), tagOccurrence.getOccurrence());
+		}
+		return extractedSource;
 	}
 
 	@Override
