@@ -60,6 +60,12 @@ public class ScraperUtil {
 					foundOccurrenceCount++;
 					if (foundOccurrenceCount == occurrence) {
 						foundValue = field.getValue();
+						
+						// TODO: Need a better method of replacing strange whitespace
+						if (foundValue != null && foundValue.contains("Ê")) {
+							foundValue = foundValue.replace("Ê", "");
+						}
+						
 						break;
 					}
 				}
