@@ -263,6 +263,22 @@ public class ScraperUtil {
 
 		return stringBuilder.toString();
 	}
+	
+	public static String safeReplaceNewLinesWithNewLinesTag(String text) {
+		if (text == null) {
+			return null;
+		}
+
+		String[] splitString = text.split(System.getProperty("line.separator"));
+
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < splitString.length; i++) {
+			stringBuilder.append(splitString[i].trim());
+			stringBuilder.append(" <br /> ");
+		}
+
+		return stringBuilder.toString();
+	}
 
 	public static boolean isAbsoluteURLString(String urlString) {
 		String findResult = getRegexFirstGroupCaseInsensitive("^http[a-z]*:", urlString);

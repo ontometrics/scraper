@@ -48,6 +48,19 @@ public class ScraperUtilTest {
 		result = ScraperUtil.safeReplaceSemicolonsWithNewLinesWithTrim(normalString);
 		assertThat(result, is("Teton Science School"));
 	}
+	
+	@Test
+	public void safeReplaceNewLinesWithNewLinesTag() {
+		String result = null;
+
+		String nullString = null;
+		result = ScraperUtil.safeReplaceNewLinesWithNewLinesTag(nullString);
+		assertThat(result, is(nullValue()));
+
+		String normalString = "Teton Science School ";
+		result = ScraperUtil.safeReplaceNewLinesWithNewLinesTag(normalString);
+		assertThat(result, is("Teton Science School <br /> "));
+	}
 
 	@Test
 	public void extractLinksWithText() throws IOException {
