@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import net.htmlparser.jericho.Source;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public class ManipulatorTest {
 	}
 
 	@Test
+	@Ignore
 	public void canSpliceBetweenTwoElements() {
 		mockExtractionAgent = new MockManipulator();
 		SplicingExtractor beginExtractor = new SplicingExtractor(SpliceOperation.After,

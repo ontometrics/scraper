@@ -1,6 +1,6 @@
 package com.ontometrics.scraper.extraction;
 
-import static com.ontometrics.scraper.HtmlSample.PagedListingTable;
+import static com.ontometrics.scraper.HtmlSample.GrantsGovTable;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -40,7 +40,7 @@ public class LinkExtractorTest {
 
 	@Test
 	public void canExtractLinksFromPage() {
-		List<Link> links = linkExtractor.source(html().url(PagedListingTable.getUrl()).table(3)).getLinks();
+		List<Link> links = linkExtractor.source(html().url(GrantsGovTable.getUrl()).table(3)).getLinks();
 		log.info("found {} links: {}", links.size(), links);
 		assertThat(links.size(), is(numberOfLinksInTable3));
 	}
@@ -48,13 +48,13 @@ public class LinkExtractorTest {
 	@Test
 	public void canExtractLinksMatching() {
 		List<Link> links = linkExtractor.section(
-				html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title")).getLinks();
+				html().url(GrantsGovTable.getUrl()).table().matching("Opportunity Title")).getLinks();
 		log.info("found {} links: {}", links.size(), links);
 		assertThat(links.size(), is(numberOfLinksInTargetTable));
 
 		linkExtractor = new LinkExtractor();
 		links = linkExtractor
-				.source(html().url(PagedListingTable.getUrl()).table().matching("663-A-08-002"))
+				.source(html().url(GrantsGovTable.getUrl()).table().matching("663-A-08-002"))
 				.matching("PAGECHANGE")
 				.getLinks();
 		log.info("found {} links: {}", links.size(), links);
@@ -64,8 +64,8 @@ public class LinkExtractorTest {
 	@Test
 	public void canExtractLinksFromMultipleSections() {
 		List<Link> links = linkExtractor
-				.section(html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title"))
-				.section(html().url(PagedListingTable.getUrl()).table(3))
+				.section(html().url(GrantsGovTable.getUrl()).table().matching("Opportunity Title"))
+				.section(html().url(GrantsGovTable.getUrl()).table(3))
 				.getLinks();
 		log.info("found {} links: {}", links.size(), links);
 		assertThat(links.size(), is(numberOfLinksInTargetTable + numberOfLinksInTable3));
@@ -75,7 +75,7 @@ public class LinkExtractorTest {
 	public void canExtractLinksMatchingAString() {
 		String linkPattern = "mode=VIEW";
 		List<Link> links = linkExtractor
-				.source(html().url(PagedListingTable.getUrl()).table().matching("Opportunity Title"))
+				.source(html().url(GrantsGovTable.getUrl()).table().matching("Opportunity Title"))
 				.matching(linkPattern)
 				.getLinks();
 
