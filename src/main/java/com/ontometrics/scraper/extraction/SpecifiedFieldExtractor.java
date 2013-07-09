@@ -2,6 +2,7 @@ package com.ontometrics.scraper.extraction;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,13 @@ public class SpecifiedFieldExtractor extends BaseExtractor implements FieldExtra
 		public Builder addField(String identifier) {
 			this.fieldsToGet.add(new DesignatedField(identifier, new TagOccurrence.Builder()
 					.elementIdentifierType(defaultElementIdentifier).identifier(identifier).build()));
+			return this;
+		}
+		
+		public Builder addFields(Collection<String> fields) {
+			for (String fieldName : fields){
+				addField(fieldName);
+			}
 			return this;
 		}
 
