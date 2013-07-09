@@ -25,8 +25,8 @@ public class ListingDetailScraperTest {
 
 	private static final Logger log = LoggerFactory.getLogger(ListingDetailScraperTest.class);
 
-	private static final String listingTableKeyword = "Opportunity Title";
-	private static final String linkPattern = "mode=VIEW";
+//	private static final String listingTableKeyword = "Opportunity Title";
+//	private static final String linkPattern = "mode=VIEW";
 
 	@Test
 	public void canExtractLinksFromListingPage() {

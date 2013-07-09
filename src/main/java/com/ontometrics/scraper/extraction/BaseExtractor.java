@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The one thing all Extractors will have in common is the need to marshall some html to perform their specialized
+ * The one thing all Extractors will have in common is the need to marshal some html to perform their specialized
  * extractions on. This class provides a means of getting that source by calling a chain of {@link Manipulator}s that
  * are held in the {@link HtmlExtractor}.
  * <p>
