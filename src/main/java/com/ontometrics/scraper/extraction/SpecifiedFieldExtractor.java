@@ -22,12 +22,10 @@ import com.ontometrics.scraper.util.ScraperUtil;
  * extract from tables, or paired tags. Each field must be given as a designated
  * field and the scraper will find it in the page and extract its value.
  * 
- * 
  * @author Rob
- * 
  */
-public class SpecifiedFieldExtractor extends BaseExtractor implements FieldExtractor<SpecifiedFieldExtractor>{
-	
+public class SpecifiedFieldExtractor extends BaseExtractor implements FieldExtractor<SpecifiedFieldExtractor> {
+
 	private Logger log = LoggerFactory.getLogger(SpecifiedFieldExtractor.class);
 
 	private Set<DesignatedField> fieldsToGet;
@@ -44,12 +42,14 @@ public class SpecifiedFieldExtractor extends BaseExtractor implements FieldExtra
 
 		public Builder addField(String identifier) {
 			this.fieldsToGet.add(new DesignatedField(identifier, new TagOccurrence.Builder()
-					.elementIdentifierType(defaultElementIdentifier).identifier(identifier).build()));
+					.elementIdentifierType(defaultElementIdentifier)
+						.identifier(identifier)
+						.build()));
 			return this;
 		}
-		
+
 		public Builder addFields(Collection<String> fields) {
-			for (String fieldName : fields){
+			for (String fieldName : fields) {
 				addField(fieldName);
 			}
 			return this;
@@ -59,19 +59,19 @@ public class SpecifiedFieldExtractor extends BaseExtractor implements FieldExtra
 			return new SpecifiedFieldExtractor(this);
 		}
 	}
-	
+
 	@Override
 	public SpecifiedFieldExtractor url(URL url) {
 		super.url(url);
 		return this;
 	}
-	
+
 	@Override
 	public SpecifiedFieldExtractor section(HtmlExtractor htmlExtractor) {
 		super.section(htmlExtractor);
 		return this;
 	}
-	
+
 	@Override
 	public SpecifiedFieldExtractor source(HtmlExtractor htmlExtractor) {
 		super.source(htmlExtractor);

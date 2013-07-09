@@ -57,7 +57,7 @@ public class SpecifiedFieldExtractorTest {
 		Field description = fieldsFound.get("job_desc");
 
 		assertThat(title.getValue(), is("Front End / HTML Developer"));
-		assertThat(description.getValue(), containsString("Front End / HTML Developer"));
+		assertThat(description.getValue(), containsString("Responsibilities: A Kforce client is seeking"));
 	}
 
 	private void extractFoundFields(List<Field> fields) {
