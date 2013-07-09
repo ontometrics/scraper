@@ -4,6 +4,7 @@ import static com.ontometrics.scraper.HtmlSample.CareerBuilderDetailPage;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 import java.util.List;
 
@@ -34,6 +35,10 @@ public class SpecifiedFieldExtractorTest {
 	public void canExtractASpecifiedField(){
 		List<Field> fields = extractor.source(html().url(CareerBuilderDetailPage.getUrl())).getFields();
 		log.info("fields found: {}", fields);
+		
+		Field description = fields.get(0);
+		
+		assertThat(description.getValue(), containsString("Front End / HTML Developer"));
 	}
 
 }
