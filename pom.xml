@@ -6,8 +6,13 @@
 	<artifactId>scraper</artifactId>
 	<packaging>jar</packaging>
 	<name>scraper</name>
-	<version>0.9.0</version>
+	<version>0.0.22-SNAPSHOT</version>
 	<description></description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 	<build>
 		<finalName>scraper</finalName>
 		<plugins>
@@ -16,6 +21,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<encoding>Cp1252</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
