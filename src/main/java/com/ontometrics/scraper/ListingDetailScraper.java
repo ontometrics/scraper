@@ -18,6 +18,8 @@ public class ListingDetailScraper extends RecordScraper {
 	private static final Logger log = LoggerFactory.getLogger(ListingDetailScraper.class);
 
 	private Iterator iterator;
+	
+	private int pages;
 
 	private List<Link> links = new ArrayList<Link>();
 
@@ -25,7 +27,8 @@ public class ListingDetailScraper extends RecordScraper {
 
 	public ListingDetailScraper listing(LinkExtractor linkExtractor) throws MalformedURLException {
 		if (iterator != null) {
-			while (iterator.hasNext()) {
+			int counter = 0;
+			while (iterator.hasNext() && counter < pages) {
 				log.debug("Inside iterator.hasnext");
 				URL nextUrl = iterator.next();
 				log.debug("next url = {}", nextUrl);
@@ -35,6 +38,7 @@ public class ListingDetailScraper extends RecordScraper {
 				}
 				linkExtractor.url(nextUrl);
 				this.links.addAll(linkExtractor.getLinks());
+				++counter;
 			}
 		} else {
 			links = linkExtractor.getLinks();
@@ -80,6 +84,11 @@ public class ListingDetailScraper extends RecordScraper {
 			}
 
 		}
+		return this;
+	}
+	
+	public ListingDetailScraper pages(int pages) {
+		this.pages = pages;
 		return this;
 	}
 
