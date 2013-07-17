@@ -100,5 +100,9 @@ public class ListingDetailScraper extends RecordScraper {
 		this.convertURLs = convertURLs;
 		return this;
 	}
+	
+	public List<Link> getLinks() {
+		return links;
+	}
 
 }

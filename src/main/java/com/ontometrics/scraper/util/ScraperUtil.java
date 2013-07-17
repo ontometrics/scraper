@@ -138,7 +138,9 @@ public class ScraperUtil {
 	public static Element extract(Source source, TagOccurrence tagOccurrence) {
 		Element result = null;
 		if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.cssClass) {
-			result = source.getAllElementsByClass(tagOccurrence.getIdentifier()).get(0);
+			List<Element> elements = source.getAllElementsByClass(tagOccurrence.getIdentifier());
+			if(elements != null && !elements.isEmpty())
+				result = elements.get(0);
 		} else if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.ID) {
 			result = source.getElementById(tagOccurrence.getIdentifier());
 		} else {
