@@ -84,7 +84,11 @@ public enum HtmlSample {
 	/**
 	 * Page with local anchor tags
 	 */
-	PageWithLocalAnchorLinks("/testpages/toBeConvertedNicholsDocument.html");
+	PageWithLocalAnchorLinks("/testpages/toBeConvertedNicholsDocument.html"),
+	/**
+	 * Page with local anchor tags
+	 */
+	PageWithJobDetails("/testpages/Page10_details.html");
 
 	private String path;
 
