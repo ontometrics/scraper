@@ -239,6 +239,19 @@ public class HtmlExtractor extends BaseExtractor {
 	private boolean hasManipulators() {
 		return this.manipulators.size() > 0;
 	}
+	/**
+	 * provide extracting form any tag
+	 * @param tag the name of the tag to scrape
+	 * @param id is the tag id 
+	 * @return this for method chaining
+	 */
+	public HtmlExtractor tagWithID(String tag, String id) {
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(tag)
+				.elementIdentifierType(ElementIdentifierType.ID)
+				.identifier(id)
+				.build()));
+		return this;
+	}
 
 	public HtmlExtractor tableWithID(String id) {
 		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.TABLE)
