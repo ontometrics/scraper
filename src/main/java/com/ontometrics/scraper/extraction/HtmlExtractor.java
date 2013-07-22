@@ -252,7 +252,21 @@ public class HtmlExtractor extends BaseExtractor {
 				.build()));
 		return this;
 	}
-
+	/**
+	 * provide extracting form any tag
+	 * @param tagName
+	 * @param className
+	 * @param occurrence
+	 * @return this for method chaining
+	 */
+	public HtmlExtractor tagWithClassAndOccurrence(String tagName,String className, int occurrence) {
+		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(tagName)
+				.elementIdentifierType(ElementIdentifierType.cssClass)
+				.occurrence(occurrence)
+				.identifier(className)
+				.build()));
+		return this;
+	}
 	public HtmlExtractor tableWithID(String id) {
 		addManipulator(new ElementManipulator(new TagOccurrence.Builder().tag(HTMLElementName.TABLE)
 				.elementIdentifierType(ElementIdentifierType.ID)
