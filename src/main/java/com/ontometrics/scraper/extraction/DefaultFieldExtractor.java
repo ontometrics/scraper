@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ontometrics.scraper.PairedClasses;
 import com.ontometrics.scraper.PairedTags;
 import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.util.ScraperUtil;
@@ -38,6 +39,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 	private List<DesignatedField> fieldsToGet = new ArrayList<DesignatedField>();
 
 	private List<PairedTags> pairedTagsToGet = new ArrayList<PairedTags>();
+	
+	private List<PairedClasses> pairedClassesToGet = new ArrayList<PairedClasses>();
 
 	@Override
 	public DefaultFieldExtractor url(URL url) {
@@ -58,6 +61,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		extractedFields.addAll(extractFieldsFromDLs());
 		extractedFields.addAll(extractDesignatedFields());
 		extractedFields.addAll(extractFieldsFromPairTags());
+		extractedFields.addAll(extractFieldsFromPairClasses());
 		return extractedFields;
 	}
 
@@ -91,7 +95,36 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		}
 		return extractedFields;
 	}
+	/**
+	 * The pair function will delimit field values that have new lines (<BR>
+	 * s) with semicolons.
+	 * 
+	 * @return
+	 */
+	private List<Field> extractFieldsFromPairClasses() {
+		List<Field> extractedFields = new ArrayList<Field>();
+		for (PairedClasses pairedTags : this.pairedClassesToGet) {
+			List<Element> labels = getSource().getAllElementsByClass(pairedTags.getLabelClass());
+			List<Element> fields = getSource().getAllElementsByClass(pairedTags.getFieldClass());
 
+			removeInvalidFields(fields);
+
+			int fieldCount = Math.min(labels.size(), fields.size());
+			for (int i = 0; i < fieldCount; i++) {
+				String label = labels.get(i).getTextExtractor().toString().trim();
+				String field = "";
+				if (fieldHasMultipleValues(fields.get(i).toString())) {
+					field = delimitFieldValues(fields.get(i).toString());
+				} else {
+					field = getValueFieldText(fields.get(i));
+				}
+				log.debug("outputting pair: {} : {}", label, field);
+				extractedFields.add(new ScrapedField(label, field));
+			}
+
+		}
+		return extractedFields;
+	}
 	private List<Field> extractDesignatedFields() {
 		List<Field> extractedFields = new ArrayList<Field>();
 
@@ -125,6 +158,10 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	public DefaultFieldExtractor add(PairedTags pairedTags) {
 		this.pairedTagsToGet.add(pairedTags);
+		return this;
+	}
+	public DefaultFieldExtractor add(PairedClasses pairedClasses) {
+		this.pairedClassesToGet.add(pairedClasses);
 		return this;
 	}
 
