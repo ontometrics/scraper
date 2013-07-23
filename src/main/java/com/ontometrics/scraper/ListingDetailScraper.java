@@ -106,3 +106,4 @@ public class ListingDetailScraper extends RecordScraper {
 	}
 
 }
+
