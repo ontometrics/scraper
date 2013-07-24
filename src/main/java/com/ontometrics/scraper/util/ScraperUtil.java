@@ -145,7 +145,8 @@ public class ScraperUtil {
 			result = source.getElementById(tagOccurrence.getIdentifier());
 		} else {
 			List<Element> elements = source.getAllElements(tagOccurrence.getTag());
-			result = elements.get(tagOccurrence.getOccurrence());
+			if(elements.size() > tagOccurrence.getOccurrence())
+				result = elements.get(tagOccurrence.getOccurrence());
 		}
 		return result;
 	}
@@ -164,9 +165,9 @@ public class ScraperUtil {
 			}
 		} else if (tagOccurrence.getElementIdentifierType() == ElementIdentifierType.cssClass) {
 			log.debug("extracting: {}", tagOccurrence);
-			result = source.getAllElementsByClass(tagOccurrence.getIdentifier())
-					.get(tagOccurrence.getOccurrence())
-					.toString();
+			List<Element> elements = source.getAllElementsByClass(tagOccurrence.getIdentifier());
+			if(elements.size() > tagOccurrence.getOccurrence())
+				result = elements.get(tagOccurrence.getOccurrence()).toString();
 		}
 		log.debug("identifier: {}/{} result: {}",
 				new Object[] { tagOccurrence.getIdentifier(), tagOccurrence.getElementIdentifierType(), result });
