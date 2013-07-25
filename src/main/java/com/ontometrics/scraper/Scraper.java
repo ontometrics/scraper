@@ -55,9 +55,20 @@ public class Scraper {
 	}
 
 	protected String convertToAbsoluteUrl(String link) {
-		String absoluteUrlString = (getBaseUrl().toString()) + "/" + link;
+		URL baseUrl = getBaseUrl();
+		StringBuffer absoluteUrlStringBuffer = new StringBuffer(baseUrl.getHost());
+		if(baseUrl.getPort() > 0) {
+			absoluteUrlStringBuffer.append(':').append(getBaseUrl().getPort());
+		}
+		if(!link.startsWith("/") && baseUrl.getPath() != null && !baseUrl.getPath().isEmpty()) {
+			absoluteUrlStringBuffer.append(baseUrl.getPath());
+		}
+		absoluteUrlStringBuffer.append('/').append(link);
+		String absoluteUrlString = baseUrl.getProtocol() + "://" + 
+				absoluteUrlStringBuffer.toString().replaceAll("(/){2,}+", "/");
 		log.debug("absolute url: {}", absoluteUrlString);
 		return absoluteUrlString;
 	}
 
 }
+

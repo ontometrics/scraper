@@ -100,6 +100,14 @@ public class ScraperTest {
 		log.info("tag text: {}", tagText);
 		assertThat(tagText.contains("39"), is(true));
 		assertThat(tagText.contains("52"), is(true));
+		
+		
+		//This returns all occurrances not the first one only.
+		tagText = scraper.url(ProgramDetailPage.getUrl())
+				.extract(scraper.extractor().ofClass(eligibilityClassName, 0).execute()).getResult();
+		log.info("tag text: {}", tagText);
+		assertThat(tagText.contains("Applicant Eligibility (081)"), is(true));
+		assertThat(tagText.contains("39"), is(false));
 	}
 
 	@Test
