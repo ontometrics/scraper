@@ -21,6 +21,11 @@ public enum HtmlSample {
 	
 	PagedListingTable("/testpages/PagedListingTable.html"),
 	
+	/**
+	 * table contains td with classes
+	 */
+	TableContainsClasses("/testpages/Page11_details.html"),
+	
 	PagedListingFolder("/testpages/"),
 
 	/**
@@ -84,7 +89,12 @@ public enum HtmlSample {
 	/**
 	 * Page with local anchor tags
 	 */
-	PageWithLocalAnchorLinks("/testpages/toBeConvertedNicholsDocument.html");
+	PageWithLocalAnchorLinks("/testpages/toBeConvertedNicholsDocument.html"),
+	/**
+	 * Page with local anchor tags
+	 */
+	PageWithJobDetails("/testpages/Page10_details.html")
+	;
 
 	private String path;
 

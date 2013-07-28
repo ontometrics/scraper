@@ -193,6 +193,22 @@ public class ScraperUtil {
 		log.debug("found = {}", found);
 		return found;
 	}
+	/**
+	 * Gets all elements with the given tag name  
+	 * @param html String contain the source html
+	 * @param tagName 
+	 * @return all elements that having the given tag 
+	 */
+	public static List<Element> extractAllTagMatching(String html, String tagName) {
+		log.debug("looking for all {} in Source", tagName);
+		Source source = new Source(html);
+		source.fullSequentialParse();
+		log.debug("source = {}", source);
+		List<Element> elements = source.getAllElements(tagName);
+
+		log.debug("found = {}",elements.size());
+		return elements;
+	}
 
 	private static String cleanupTag(String sourceTag) {
 		String tag = sourceTag.startsWith("<") ? sourceTag : "<".concat(sourceTag);

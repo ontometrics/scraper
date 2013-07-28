@@ -1,6 +1,7 @@
 package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.DetailPage;
+import static com.ontometrics.scraper.HtmlSample.TableContainsClasses;
 import static com.ontometrics.scraper.HtmlSample.ListingWithNumberedPaging;
 import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
 import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ontometrics.scraper.HtmlSample;
+import com.ontometrics.scraper.PairedClasses;
 import com.ontometrics.scraper.PairedTags;
 import com.ontometrics.scraper.Record;
 import com.ontometrics.scraper.ScrapedRecord;
@@ -163,7 +165,17 @@ public class DefaultFieldExtractorTest {
 		log.info("found fields: {}", fields);
 		assertThat(fields.contains(agencyName), is(true));
 	}
-
+	
+	@Test
+	public void canExtractFieldsFromPairedClasses() {
+		Field documentType = new ScrapedField("Document Type:", "Grants Notice");
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().url(TableContainsClasses.getUrl()))
+				.add(new PairedClasses("field1", "field2"))
+				.getFields();
+		log.info("found fields: {}", fields);
+		assertThat(fields.contains(documentType), is(true));
+	}
 	@Test
 	public void canExtractFieldsFromTableAtSpecificOccurrence() {
 		List<Field> fields = new DefaultFieldExtractor().source(html().url(DetailPage.getUrl()).table(4)).getFields();

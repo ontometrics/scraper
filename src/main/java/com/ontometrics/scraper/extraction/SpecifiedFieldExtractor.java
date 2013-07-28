@@ -54,6 +54,13 @@ public class SpecifiedFieldExtractor extends BaseExtractor implements FieldExtra
 			}
 			return this;
 		}
+		
+		public Builder addFields(Collection<String> fields) {
+			for (String fieldName : fields){
+				addField(fieldName);
+			}
+			return this;
+		}
 
 		public SpecifiedFieldExtractor build() {
 			return new SpecifiedFieldExtractor(this);
