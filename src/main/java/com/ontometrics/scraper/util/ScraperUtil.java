@@ -23,6 +23,7 @@ import com.ontometrics.scraper.TagOccurrence;
 import com.ontometrics.scraper.extraction.ElementIdentifierType;
 import com.ontometrics.scraper.extraction.Field;
 import com.ontometrics.scraper.extraction.Link;
+import com.ontometrics.scraper.extraction.ScrapedField;
 
 public class ScraperUtil {
 
@@ -60,18 +61,42 @@ public class ScraperUtil {
 					foundOccurrenceCount++;
 					if (foundOccurrenceCount == occurrence) {
 						foundValue = field.getValue();
-						
+
 						// TODO: Need a better method of replacing strange whitespace
 						if (foundValue != null && foundValue.contains("Ê")) {
 							foundValue = foundValue.replace("Ê", "");
 						}
-						
+
 						break;
 					}
 				}
 			}
 		}
 		return foundValue;
+	}
+
+	public static void setFieldValue(List<Field> fields, String label, String value, int occurrence) {
+		int foundOccurrenceCount = 0;
+		int foundIndex = -1;
+
+		if (fields != null && fields.size() > 0) {
+			for (int i = 0; i < fields.size(); i++) {
+				Field field = fields.get(i);
+				if (field.getLabel().equalsIgnoreCase(label)) {
+					foundOccurrenceCount++;
+					if (foundOccurrenceCount == occurrence) {
+						foundIndex = i;
+						break;
+					}
+				}
+			}
+
+			if (foundIndex != -1) {
+				fields.remove(foundIndex);
+				Field newField = new ScrapedField(label, value);
+				fields.add(foundIndex, newField);
+			}
+		}
 	}
 
 	public static List<Link> extractLinks(String sourceToParse) {

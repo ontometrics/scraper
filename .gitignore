@@ -4,3 +4,5 @@ target/
 .classpath
 .DS_Store
 *.orig
+*.iml
+.idea/
