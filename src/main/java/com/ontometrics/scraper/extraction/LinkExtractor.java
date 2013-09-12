@@ -19,7 +19,14 @@ public class LinkExtractor extends BaseExtractor {
 	private static final Logger log = LoggerFactory.getLogger(LinkExtractor.class);
 
 	private String matcher;
+	
+	private String styleClass;
+	
 
+	public LinkExtractor ofClass(String styleClass) {
+		this.styleClass = styleClass;
+		return this;
+	}
 	/**
 	 * This is the product we are building here.
 	 * 
@@ -62,6 +69,11 @@ public class LinkExtractor extends BaseExtractor {
 		List<Link> links = new ArrayList<Link>();
 		List<Element> as = getSource().getAllElements(HTMLElementName.A);
 		for (Element linkElement : as) {
+			if(styleClass != null && !styleClass.isEmpty()) {
+				String classValue = linkElement.getAttributeValue("class");
+				if(classValue == null || !classValue.contains(styleClass))
+					continue;
+			} 
 			String text = linkElement.getTextExtractor().toString();
 			String href = linkElement.getAttributeValue("href");
 			String name = linkElement.getAttributeValue("name");
@@ -77,3 +89,4 @@ public class LinkExtractor extends BaseExtractor {
 	}
 
 }
+

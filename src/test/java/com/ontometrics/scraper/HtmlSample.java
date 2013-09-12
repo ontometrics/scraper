@@ -10,6 +10,8 @@ import net.htmlparser.jericho.Source;
  * 
  */
 public enum HtmlSample {
+	
+	CareerBuilderDetailPage("/testpages/careerbuilder-job-detail-page.html"),
 
 	/**
 	 * This is a listing of Grants where each one appears in a line in the table
