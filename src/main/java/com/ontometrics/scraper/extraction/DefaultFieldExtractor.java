@@ -39,7 +39,12 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	private List<PairedTags> pairedTagsToGet = new ArrayList<PairedTags>();
 
-	@Override
+    @Override
+    public Source getSource() {
+        return super.getSource();
+    }
+
+    @Override
 	public DefaultFieldExtractor url(URL url) {
 		super.url(url);
 		return this;

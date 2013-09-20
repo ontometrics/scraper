@@ -34,6 +34,8 @@ public abstract class BaseExtractor {
 	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(BaseExtractor.class);
 
+    private Source extractedSource = null;
+
 	/**
 	 * Does the work of actually honing in on the source we are interested in.
 	 */
@@ -83,13 +85,16 @@ public abstract class BaseExtractor {
 	 * @return the manipulated source gotten from the {@link #htmlExtractor}
 	 */
 	public Source getSource() {
-		StringBuffer accumulatedSource = new StringBuffer();
-		for (HtmlExtractor extractor : htmlExtractors) {
-			accumulatedSource.append(extractor.getSource().toString());
-		}
-		Source combinedSource = new Source(accumulatedSource);
-		combinedSource.fullSequentialParse();
-		return combinedSource;
+        if (extractedSource==null){
+            StringBuffer accumulatedSource = new StringBuffer();
+            for (HtmlExtractor extractor : htmlExtractors) {
+                accumulatedSource.append(extractor.getSource().toString());
+            }
+            Source combinedSource = new Source(accumulatedSource);
+            combinedSource.fullSequentialParse();
+            extractedSource = combinedSource;
+        }
+        return extractedSource;
 	}
 
 }
