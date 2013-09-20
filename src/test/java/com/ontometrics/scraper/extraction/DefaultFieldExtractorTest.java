@@ -1,11 +1,6 @@
 package com.ontometrics.scraper.extraction;
 
-import static com.ontometrics.scraper.HtmlSample.DetailPage;
-import static com.ontometrics.scraper.HtmlSample.ListingWithNumberedPaging;
-import static com.ontometrics.scraper.HtmlSample.ProgramListingPage;
-import static com.ontometrics.scraper.HtmlSample.TableWithAlternatingRowsOfHeaders;
-import static com.ontometrics.scraper.HtmlSample.TableWithCompoundContactInfo;
-import static com.ontometrics.scraper.HtmlSample.TableWithULs;
+import static com.ontometrics.scraper.HtmlSample.*;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,6 +11,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import com.ontometrics.scraper.*;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
@@ -25,10 +21,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ontometrics.scraper.HtmlSample;
-import com.ontometrics.scraper.PairedTags;
-import com.ontometrics.scraper.Record;
-import com.ontometrics.scraper.ScrapedRecord;
 import com.ontometrics.scraper.util.ScraperUtil;
 
 public class DefaultFieldExtractorTest {
@@ -230,6 +222,19 @@ public class DefaultFieldExtractorTest {
 		assertThat(contactInfo.contains(";"), is(true));
 		
 	}
+
+    @Test
+    public void canFindStipulatedFieldsByClass(){
+        List<Field> fields = new DefaultFieldExtractor()
+                .source(html().url(CareerBuilderDetailPage.getUrl()).clean())
+                .field("jobTitle", ElementIdentifierType.cssClass, "job_title")
+                .field("jobDescription", ElementIdentifierType.cssClass, "job_desc")
+                .field("jobReq", ElementIdentifierType.cssClass, "job_req")
+                .getFields();
+
+        log.info("found fields in careerbuilder: {}", fields);
+
+    }
 	
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
 		Field found = null;
@@ -248,4 +253,5 @@ public class DefaultFieldExtractorTest {
 
 		return found;
 	}
+
 }

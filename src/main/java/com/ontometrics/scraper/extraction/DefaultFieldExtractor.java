@@ -27,7 +27,7 @@ import com.ontometrics.scraper.util.ScraperUtil;
  * the value.
  * <p>
  * One way to use this tool is to just start with this default extractor and
- * then start removing the the elements that are not helping.
+ * then start removing the elements that are not helping.
  * 
  * @author Rob
  */
@@ -96,7 +96,10 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		List<Field> extractedFields = new ArrayList<Field>();
 
 		for (DesignatedField designatedField : this.fieldsToGet) {
+            log.debug("designated field: {}", designatedField);
+            log.debug("tag to get value from: {}", designatedField.getTagToGetValueFrom());
 			Element elementWithValue = ScraperUtil.extract(getSource(), designatedField.getTagToGetValueFrom());
+            log.debug("element with value: {}", elementWithValue);
 			String value = getValueFieldText(elementWithValue);
 			log.debug("looking for field: {}, value: {}", designatedField.getLabel(), value);
 			extractedFields.add(new ScrapedField(designatedField.getLabel(), value));
@@ -296,71 +299,54 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	private String getValueFieldText(Element valueElement) {
 		String result = "";
-		List<Element> preTags = valueElement.getAllElements(HTMLElementName.PRE);
-		if (preTags.size() > 0) {
-			result = preTags.get(0).getContent().toString();
-			/*
-			 * } else {
-			 * 
-			 * log.debug("found anchorSubElements on: {}",
-			 * valueElement.getTextExtractor().toString()); List<Element>
-			 * anchorSubElements =
-			 * valueElement.getAllElements(HTMLElementName.A); /* if
-			 * (anchorSubElements.size() > 0) {
-			 * log.debug("found a tag inside field!"); for (Element element :
-			 * anchorSubElements) { if
-			 * (element.getName().equals(HTMLElementName.A)) { if
-			 * (element.getAttributeValue("href") != null) {
-			 * log.debug("found href"); result =
-			 * element.getAttributeValue("href"); } } else { result =
-			 * element.getTextExtractor().toString();
-			 * log.debug("found {} inside anchorSubElements", result); } }
-			 * log.debug("done looking at anchorSubElements, result: {}",
-			 * result);
-			 */
+        log.debug("valueElement: {}", valueElement);
+        if (valueElement!=null){
+            List<Element> preTags = valueElement.getAllElements(HTMLElementName.PRE);
+            if (preTags.size() > 0) {
+                result = preTags.get(0).getContent().toString();
+            } else {
 
-		} else {
+                log.debug("parsing element: {}", valueElement.toString());
+                Segment valueText = valueElement.getContent();
+                int elementsSize = valueText.getAllElements().size();
+                String fieldText = "";
+                if (elementsSize > 0) {
+                    if (valueText.toString().contains("<br")) {
+                        String delimitedText = valueText
+                                .toString()
+                                .replace("<br>", ";")
+                                .replace("<br/>", ";")
+                                .replace("<br />", ";");
+                        log.debug("delimited text: {}", delimitedText);
+                        Source newElement = new Source(delimitedText);
+                        fieldText = newElement.getTextExtractor().toString();
+                        if (fieldText.endsWith(";")) {
+                            fieldText = fieldText.substring(0, fieldText.length() - 1).trim();
+                        }
+                    } else {
+                        fieldText = valueText.getTextExtractor().toString();
+                    }
 
-			log.debug("parsing element: {}", valueElement.toString());
-			Segment valueText = valueElement.getContent();
-			int elementsSize = valueText.getAllElements().size();
-			String fieldText = "";
-			if (elementsSize > 0) {
-				if (valueText.toString().contains("<br")) {
-					String delimitedText = valueText
-							.toString()
-							.replace("<br>", ";")
-							.replace("<br/>", ";")
-							.replace("<br />", ";");
-					log.debug("delimited text: {}", delimitedText);
-					Source newElement = new Source(delimitedText);
-					fieldText = newElement.getTextExtractor().toString();
-					if (fieldText.endsWith(";")) {
-						fieldText = fieldText.substring(0, fieldText.length() - 1).trim();
-					}
-				} else {
-					fieldText = valueText.getTextExtractor().toString();
-				}
+                } else {
+                    fieldText = valueText.getTextExtractor().toString();
+                }
+                // check for links..
+                List<Element> links = valueElement.getAllElements(HTMLElementName.A);
+                if (links.size() > 0) {
+                    for (Element link : links) {
+                        int linkcount = 0;
+                        log.debug("found link inside field: {}", link);
+                        if (link.getAttributeValue("href") != null) {
+                            fieldText += (linkcount > 0) ? ";" : " ";
+                            fieldText += link.getAttributeValue("href");
+                            linkcount++;
+                        }
+                    }
+                }
 
-			} else {
-				fieldText = valueText.getTextExtractor().toString();
-			}
-			// check for links..
-			List<Element> links = valueElement.getAllElements(HTMLElementName.A);
-			if (links.size() > 0) {
-				for (Element link : links) {
-					int linkcount = 0;
-					log.debug("found link inside field: {}", link);
-					if (link.getAttributeValue("href") != null) {
-						fieldText += (linkcount > 0) ? ";" : " ";
-						fieldText += link.getAttributeValue("href");
-						linkcount++;
-					}
-				}
-			}
-
-			result = fieldText;
-			log.debug("returning value = {}", result);
+                result = fieldText;
+                log.debug("returning value = {}", result);
+            }
 		}
 		return result;
 	}

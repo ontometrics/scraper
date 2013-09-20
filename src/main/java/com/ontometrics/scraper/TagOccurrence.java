@@ -98,9 +98,15 @@ public class TagOccurrence {
 		this.matching = matcher;
 	}
 
-	@Override
-	public String toString() {
-		return "TagOccurrence [tag=" + tag + ", identifier=" + identifier + ", occurrence=" + occurrence + ", matching=" + matching + "]";
-	}
-
+    @Override
+    public String toString() {
+        return "TagOccurrence{" +
+                "tag='" + tag + '\'' +
+                ", elementIdentifierType=" + elementIdentifierType +
+                ", identifier='" + identifier + '\'' +
+                ", occurrence=" + occurrence +
+                ", matching='" + matching + '\'' +
+                ", ofClass='" + ofClass + '\'' +
+                '}';
+    }
 }
