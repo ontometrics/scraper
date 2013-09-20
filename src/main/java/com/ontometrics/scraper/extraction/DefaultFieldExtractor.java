@@ -125,6 +125,11 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return this;
 	}
 
+    public DefaultFieldExtractor source(Source source){
+        super.source(source);
+        return this;
+    }
+
 	@Override
 	public DefaultFieldExtractor section(HtmlExtractor htmlExtractor) {
 		super.section(htmlExtractor);

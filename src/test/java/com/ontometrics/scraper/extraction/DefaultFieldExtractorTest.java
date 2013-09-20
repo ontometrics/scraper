@@ -234,8 +234,30 @@ public class DefaultFieldExtractorTest {
 
         log.info("found fields in careerbuilder: {}", fields);
 
+        assertThat(fields.size(), is(3));
+        assertThat(fields.get(0).getLabel(), is("jobTitle"));
+        assertThat(fields.get(1).getLabel(), is("jobDescription"));
+        assertThat(fields.get(2).getLabel(), is("jobReq"));
+
     }
-	
+
+    @Test
+    public void canPassParsedSourceToExtractor(){
+        Source source = html().url(CareerBuilderDetailPage.getUrl()).getSource();
+
+        List<Field> fields = new DefaultFieldExtractor()
+                .source(source)
+                .field("jobTitle", ElementIdentifierType.cssClass, "job_title")
+                .field("jobDescription", ElementIdentifierType.cssClass, "job_desc")
+                .field("jobReq", ElementIdentifierType.cssClass, "job_req")
+                .getFields();
+
+        log.info("found fields in careerbuilder: {}", fields);
+
+        assertThat(fields.size(), is(526));
+
+    }
+
 	private Field extractFieldByDetectingTagWrapper(Element liElement) {
 		Field found = null;
 		if (liElement.getAllTags().size() == 4) {

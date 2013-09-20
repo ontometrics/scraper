@@ -55,6 +55,11 @@ public abstract class BaseExtractor {
 		return this;
 	}
 
+    public BaseExtractor source(Source startingSource){
+        this.extractedSource = startingSource;
+        return this;
+    }
+
 	/**
 	 * Provided as a convenience method for use in cases where might want to extract things from multiple sections of
 	 * the page.
@@ -86,6 +91,7 @@ public abstract class BaseExtractor {
 	 */
 	public Source getSource() {
         if (extractedSource==null){
+            System.out.println("**** extracting source...");
             StringBuffer accumulatedSource = new StringBuffer();
             for (HtmlExtractor extractor : htmlExtractors) {
                 accumulatedSource.append(extractor.getSource().toString());

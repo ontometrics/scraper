@@ -1,5 +1,7 @@
 package com.ontometrics.scraper.extraction;
 
+import net.htmlparser.jericho.Source;
+
 public class TextExtractor extends BaseExtractor {
 
 	@Override
