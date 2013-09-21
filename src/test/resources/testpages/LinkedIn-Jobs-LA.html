@@ -1,0 +1,2885 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html lang="en" class="ie ie6 lte9 lte8 lte7 os-mac"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" class="ie ie7 lte9 lte8 lte7 os-mac"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" class="ie ie8 lte9 lte8 os-mac"> <![endif]-->
+<!--[if IE 9]>
+<html lang="en" class="ie ie9 lte9 os-mac"> <![endif]-->
+<!--[if gt IE 9]>
+<html lang="en" class="os-mac"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="os-mac"> <!--<![endif]-->
+
+<head>
+<meta name="lnkd-track-json-lib"
+      content="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=lib%2Fjson%2Fjson2&amp;f=lib%2Ftracking%2F1.0.0%2Fshared%2Fxhr">
+<meta name="lnkd-track-lib"
+      content="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=lib%2Ftracking%2F1.0.0%2Fshared%2Fxhr">
+<meta name="treeID" content="CF+j7P2fJRPQ6iYaMSsAAA==">
+<meta name="appName" content="job">
+<meta name="lnkd-track-error" content="/lite/ua/error?csrfToken=ajax%3A1927336160442255839">
+<script type="text/javascript"
+        src="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=lib%2Ftracking%2F1.0.0%2Fshared%2Fload&amp;f=lib%2Ftracking%2F1.0.0%2Ferrors%2Fmodule&amp;f=lib%2Ftracking%2F1.0.0%2Ferrors%2Fcodes&amp;f=lib%2Ftracking%2F1.0.0%2Ferrors%2Fbootstrap"></script>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+<meta name="pageImpressionID" content="0a7917c0-38bf-40de-b5ca-be945d796d11">
+<meta name="pageKey" content="JOB:/consumer/search/search">
+<meta name="analyticsURL" content="/analytics/noauthtracker">
+<link rel="openid.server" href="">
+
+<link rel="apple-touch-icon-precomposed" href="/img/icon/apple-touch-icon.png">
+<!--[if lte IE 8]>
+<link rel="shortcut icon" href="http://s.c.lnkd.licdn.com/scds/common/u/images/logos/favicons/v1/16x16/favicon.ico">
+<![endif]-->
+<!--[if IE 9]>
+<link rel="shortcut icon" href="http://s.c.lnkd.licdn.com/scds/common/u/images/logos/favicons/v1/favicon.ico">
+<![endif]-->
+<link rel="icon" href="http://s.c.lnkd.licdn.com/scds/common/u/images/logos/favicons/v1/favicon.ico">
+
+
+<meta name="msapplication-TileImage"
+      content="http://s.c.lnkd.licdn.com/scds/common/u/images/logos/linkedin/logo-in-win8-tile-144_v1.png"/>
+<meta name="msapplication-TileColor" content="#0077B5"/>
+<meta name="application-name" content="LinkedIn"/>
+
+<link rel="stylesheet" type="text/css"
+      href="http://s.c.lnkd.licdn.com/scds/concat/common/css?v=build-2000_1_30076-prod&amp;f=scss%2Fbase%2Freset_en_US&amp;f=lib%2Fyui%2F2.8.1%2Fcontainer%2Fassets%2Fcontainer-core-min&amp;f=scss%2Fbase%2Fbase_en_US&amp;f=scss%2Fmodules%2Fghost_label_en_US&amp;f=scss%2Fbase%2Fimages_en_US&amp;f=scss%2Fmodules%2Flegal_notice_en_US&amp;f=scss%2Fmodules%2Ftabs_en_US&amp;f=scss%2Fmodules%2Fcheck_textarea_en_US&amp;f=scss%2Fmodules%2Fshow_more_en_US&amp;f=scss%2Fthemes%2Fconsumer%2Fchrome_v5_en_US&amp;f=scss%2Fbase%2Flayout_en_US&amp;f=scss%2Fmodules%2Fmodules_en_US&amp;f=scss%2Fmodules%2Fdialog_en_US&amp;f=scss%2Fbase%2Fbuttons_en_US&amp;f=scss%2Fmodules%2Fdropdown_en_US&amp;f=scss%2Fmodules%2Fads_en_US">
+
+
+<script type="text/javascript"
+        src="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=lib%2Fyui%2F2.8.1_li%2Fyahoo-dom-event%2Fyahoo-dom-event&amp;f=lib%2Fyui%2F2.8.1%2Fdatasource%2Fdatasource-min&amp;f=lib%2Fyui%2F2.8.1_li%2Fconnection%2Fconnection-min&amp;f=lib%2Fyui%2F2.8.1_li%2Fautocomplete%2Fautocomplete-min&amp;f=lib%2Fyui%2F2.8.1%2Fanimation%2Fanimation-min&amp;f=lib%2Fyui%2F2.8.1%2Fget%2Fget-min&amp;f=lib%2Fyui%2F2.8.1%2Fjson%2Fjson-min&amp;f=lib%2Fyui%2F2.8.1%2Fimageloader%2Fimageloader-min&amp;f=lib%2Fjquery%2F1.9.1%2Fjquery-min&amp;f=scripts%2Flib%2Fjq-migrate-1.2.1%2Fjquery-migrate-1.2.1.min&amp;f=scripts%2Fcore%2FDefine&amp;f=scripts%2Fcore%2FLogger&amp;f=scripts%2Fcore%2FControls&amp;f=scripts%2Fcore%2Fi18n&amp;f=js%2Futil%2FHelps&amp;f=lib%2Flui%2Flinkedin_url-min&amp;f=js%2Fapps%2FNotificationsCountUpdatesService&amp;f=js%2Fapps%2FNavigationMenu&amp;f=js%2Fapps%2FNavAccessibility&amp;f=js%2Fapps%2FHeaderNotifications&amp;f=js%2Fajax%2Fui_settings_service_lite&amp;f=js%2Fajax%2Fwebtracking_service_lite&amp;f=js%2Fajax%2Fsearch_webtracking_service&amp;f=js%2Fads&amp;f=js%2Futil%2FGhostLabel&amp;f=js%2Futil%2FFocusField&amp;f=js%2Futil%2FToggleClass&amp;f=js%2Futil%2FShowMore&amp;f=js%2Futil%2FCheckTextarea&amp;f=js%2Fapps%2FTypeahead&amp;f=js%2Futil%2Ftypeahead%2FTypeahead2&amp;f=js%2Futil%2FStyledDropdown&amp;f=js%2Fapps%2FUniversalSearch"></script>
+
+
+<script type="text/javascript">
+    LI.define('UrlPackage');
+    LI.UrlPackage.containerCore =
+            ["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=lib%2Fyui%2F2.8.1%2Fcontainer%2Fcontainer_core-min"]
+                    [0];
+</script>
+
+<script type="text/javascript">
+    LI.JSContentBasePath = "http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod";
+    LI.CSSContentBasePath = "http://s.c.lnkd.licdn.com/scds/concat/common/css?v=build-2000_1_30076-prod";
+    LI.injectRelayHtmlUrl = "http://s.c.lnkd.licdn.com/scds/common/u/lib/inject/0.4.2/relay.html";
+    LI.injectRelaySwfUrl = "http://s.c.lnkd.licdn.com/scds/common/u/lib/inject/0.4.2/relay.swf";
+    LI.comboBaseUrl = "http://s.c.lnkd.licdn.com/scds/concat/common/css?v=build-2000_1_30076-prod";
+    LI.staticUrlHashEnabled = "false";
+</script>
+<script type="text/javascript"
+        src="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=lib%2Ffiber%2F1.0.3%2Ffiber.min&amp;f=lib%2Finject%2F0.4.2%2Finject.min&amp;f=scripts%2Flib%2Finject%2Finject-plugins&amp;f=scripts%2Flib%2Finject%2F0.4.2%2Finject-li&amp;f=lib%2Funderscore%2F1.3.1%2Funderscore-min&amp;f=scripts%2Fcore%2FEvents&amp;f=scripts%2Fshared%2FBaseControl"></script>
+<title>Information Technology Jobs in Los Angeles | LinkedIn</title>
+<link rel="stylesheet" type="text/css"
+      href="http://s.c.lnkd.licdn.com/scds/concat/common/css?v=build-2000_1_30076-prod&amp;f=scss%2Fbase%2Ficons_en_US&amp;f=scss%2Fmodules%2Ftypeahead_katy_en_US&amp;f=scss%2Fthemes%2Fkaty%2Fmentions%2Ftypeahead_mentions_en_US&amp;f=scss%2Fmodules%2Falerts_en_US">
+<script type="text/javascript"
+        src="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=js%2Frum_bootstrap&amp;f=js%2Frum_bootstrap_fizzy_dust&amp;f=js%2Futil%2FA11yMenu"></script>
+
+<script type="text/javascript"
+        src="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=lib%2Fdust%2F1.0.2%2Fdust-core&amp;f=lib%2Fdust%2F1.0.2%2Fdust-helpers&amp;f=lib%2Fdust%2F1.0.2%2Fdust-ui-helpers"></script>
+
+
+<link rel="canonical" href="http://www.linkedin.com/job/q-information-technology-l-los-angeles-jobs"/>
+<meta name="description"
+      content="1,213 Information Technology, Los Angeles Jobs on LinkedIn. Research Information Technology careers, companies and salaries.">
+<meta name="keywords" content="Information Technology, Los Angeles, Jobs, Career, Employment">
+<meta name="li-chromeTheme" content="consumer"/>
+<meta name="li-useMixedMode" content="true"/>
+<meta name="li-hideFooterNav" content="true"/>
+<meta name="li-chromeBodyTitle" content="false"/>
+
+
+<link rel="stylesheet"
+      href="http://s.c.lnkd.licdn.com/scds/concat/common/css?v=build-2000_1_30076-prod&amp;f=scss%2Fapps%2Fjobs%2Fguest%2Fshared_en_US&amp;f=scss%2Fapps%2Fjobs%2Fhome%2Fsearch_en_US&amp;f=scss%2Fapps%2Fjobs%2Fguest%2Fsearch_en_US"
+      type="text/css" media=""/>
+
+
+</head>
+
+
+<body class="en member v2  chrome-v5 chrome-v5-responsive background-v4 sticky-bg"
+      id="pagekey-JOB:/consumer/search/search">
+
+
+<input id="inSlowConfig" type="hidden" value="false"/>
+
+<script type="text/javascript">document.body.className += " js ";</script>
+
+
+<script>
+    LI.define('InboxNav.Scripts');
+    LI.InboxNav.Scripts =
+            ["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=lib%2Fyui%2F2.8.1%2Felement%2Felement-min&f=js%2Futil%2FRequestQueue&f=js%2Futil%2FSplitButton&f=js%2Fapps%2FInboxBaseListView&f=js%2Fapps%2FInboxPendingInvitationListView&f=js%2Fapps%2FInboxMessageListView"]
+    ;
+</script>
+
+
+<div class="a11y-skip-nav-container">
+    <div class="a11y-skip-nav a11y-hidden">
+        <a href="#a11y-content" id="a11y-skip-nav-link">Skip to main content</a>
+    </div>
+
+
+    <script id="control-http-12261-5561859-1" type="linkedin/control" class="li-control">
+
+        /* extlib: _a11ymenu */
+
+
+        LI.Controls.addControl('control-http-12261-5561859-1', 'A11yMenu', {
+        jumpToText: 'Jump to: <strong>Summary<\/strong>',
+        skipToText: 'Skip to: <strong>Search<\/strong>',
+            feedbackText: 'Accessibility Feedback',
+            closeText: 'close',
+            anchorText: 'Content Follows:',
+            moreText: 'More in-page navigation options below',
+            smallPageText: 'Not much to look at here. Go directly to content.',
+            searchUrl: '/vsearch/f'
+            });
+    </script>
+
+
+</div>
+
+<div id="header" class="global-header responsive-header nav-v5-2-header responsive-1 premium-member" role="banner">
+
+
+<div id="top-header">
+<div class="wrapper">
+<div class="header-section first-child">
+<h2 class="logo-container" tabIndex="0">
+    <a href="http://www.linkedin.com/?trk=prem_logo"
+       class="logo"
+       id="in-premium-logo">
+        LinkedIn Premium
+    </a>
+</h2>
+
+
+<form id="global-search"
+      role="search"
+      action="/vsearch/f"
+      method="get"
+      accept-charset="UTF-8"
+      name="commonSearch"
+      class="global-search voltron voltron-vertical-selector">
+
+<fieldset>
+<legend>Find People, Jobs, Companies, and More</legend>
+
+
+<div class="search-scope">
+    <label for="main-search-category">Search for:</label>
+
+
+    <select name="type" id="main-search-category" class="search-category">
+
+
+        <option class="all"
+                data-li-advanced-link="/vsearch/f?adv=true&amp;trk=federated_advs"
+                data-li-styled-dropdown-class="all"
+                data-li-search-action="/vsearch/f"
+                data-li-ghost-text="Search for people, jobs, companies, and more..."
+                data-li-trk-code="vsrp_all_vertical_selector_item"
+                title="Search for people, jobs, companies, and more..."
+                value="all">All
+        </option>
+
+
+        <option class="people"
+                data-li-advanced-link="/vsearch/p?adv=true&amp;trk=advsrch"
+                data-li-styled-dropdown-class="people"
+                data-li-search-action="/vsearch/p"
+                data-li-ghost-text="Search people..."
+                data-li-trk-code="vsrp_people_vertical_selector_item"
+                title="Keyword, name, company or title"
+                value="people">People
+        </option>
+
+
+        <option class="jobs"
+                data-li-advanced-link="/vsearch/j?adv=true&amp;trk=hb_advjs"
+                data-li-styled-dropdown-class="jobs"
+                data-li-search-action="/vsearch/j"
+                data-li-ghost-text="Search jobs..."
+                data-li-trk-code="vsrp_jobs_vertical_selector_item"
+                title="Keyword, company or job title"
+                value="jobs">Jobs
+        </option>
+
+
+        <option class="companies"
+                data-li-styled-dropdown-class="companies"
+                data-li-search-action="/vsearch/c"
+                data-li-ghost-text="Search companies..."
+                title="Keyword"
+                data-li-trk-code="vsrp_companies_vertical_selector_item"
+                value="companies">Companies
+        </option>
+
+
+        <option class="groups"
+                data-li-styled-dropdown-class="groups"
+                data-li-search-action="/vsearch/g"
+                data-li-ghost-text="Search groups..."
+                data-li-trk-code="vsrp_groups_vertical_selector_item"
+                title="Keyword"
+                value="groups">Groups
+        </option>
+
+
+        <option class="edu"
+                data-li-styled-dropdown-class="edu"
+                data-li-search-action="/vsearch/e"
+                data-li-ghost-text="Search universities..."
+                data-li-trk-code="vsrp_edu_vertical_selector_item"
+                title="Keyword"
+                value="edu">Universities
+        </option>
+
+
+        <option class="inbox"
+                data-li-styled-dropdown-class="inbox"
+                data-li-search-action="/inbox/messages/search"
+                data-li-ghost-text="Search inbox..."
+                data-li-trk-code="vsrp_inbox_vertical_selector_item"
+                title="Keyword"
+                value="inbox">Inbox
+        </option>
+
+    </select>
+</div>
+
+
+<script id="control-http-12261-5561860-2" type="linkedin/control" class="li-control">
+
+
+    /* extlib: _styleddropdown */
+
+
+    LI.Controls.addControl('control-http-12261-5561860-2', 'StyledDropdown', {
+    name: 'universal-search-selector',
+    align: 'left',
+    listClass: 'search-selector',
+    autoPosition: false,
+    containerClass: 'global-nav-styled-dropdown'
+    });
+</script>
+
+
+<div class="search-box-container" id="search-box-container">
+      <span id="search-autocomplete-container"
+            title="Tip: You can also search by keyword, company, school..."
+            class="/typeahead">
+      
+          
+              
+            
+          
+            <label for="main-search-box" class="ghost">Search for people, jobs, companies, and more...</label>
+          <script id="control-http-12261-5561861-3" type="linkedin/control" class="li-control">
+
+
+              /* extlib: _ghostlabel */
+
+
+              LI.Controls.addControl('control-http-12261-5561861-3', 'GhostLabel', {});
+          </script>
+        
+          <input name="keywords"
+                 id="main-search-box"
+                 class="search-term"
+                 type="text"
+                 value=""
+                 autocomplete="off">
+        
+        <span id="search-typeahead-container"></span>
+
+        
+      </span>
+
+
+    <input name="orig" type="hidden" value="GLHD">
+
+    <input name="pageKey" type="hidden" value="JOB:/consumer/search/search">
+
+</div>
+
+
+<button name="search" value="Search" class="search-button" type="submit">
+    <span>Search</span>
+</button>
+
+
+</fieldset>
+
+
+<div class="advanced-search-outer">
+    <div class="advanced-search-inner">
+        <a href="/vsearch/f?adv=true"
+           class="advanced-search"
+           id="advanced-search">Advanced
+
+        </a>
+    </div>
+</div>
+
+
+</form>
+
+
+<script id="control-http-12261-5561861-4" type="linkedin/control" class="li-control">
+
+
+    /* extlib: _universalsearch */
+    LI.i18n.register( 'universal-search-connections', 'Connections' );
+    LI.i18n.register( 'universal-search-companies', 'Companies' );
+    LI.i18n.register( 'universal-search-groups', 'Groups' );
+    LI.i18n.register( 'universal-search-features', 'Features' );
+    LI.i18n.register( 'universal-search-skills', 'Skills' );
+    LI.i18n.register( 'universal-search-skill', 'Skill' );
+    LI.i18n.register( 'universal-search-suggestions', 'Suggestions' );
+    LI.i18n.register( 'universal-search-refine', 'Refine' );
+    LI.i18n.register( 'universal-search-search-current-for', 'Search current results for <strong>{0}<\/strong>' );
+
+
+    LI.i18n.register( 'typeahead2-no-matching-results', 'No matching results' );
+    LI.i18n.register( 'typeahead2-search-connections', 'Connections' );
+    LI.i18n.register( 'typeahead2-search-companies', 'Companies' );
+    LI.i18n.register( 'typeahead2-search-groups', 'Groups' );
+    LI.i18n.register( 'typeahead2-search-features', 'Features' );
+    LI.i18n.register( 'typeahead2-search-skills', 'Skills' );
+    LI.i18n.register( 'typeahead2-search-skill', 'Skill' );
+    LI.i18n.register( 'typeahead2-search-suggestions', 'Suggestions' );
+    LI.i18n.register( 'typeahead2-search-schools', 'Universities' );
+    LI.i18n.register( 'typeahead2-search-degrees', 'Degrees' );
+    LI.i18n.register( 'typeahead2-search-fields-of-study', 'Fields of study' );
+    LI.i18n.register( 'typeahead2-cap-prospects', 'Profiles' );
+    LI.i18n.register( 'typeahead2-cap-jobs', 'Jobs' );
+    LI.i18n.register( 'typeahead2-cap-projects', 'Projects' );
+    LI.i18n.register( 'typeahead2-search-discussion-participants', 'Participants' );
+    LI.i18n.register( 'typeahead2-search-group-members', 'Group Members' );
+
+    LI.TypeaheadDataSourceUrls = {
+    COMPANY: "/ta/company",
+    INDUSTRY: "/ta/industry",
+    REGION: "/ta/region",
+    GROUP: "/ta/group",
+    JOB_TITLE: "/ta/titleV2",
+    JOB_FUNCTION: "/ta/jobfunc",
+    SKILL: "/ta/skill",
+    LANGUAGE: "/ta/language",
+    SCHOOL: "/ta/school",
+    DEGREE: "/ta/degree",
+    FIELD_OF_STUDY: "/ta/fieldofstudy",
+    MY_NETWORK: "/ta/mynetwork",
+    MY_GROUP: "/typeahead/mygroup",
+    FIRST_DEGREE_MY_NETWORK: "/ta/my1stnetwork",
+    SITEFEATURE: "/ta/sitefeature",
+    FEDERATOR: "/ta/federator",
+    AUTOCOMPLETE: "/ta/autocomplete",
+    CAP_PROSPECTS_PROJECTS_JOBS: "/cap/lookup/capTaAjax"
+    };
+
+
+    LI.Typeahead2Dependencies = {
+    scripts:
+
+
+    ["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=js%2Futil%2Ftypeahead%2FDataSource&f=js%2Futil%2Ftypeahead%2FDataSourceAggregator2&f=js%2Futil%2Ftypeahead%2FTypeaheadRenderAs&f=js%2Futil%2Ftypeahead%2FTypeaheadHandleEventAs"]
+
+
+    };
+
+
+    LI.Controls.addControl('control-http-12261-5561861-4', 'UniversalSearch', {
+    field: "main-search-box",
+
+    searchTypeMenu: "main-search-category",
+    searchLink: "advanced-search",
+    loadingImgSrc: "http://s.c.lnkd.licdn.com/scds/common/u/img/anim/anim_loading_16x16.gif",
+    includeSearchSuggestion: false,
+    includeSearchPlusAC: true,
+    includeSearchRefine: false,
+    includeSearchAutoComplete: false,
+    includeTypeaheadTracking: false,
+    includeRankHide: false,
+    removeSkillsTA: true,
+    removeGroupsTA: false,
+    trkInfoField: "main-search-trkInfo",
+    enableEduSearch: true,
+    enableVerticalSelectorTracking: false
+    });
+</script>
+
+
+</div>
+
+<div class="header-section last-child">
+
+
+<ul class="nav utilities" role="navigation">
+
+
+<li class="nav-item activity-tab" data-li-activity-type="messages">
+    <a href="/inbox/messages/received?trk=nav_utilities_inbox" class="activity-toggle inbox-alert">
+        Inbox
+    </a>
+
+    <span id="header-messages-count" class="gem gem-unseen">11</span>
+
+    <div class="activity-container" id="inbox">
+        <div class="activity-drop activity-drop-loading">
+            <div class="activity-drop-body"></div>
+        </div>
+    </div>
+</li>
+
+
+<li class="nav-item activity-tab"
+    data-li-new-count="4"
+    data-li-action-type-click="ntf_click_notifications_icon"
+    data-li-action-type-pagination="ntf_scroll"
+    data-li-activity-type="notifications">
+    <a href="#notifications" class="activity-toggle notifications-alert">
+        Notification
+    </a>
+
+    <span id="nav-primary-inbox-item-total" class="gem gem-unseen">4</span>
+
+    <div class="activity-container" id="notifications">
+        <div class="activity-drop activity-drop-loading">
+            <div class="activity-drop-body"></div>
+        </div>
+    </div>
+
+</li>
+
+
+<li class="nav-item activity-tab" data-li-activity-type="">
+
+
+    <a href="https://www.linkedin.com/secure/importAndInvite?trk=nav_utilities_add_connx"
+       class="activity-toggle add-connections-btn">
+        Add Connections
+    </a>
+
+    <div class="add-connections simple-responsive" id="addconnections">
+        <div class="add-connections-options">
+            <div class="add-connections-options-body simple-responsive">
+                <section class="invite-securely-via-email-lix">
+                    <div class="invite-securely-via-email-lix-div-fallback ">
+                        <div class="activity-drop-header">
+                            <h3>Add Connections<span class="sub-nav-header-arrow" role="presentation"></span></h3>
+                        </div>
+
+                        <h4>Invite your contacts</h4>
+
+                        <p>Quickly find people you may know by searching your email contacts:</p>
+                        <a href="https://www.linkedin.com/secure/importAndInvite?trk=nav_utilities_add_connx"
+                           class="modal-overlay-link"></a>
+                        <ul class="providers">
+                            <li id="gmail-li" class="gmail"><a
+                                    href="https://www.linkedin.com/secure/importAndInvite?trk=nav_utilities_add_connx">Gmail</a>
+                            </li>
+                            <li class="yahoo"><a
+                                    href="https://www.linkedin.com/secure/importAndInvite?trk=nav_utilities_add_connx">AOL</a>
+                            </li>
+                            <li class="hotmail"><a
+                                    href="https://www.linkedin.com/secure/importAndInvite?trk=nav_utilities_add_connx">Hotmail</a>
+                            </li>
+                            <li class="other"><a
+                                    href="https://www.linkedin.com/secure/importAndInvite?trk=nav_utilities_add_connx">Other</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+</li>
+
+
+<li class="nav-item account-settings-tab">
+<a href="/profile/view?id=655290&amp;trk=nav_responsive_tab_profile_pic" class="account-toggle">
+
+
+    <img src="http://s.c.lnkd.licdn.com/scds/common/u/img/spacer.gif"
+         data-li-src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_20_20/p/1/000/129/06b/0daebf9.jpg"
+         id="img-defer-id-1-61862" class="img-defer-hidden img-defer nav-profile-photo" alt="Rob Williams" height="20"
+         width="20">
+
+</a>
+
+<div class="account-sub-nav" id="account-sub-nav">
+<div class="account-sub-nav-options">
+<div class="account-sub-nav-header">
+    <h3>Account &amp; Settings<span class="sub-nav-header-arrow" role="presentation"></span></h3>
+</div>
+<div class="account-sub-nav-body">
+<ul class="account-settings">
+
+<li class="self">
+    <div class="account-settings-link">
+                <span class="act-set-row">
+                  <span class="act-set-icon">
+                    <a href="/profile/view?id=655290&amp;trk=nav_responsive_tab_profile_pic">
+                      <span class="act-set-icon-image" role="presentation">
+                           
+                <img src="http://s.c.lnkd.licdn.com/scds/common/u/img/spacer.gif"
+                     data-li-src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_20_20/p/1/000/129/06b/0daebf9.jpg"
+                     id="img-defer-id-2-61862" class="img-defer-hidden img-defer profile-photo" alt="Rob Williams"
+                     height="20" width="20">
+                
+                      </span>
+                    </a>
+                  </span>
+                  <span class="act-set-name">
+                    <a href="/profile/view?id=655290&amp;trk=nav_responsive_tab_profile_pic"
+                       class="act-set-name-split-link">
+                        Rob Williams </a>
+                  </span>
+
+                  <span class="act-set-action">
+                    <a href="http://www.linkedin.com/uas/logout?session_full_logout=&amp;csrfToken=ajax%3A1927336160442255839&amp;trk=nav_account_sub_nav_signout"
+                       class="account-submenu-split-link">
+                        Sign Out
+                    </a>
+                  </span>
+                </span>
+    </div>
+</li>
+
+
+<li class="account-type">
+
+
+    <a href="/mnyfe/subscriptionv2?family=general&amp;tutorial=&amp;trk=nav_account_sub_nav_premium"
+       class="account-settings-link" target="_self">
+                  <span class="act-set-row">
+                    <span class="act-set-icon"><span class="act-set-icon-image" role="presentation"></span></span>
+                    <span class="act-set-name">
+                      Account: Business
+                    </span>
+                    <span class="act-set-action">
+                      Account Tutorial
+                    </span>
+                  </span>
+    </a>
+
+</li>
+
+
+<li class="job-posting">
+    <a href="/job/consumer/manageConsumer?trk=nav_account_sub_nav_job_manage" class="account-settings-link">
+                  <span class="act-set-row">
+                    <span class="act-set-icon"><span class="act-set-icon-image" role="presentation"></span></span>
+                    <span class="act-set-name">
+                      Job Posting
+                    </span>
+                    <span class="act-set-action">
+                      Manage
+                    </span>
+                  </span>
+    </a>
+</li>
+
+
+<li class="company-admin">
+    <a href="/company/ontometrics?trk=nav_account_sub_nav_company_admin" class="account-settings-link">
+                  <span class="act-set-row">
+                    <span class="act-set-icon"><span class="act-set-icon-image" role="presentation"></span></span>
+                    <span class="act-set-name">
+                      Company Page
+                    </span>
+                    <span class="act-set-action">
+                      Manage
+                    </span>
+                  </span>
+    </a>
+</li>
+
+
+<li class="language-settings">
+    <a href="https://www.linkedin.com/settings/?tab=account&amp;modal=nsettings-select-language&amp;trk=nav_account_sub_nav_language"
+       class="account-settings-link">
+                <span class="act-set-row">
+                  <span class="act-set-icon"><span class="act-set-icon-image" role="presentation"></span></span>
+                  <span class="act-set-name">
+                    Language
+                  </span>
+                  <span class="act-set-action">
+                   Change
+                  </span>
+                </span>
+    </a>
+</li>
+
+<li class="privacy-settings">
+    <a href="https://www.linkedin.com/secure/settings?trk=nav_account_sub_nav_settings" class="account-settings-link">
+                <span class="act-set-row">
+                  <span class="act-set-icon"><span class="act-set-icon-image" role="presentation"></span></span>
+                  <span class="act-set-name">
+                    Privacy & Settings
+                  </span>
+                  <span class="act-set-action">
+                    Review
+                  </span>
+                </span>
+    </a>
+</li>
+
+<li class="help-center">
+
+    <span class="qh-icon"></span>
+                <span class="account-settings-link">
+                      
+          
+              <a href="/redir/redirect?url=http%3A%2F%2Flinkedin%2Ecusthelp%2Ecom%2Fapp%2Fhome%2Floc%2Fhd%2Ftrk%2FJOB%3A%2Fconsumer%2Fsearch%2Fsearch%2F&amp;urlhash=DR7m&amp;trk=help-en"
+                 target="_blank" rel="nofollow" class="act-set-name">Help Center</a>
+    
+                      
+          
+              <a href="/redir/redirect?url=http%3A%2F%2Flinkedin%2Ecusthelp%2Ecom%2Fapp%2Fhome%2Floc%2Fhd%2Ftrk%2FJOB%3A%2Fconsumer%2Fsearch%2Fsearch%2F&amp;urlhash=DR7m&amp;trk=help-en"
+                 target="_blank" rel="nofollow" class="act-set-action">Get Help</a>
+    
+                      <div id="qh-tourlist-loader" class="loading"></div>
+                      <ul class="qh-page-tours"></ul>
+                </span>
+
+
+    <script id="control-http-12261-5561864-5" type="linkedin/control" class="li-control">
+
+        /* extlib: _quickhelp2 */
+
+
+        LI.QuickHelpDependencies = {
+        jsFiles:
+
+
+        ["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=lib%2Fhopscotch%2F0.0.5%2Fjs%2Fhopscotch-0.0.5.min&f=scripts%2Fapps%2Fchrome%2Fquickhelp%2Fli_hopscotch_helpers"]
+
+
+        ,
+        helpers:
+
+
+        ["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=scripts%2Fapps%2Fchrome%2Fquickhelp%2Fli_hopscotch_helpers"]
+
+
+        ,
+        cssFiles:
+
+
+        ["http://s.c.lnkd.licdn.com/scds/concat/common/css?v=build-2000_1_30076-prod&f=scss%2Fthemes%2Fkaty%2Fchrome%2Fhopscotch_en_US"]
+
+
+        };
+
+        LI.i18n.register( 'QuickHelp-next', 'Next' );
+        LI.i18n.register( 'QuickHelp-prev', 'Prev' );
+        LI.i18n.register( 'QuickHelp-close', 'Close' );
+        LI.i18n.register( 'QuickHelp-skip', 'Skip' );
+        LI.i18n.register( 'QuickHelp-done', 'Done' );
+        LI.i18n.register( 'QuickHelp-tour-complete', 'Tour complete' );
+        LI.i18n.register( 'QuickHelp-related-tours', 'Take a related tour:' );
+        LI.i18n.register( 'QuickHelp-go-back', 'Go back' );
+
+
+        LI.Controls.addControl('control-http-12261-5561864-5', 'QuickHelp2', {
+        helpCenterTourText: 'Help Center Tours',
+        lixResultUrl: '/lite/lite-lix?csrfToken=ajax%3A1927336160442255839',
+        product: '',
+        catalogUrls: {
+        subs: '/chrome/quickhelp-subs-catalog?csrfToken=ajax%3A1927336160442255839',
+        home: '/chrome/quickhelp-home-catalog?csrfToken=ajax%3A1927336160442255839',
+        edu: '/chrome/quickhelp-edu-catalog?csrfToken=ajax%3A1927336160442255839',
+        search: '/chrome/quickhelp-search-catalog?csrfToken=ajax%3A1927336160442255839'
+        },
+        dependencies: LI.QuickHelpDependencies
+        });
+    </script>
+
+</li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+
+
+</ul>
+
+
+<script id="control-http-12261-5561864-6" type="linkedin/control" class="li-control">
+
+/* extlib: _headernotifications */
+
+
+LI.HeaderNotificationsDependencies = {
+inbox_v2: {
+jsFiles:
+
+
+["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=lib%2Fyui%2F2.8.1%2Felement%2Felement-min&f=js%2Futil%2FRequestQueue&f=js%2Futil%2FSplitButton&f=js%2Futil%2FDialog&f=js%2Fapps%2FInboxBaseListView&f=js%2Fapps%2FInboxPendingInvitationListView&f=js%2Fapps%2FInboxMessageListView"]
+
+
+},
+messages: {
+jsFiles:
+
+
+["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=lib%2Fyui%2F2.8.1%2Felement%2Felement-min&f=js%2Futil%2FRequestQueue&f=js%2Fapps%2FInboxBaseListView&f=js%2Fapps%2FInboxMessageListView"]
+
+
+},
+invitations: {
+jsFiles:
+
+
+["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=lib%2Fyui%2F2.8.1%2Felement%2Felement-min&f=js%2Futil%2FRequestQueue&f=js%2Fapps%2FInboxBaseListView&f=js%2Fapps%2FInboxPendingInvitationListView"]
+
+
+},
+notifications: {
+jsFiles:
+
+
+["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=js%2Fapps%2FNotificationsList&f=js%2Fapps%2FScrollTopObserver&f=js%2Futil%2FBalloonCallout"]
+
+
+},
+addconn: {
+jsFiles:
+
+
+["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=js%2Fapps%2Ffetch%2FImportSubmitter&f=js%2Fapps%2Ffetch%2FOneClickImporter&f=js%2Fapps%2Fzeppelin%2FZeppelinForm&f=js%2Fapps%2Freg%2FRegImportAbookContacts&f=js%2Fapps%2FAddConnDropDownUtil"]
+
+
+}
+};
+
+
+LI.Controls.addControl('control-http-12261-5561864-6', 'HeaderNotifications', {
+enableRealTimeUpdate: false,
+hoverMenus: true,
+remoteMenus: {
+messages: {
+
+url : '/inbox/summary',
+dependencies: 'LI.HeaderNotificationsDependencies.inbox_v2'
+},
+notifications: {
+backfillUrl: '/inbox/activity/notifications/more/v2',
+dependencies: 'LI.HeaderNotificationsDependencies.notifications',
+markAsReadOnClick: {
+url: '/inbox/notifications-click-track?csrfToken=ajax%3A1927336160442255839'
+},
+infiniteScroll: true,
+url: '/inbox/activity/notifications/v2?trk=gnav-not-all'
+},
+
+addconnections: {
+url : '/fetch/addconn-dropdown-buttons',
+dependencies: 'LI.HeaderNotificationsDependencies.addconn'
+}
+}
+});
+</script>
+
+
+</div>
+</div>
+</div>
+
+<div class="responsive-nav" id="responsive-nav-scrollable">
+<div class="wrapper">
+
+
+<ul class="nav main-nav" role="navigation">
+
+
+    <li class="nav-item">
+        <a href="/home?trk=nav_responsive_tab_home"
+           class="nav-link">
+            Home
+        </a>
+    </li>
+
+
+    <li class="nav-item">
+        <a href="/profile/view?id=655290&amp;trk=nav_responsive_tab_profile" class="nav-link">
+            Profile
+        </a>
+        <ul class="sub-nav" id="profile-sub-nav">
+
+
+            <li>
+                <a href="/profile/edit?trk=nav_responsive_sub_nav_edit_profile">
+                    Edit Profile
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/wvmx/profile?trk=nav_responsive_sub_nav_wvmp">
+                    Who's Viewed Your Profile
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+    <li class="nav-item">
+        <a href="/connections?trk=nav_responsive_tab_network"
+           class="nav-link">
+            Network
+        </a>
+        <ul class="sub-nav">
+            <li>
+                <a href="/connections?trk=nav_responsive_tab_network">
+                    Contacts
+                </a>
+            </li>
+            <li>
+                <a href="https://www.linkedin.com/fetch/importAndInviteEntry?trk=nav_responsive_sub_nav_add_connections">
+                    Add Connections
+                </a>
+            </li>
+            <li>
+                <a href="/college/alumni?trk=nav_responsive_sub_nav_find_alumni">
+                    Find Alumni
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="nav-item">
+        <a href="/jobs?displayHome=&amp;trk=nav_responsive_sub_nav_jobs"
+           class="nav-link">
+            Jobs
+        </a>
+
+
+    </li>
+
+    <li class="nav-item">
+        <div id="nav-link-interests" class="nav-link no-click">
+            Interests
+        </div>
+        <ul class="sub-nav" id="interests-sub-nav">
+            <li>
+
+
+                <a href="/companies?dspFllwed=&amp;trk=nav_responsive_sub_nav_companies">
+                    Companies
+                </a>
+
+
+            </li>
+
+
+            <li>
+                <a href="/myGroups?trk=nav_responsive_sub_nav_groups">
+                    Groups
+                </a>
+            </li>
+
+
+            <li>
+
+
+                <a href="/today/post/whoToFollow?strategy=recentPosts&amp;trk=nav_responsive_sub_nav_influencers">
+                    Influencers
+                </a>
+
+            </li>
+
+
+            <li>
+                <a href="/edu/?trk=nav_responsive_sub_nav_edu">
+                    Education
+                </a>
+            </li>
+
+        </ul>
+    </li>
+</ul>
+
+
+<script id="control-http-12261-5561867-7" type="linkedin/control" class="li-control">
+
+
+    /* extlib: _navaccessibility */
+
+
+    LI.Controls.addControl('control-http-12261-5561867-7', 'NavAccessibility', {
+    linkElement: ".nav-item",
+    subNav: ".sub-nav",
+    lastElement: "influencer-tab",
+    activeClass: "active"
+    });
+</script>
+
+
+<ul class="nav premium-nav" role="navigation">
+    <li class="nav-item">
+        <a href="#business-sub-nav"
+           class="nav-link">
+
+
+            Business Services
+
+
+        </a>
+        <ul class="sub-nav" id="business-sub-nav">
+            <li>
+                <a href="/jobs/post?editAttributes=&amp;trk=nav_responsive_sub_nav_post_job">
+                    Post a Job
+                </a>
+            </li>
+
+
+            <li>
+                <a href="/mnyfe/subscriptionv2?displayProducts=&amp;family=talent&amp;trk=li-nav"
+                   target="_blank">
+                    Talent Solutions
+                </a>
+            </li>
+
+            <li>
+
+                <a href="https://www.linkedin.com/ads/start?utm_source=li&amp;utm_medium=el&amp;utm_campaign=hb_tab_ads&amp;src=en-all-el-li-hb_tab_ads&amp;trk=nav_responsive_sub_nav_advertise"
+                   target="_blank">
+                    Advertise
+                </a>
+            </li>
+
+
+        </ul>
+    </li>
+
+
+    <li class="nav-item">
+
+        <a href="/mnyfe/subscriptionv2?displayProducts=&amp;trk=nav_responsive_sub_nav_upgrade"
+           class="nav-link">
+            Upgrade
+        </a>
+
+    </li>
+</ul>
+
+
+<script id="control-http-12261-5561867-8" type="linkedin/control" class="li-control">
+
+
+    LI.Controls.addControl('control-http-12261-5561867-8', 'NavAccessibility', {
+    linkElement: ".nav-item",
+    subNav: ".sub-nav",
+    activeClass: "active"
+    });
+</script>
+
+
+</div>
+</div>
+<script type="text/javascript">
+
+(function () {
+    // config
+    // more steps == smoother animation, more processing
+    // more time = slower animation, can be smoother
+    // zindex for slide = less than nav it slides under
+    var UP = 'up',
+            DOWN = 'down',
+            PX = 'px',
+            RETRACT_NAV = 'chrome-v5-retract-nav-enabled',
+            maxSteps = 10,
+            duration = 200,
+            slideZIndex = 1,
+            navbar = document.getElementById('responsive-nav-scrollable'),
+            header = document.getElementById('header'),
+            topHeader = document.getElementById('top-header'),
+            topHeaderHeight = topHeader.offsetHeight,
+            originalHeight = navbar.offsetHeight,
+            originalZ = navbar.style.zIndex,
+            direction = null,
+            doAnimate = false,
+            visibleNavOnTop = true,
+            lastY = window.pageYOffset,
+            interval = Math.floor(duration / maxSteps),
+            animating = false,
+            preventOpenTillUp = false,
+            hasOwnProperty = Object.prototype.hasOwnProperty,
+            noResponsiveNav = false,      // HUED-841
+            distance = 0,          // HUED-797
+            threshold = 60,         // HUED-797
+            mouseMoveCount = 0,
+            defaults, getOffset, originalOffset, addEvent, hasClass, addClass, removeClass, fireEvent, contains, mouseEnterLeave, animate, mouseOpen, mouseClose, mouseOpenTimer,
+            mouseCloseTimer, staticPositionNav, fixedPositionNav;
+
+    // support IE7, 8
+    lastY = lastY || document.body.scrollTop;
+    lastY = lastY || Math.max(document.documentElement.scrollTop, lastY);
+
+    // pretty much does the same thing that underscore's defaults method does: the
+    // defaults object contains default values for properties. If the properties
+    // aren't defined in the destination object, they are copied to it. If they are
+    // defined, the value in the destination object is kept.
+    defaults = function (dest, defs) {
+        for (var prop in defs) {
+            if (!hasOwnProperty.call(dest, prop)) {
+                dest[prop] = defs[prop];
+            }
+        }
+        return dest;
+    };
+
+    // measuring functions
+    getOffset = function (el) {
+        var _x = 0,
+                _y = 0;
+        while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+            _x += el.offsetLeft - el.scrollLeft;
+            _y += el.offsetTop - el.scrollTop;
+            el = el.offsetParent;
+        }
+        return { top: _y, left: _x };
+    };
+
+    originalOffset = getOffset(navbar);
+
+    // local addEvent listener;
+    addEvent = (function () {
+        if (window.addEventListener) {
+            return function (el, ev, fn) {
+                el.addEventListener(ev, fn, false);
+            };
+        }
+        else if (window.attachEvent) {
+            return function (el, ev, fn) {
+                el.attachEvent('on' + ev, fn);
+            };
+        }
+        else {
+            return function (el, ev, fn) {
+                var oldFn = el['on' + ev] || function () {
+                };
+                el['on' + ev] = function () {
+                    oldFn();
+                    fn();
+                };
+            };
+        }
+    })();
+
+    // fires an namespaced event on the
+    // document if LI.Events.fire is available
+    fireEvent = function (type, opts) {
+        var triggerFn,
+                eventName = 'globalnav:' + type;
+
+        opts = opts || {};
+
+        if (LI.Events) {
+            // For compatibility with the new event bus which lacks a fire method.
+            triggerFn = LI.Events.trigger || LI.Events.fire;
+            if (typeof triggerFn === 'function') {
+                triggerFn.call(LI.Events, eventName, defaults(opts, {
+                    name: eventName
+                }));
+            }
+        }
+    };
+
+    // Provides mouseenter and mouseleave functionality
+    // through mouseover and mouseout. This is important
+    // because we only want the callback to fire once so
+    // we can properly relay the state of the nav.
+    mouseEnterLeave = function (element, type, callback) {
+        var preCallback,
+                mouseEnter = type === 'mouseenter',
+                type = mouseEnter ? 'mouseover' : 'mouseout',
+        // property is different for ie
+                ie = mouseEnter ? 'fromElement' : 'toElement';
+
+        preCallback = function (event) {
+            event = event || window.event;
+
+            var target = event.target || event.srcElement,
+                    related = event.relatedTarget || event[ie];
+
+            // only fire the callback if the target is not a child element
+            if ((element === target || contains(element, target)) && !contains(element, related)) {
+                callback();
+            }
+        };
+
+        addEvent(element, type, preCallback);
+
+        return preCallback;
+    }
+
+    // mozilla fix for contains functionality
+    // http://www.quirksmode.org/blog/archives/2006/01/contains_for_mo.html
+    contains = function (container, element) {
+        return container.contains ? container.contains(element) : !!(container.compareDocumentPosition(element) & 16);
+    }
+
+    //local hasClass a la YUI3
+    hasClass = function (el, test) {
+        var rHasClass = new RegExp('(?:^|\\s+)' + test + '(?:\\s+|$)');
+        if (el && el.nodeType === 1 && rHasClass.test(el.className)) {
+            return true;
+        }
+        return false;
+    };
+    //local addClass a la YUI3
+    addClass = function (el, newClass) {
+        if (el && el.nodeType === 1 && typeof newClass === 'string' && !hasClass(el, newClass)) {
+            el.className = el.className + ' ' + newClass;
+        }
+    };
+    //local removeClass a la YUI3
+    removeClass = function (el, killClass) {
+        if (el && el.nodeType === 1 && typeof killClass === 'string' && hasClass(el, killClass)) {
+            el.className = el.className.replace(new RegExp('(?:^|\\s+)' + killClass + '(?:\\s+|$)'), ' ');
+        }
+    };
+
+    // simple animation call
+    animate = function (opts) {
+        var start = new Date(),
+                id;
+
+        if (opts.onStart) {
+            opts.onStart();
+        }
+
+        id = setInterval(function () {
+            var timePassed = new Date() - start,
+                    progress = timePassed / opts.duration,
+                    delta;
+
+            if (progress > 1) {
+                progress = 1;
+            }
+
+            delta = opts.delta(progress);
+            opts.step(delta);
+
+            if (progress === 1) {
+                clearInterval(id);
+                if (opts.onComplete) {
+                    opts.onComplete();
+                }
+            }
+        }, opts.delay || 10);
+
+        return id;
+    };
+
+    // position static nav
+    staticPositionNav = function () {
+        navbar.style.position = 'static';
+        navbar.style.zIndex = originalZ;
+        navbar.style.width = 'auto';
+        navbar.style.top = null;
+    };
+
+    // position fixed nav
+    fixedPositionNav = function () {
+        navbar.style.position = 'fixed';
+        navbar.style.zIndex = slideZIndex;
+        navbar.style.width = navbar.parentNode.clientWidth + PX;
+    };
+
+    // JTRACY | HUED-841
+    //
+    // Q: Why are these android and ios checks in here?
+    //
+    // A: The chrome v5 nav currently does not play nicely on mobile and
+    // tablet devices, such as android and ipad, when the user pinches
+    // to zoom in.
+    //
+    // In order to provide some immediate user experience relief we are
+    // disabling the responsive sub-nav and not fixing the global nav at
+    // the top of the screen.
+    //
+    // Returning here skips all of the responsive nav initialization routines.
+    noResponsiveNav = hasClass(document.documentElement, "os-android") || hasClass(document.documentElement, "os-ios");
+    if (noResponsiveNav) {
+        return;
+    }
+
+    // on window scroll, determine if we need to start an
+    // animation
+    addEvent(window, 'scroll', function () {
+        var currentY = window.pageYOffset;
+        // support IE7, 8
+        currentY = currentY || document.body.scrollTop;
+        currentY = currentY || Math.max(document.documentElement.scrollTop, currentY);
+
+        if (0 > lastY) {
+            lastY = 0;
+        }
+
+        if (currentY > lastY && direction !== DOWN) {
+            doAnimate = true;
+            direction = DOWN;
+            // reset distance measurement for next upward scroll event
+            distance = 0;
+            if (preventOpenTillUp) {
+                doAnimate = false;
+            }
+        }
+        else if (lastY > currentY && direction !== UP) {
+            /*
+             * JTRACY | HUED-797 | Delay trigger of responsive nav on upward scroll
+             * -----------------------------------------------------------
+             * The Jira states that "We should ideally not trigger the expansion of the
+             * secondary nav bar on upward scroll until the user has scrolled at least
+             * the height of the secondary nav bar (29 px)."
+             *
+             * In order to do that, we need to delay the animation until the user has
+             * scrolled upward a certain distance. The variable 'distance' holds the
+             * number of pixels scrolled since the user initiated an upward scroll.
+             * Once that distance exceeds the defined threshold (or we reach the top
+             * of the screen), then the sub navigation is animated down. 'distance' is
+             * reset when this occurs or when the user scrolls back down.
+             *
+             * The threshold is set to 60px, or about twice the height of the subnav.
+             * Using a lower number makes it still feel like it triggers too soon.
+             */
+            distance += (lastY - currentY);
+            if (distance > threshold || currentY == 0) {
+                doAnimate = true;
+                direction = UP;
+                preventOpenTillUp = false;
+                // reset distance measurement for next upward scroll event
+                distance = 0;
+            }
+        }
+        else {
+            // reset distance measurement for next upward scroll event
+            distance = 0;
+        }
+
+        lastY = currentY;
+
+        if (!doAnimate) {
+            return;
+        }
+
+        doAnimate = false;
+        if (animating) {
+            clearInterval(animating);
+        }
+
+        animating = animate({
+            delay: interval,
+            duration: duration,
+            delta: function (progress) {
+                return progress;
+            },
+            onStart: function () {
+                fixedPositionNav();
+                fireEvent(((direction === UP) ? 'show' : 'hide') + 'Start');
+            },
+            step: function (delta) {
+                var heightDelta = (originalHeight * delta),
+                        newNavHeight,
+                        eventName;
+
+                if (direction === DOWN) {
+                    newNavHeight = originalHeight - heightDelta;
+                    navbar.style.top = (originalOffset.top - heightDelta) + PX;
+                    visibleNavOnTop = false;
+                    eventName = 'hide:animation:step';
+                } else {
+                    newNavHeight = heightDelta;
+                    navbar.style.top = ((originalOffset.top - originalHeight) + heightDelta) + PX;
+                    eventName = 'show:animation:step';
+                }
+
+                fireEvent(eventName, {
+                    // Current progress in tweening. [0, 1].
+                    delta: delta,
+                    // Pass the current height of the entire header to the callback.
+                    headerHeight: newNavHeight + topHeaderHeight
+                });
+            },
+            onComplete: function () {
+                if (direction == UP) {
+                    staticPositionNav();
+                    fireEvent('showStop');
+                    visibleNavOnTop = true;
+                } else {
+                    fireEvent('hideStop');
+                }
+            }
+        });
+    });
+
+    mouseOpen = function () {
+        if (!visibleNavOnTop) {
+            staticPositionNav();
+            fireEvent('show');
+        }
+    };
+    mouseClose = function () {
+        if (!visibleNavOnTop) {
+            fixedPositionNav();
+            fireEvent('hide');
+            navbar.style.top = originalOffset.top - originalHeight + PX;
+        }
+    };
+    // On mouse over, show navigation
+    mouseEnterLeave(header, 'mouseenter', function () {
+        // if the subnav is retracted on pageload(preventOpenTillUp), make sure the mouse was off the global nav when the mouse was moved before showing the subnav.
+        if (!preventOpenTillUp || mouseMoveCount > 1) {
+            if (mouseOpenTimer) {
+                clearTimeout(mouseOpenTimer);
+            }
+            if (mouseCloseTimer) {
+                clearTimeout(mouseCloseTimer);
+            }
+            mouseOpenTimer = setTimeout(mouseOpen, 100);
+        }
+    });
+
+    // On mouse out, hide navigation
+    mouseEnterLeave(header, 'mouseleave', function () {
+        if (mouseOpenTimer) {
+            clearTimeout(mouseOpenTimer);
+        }
+        if (mouseCloseTimer) {
+            clearTimeout(mouseCloseTimer);
+        }
+        mouseCloseTimer = setTimeout(mouseClose, 300);
+    });
+
+    /*
+     * Increment a count every time the mouse moves.  This is used so that the initial mouseenter event can be ignored,
+     * which means that the subnav won't pop up on mousemove if the mouse is already on the global header(and preventOpenTillUp is true).
+     * 1 is the limit to remove the listener instead of 0, because the order of the mouseenter and mousemove events are swapped in ie lte 8.
+     * @method incrementMouseMove
+     * @return {Void}
+     * @private
+     */
+    incrementMouseMove = function () {
+        mouseMoveCount++;
+        if (mouseMoveCount > 1) {
+            YEvent.removeListener(document, 'mousemove', incrementMouseMove);
+        }
+    };
+
+    /*
+     * Hide the navbar on load immediately if it is enabled on the page.
+     * Scolling up still activates the nav bar
+     */
+    preventOpenTillUp = hasClass(document.body, RETRACT_NAV);
+
+    /*
+     * subscribe to a mousemove event to keep track of the number of times the mouse has moved so that moving the mouse when the mouse is already on the global header won't
+     * make the subnav appear.
+     */
+    if (preventOpenTillUp) {
+        YEvent.on(document, 'mousemove', incrementMouseMove);
+    }
+
+    if (preventOpenTillUp) {
+        fixedPositionNav();
+        navbar.style.top = originalOffset.top - originalHeight + PX;
+        visibleNavOnTop = false;
+    }
+
+})();
+</script>
+
+<div class="a11y-content">
+    <a name="a11y-content" tabindex="0" id="a11y-content-link">Main content starts below.</a>
+</div>
+</div>
+
+
+<script type="text/javascript">
+
+
+    LI_WCT([
+        "control-http-12261-5561859-1",
+        "control-http-12261-5561860-2",
+        "control-http-12261-5561861-3",
+        "control-http-12261-5561861-4",
+        "control-http-12261-5561864-5",
+        "control-http-12261-5561864-6",
+        "control-http-12261-5561867-7",
+        "control-http-12261-5561867-8",
+    ]);
+
+
+</script>
+
+
+<div id="body" class="" role="main">
+
+
+<div class="wrapper hp-nus-wrapper">
+
+
+<div id="global-error">
+</div>
+
+
+<script type="text/javascript">
+
+</script>
+
+
+<div class="module search-module">
+    <h3>
+
+        SEARCH FOR JOBS
+
+    </h3>
+
+    <form id="job-search" action="/job/consumer/guestSearch/searchRedirect" novalidate="novalidate" method="GET"
+          accept-charset="UTF-8" name="search">
+        <div class="content">
+            <div class="icon">
+                <img src="http://s.c.lnkd.licdn.com/scds/common/u/images/apps/jobs/home/icon_briefcase_16x16_v2.png"
+                     height="20" width="20"/>
+
+            </div>
+            <input type="text" id="job-search-box" class="job-search-field" name="keywords"
+                   placeholder="Job title, keywords, or company name"/>
+            <input type="submit" name="jsearch" value="Search" class="search-button" title="Search">
+
+            <div id="advanced-search-fields" class="advanced-search-fields"></div>
+        </div>
+        <input type="hidden" name="keepFacets" value="true">
+        <input type="hidden" name="pplSearchOrigin" id="pplSearchOrigin" value="JSHP"/>
+        <input type="hidden" name="sortBy" value="6"/>
+    </form>
+</div>
+<div class="jobs-search ">
+<div class="main">
+
+
+<div class="results-header">
+    <strong>1,213</strong> results for <h1><strong>Information Technology</strong> in <strong>Los Angeles</strong> jobs
+</h1>
+</div>
+
+
+<ul class="jobs">
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/113566" class="logo-container">
+
+        <img src="http://s.c.lnkd.licdn.com/scds/common/u/images/themes/katy/ghosts/company/ghost_company_60x60_v1.png"
+             alt="City of Temecula" title="City of Temecula" class="logo" height="60" width="60"/>
+
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7094343&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Information Technology Administrator</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/113566" itemprop="name">City of Temecula</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 11, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">The Information Technology Administrator is the manager level
+                    class in the Information Technology series. Incumbents perform the full range of routine and complex
+                    tasks required of the Information Technology Department in order to maintain the City’s hardware and
+                    software systems operating in a safe...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1243054" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/4/000/166/145/3731905.png" title="BRIDGELiNX"
+             alt="BRIDGELiNX" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7368163&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Director, Information Technology Infrastructure</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1243054" itemprop="name">BRIDGELiNX</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 18, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Our Client Our client, an industry innovator has been in
+                    business for over 50 years.  Valued more than $64 billion, our progressive client is an ideal place
+                    to work if a progressive company with an open, diverse culture and a multi-disciplinary approach to
+                    growth intrigues you.  The US office is loc...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/604322" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/4/000/186/001/3d41c79.png" title="Apperson, Inc."
+             alt="Apperson, Inc." class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7351420&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Vice President Information Technology</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/604322" itemprop="name">Apperson, Inc.</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 17, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Position Overview:  This position will lead the planning,
+                    development, implementation, monitoring, and performance of applications and infrastructure within
+                    Apperson and will provide ongoing support for our internal and external user base. Essential Duties
+                    and Responsibilities: Collaborate with exec...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1770602" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/000/090/1c1/0032a60.png"
+             title="Outsourced Partners, LLC" alt="Outsourced Partners, LLC" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7057605&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">VP, Information Technology</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1770602" itemprop="name">Outsourced Partners,
+                LLC</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Aug 28, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Ensure optimum utilization of the IT resources of the
+                    organization Design and implement IT policies, procedures and best practices for the organization
+                    Design and implement a comprehensive project management system to ensure that all the projects of
+                    the IT department are in sync with the overall obj...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/163228" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/000/1e9/11b/14dd985.png"
+             title="County of Riverside" alt="County of Riverside" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7039439&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">HIPAA Compliance Manager for Riverside County Information
+                Technology, Information Security Office</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/163228" itemprop="name">County of Riverside</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Aug 27, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Under the direction of the Chief Information Security
+                    Officer, the HIPAA Compliance Manager will develop, implement, and maintain County practices,
+                    policies, and procedures related to the Health Insurance Portability and Accountability Act (HIPAA)
+                    medical privacy and information security compliance ...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1226" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/6/000/2b5/192/3de3e54.png"
+             title="Army National Guard" alt="Army National Guard" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7348299&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">25B Information Technology Specialist</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1226" itemprop="name">Army National Guard</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 17, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Job Description Everything begins with solid communications.
+                    And in this hyper-networked world, that won't change anytime soon. So set yourself up in a promising
+                    civilian career by learning the Information Technology skills you need in the Army National
+                    Guard.Computers are essential to every divisio...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/967124" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/247/0d4/0a324c8.png"
+             title="Rubenstein / Justman Management Consultants" alt="Rubenstein / Justman Management Consultants"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7361026&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Information Technology / Business Analyst / Consultant</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/967124" itemprop="name">Rubenstein / Justman
+                Management Consultants</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 18, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">If you have experience from the Big-4 or other large
+                    consulting firm, you will fit our corporate culture.We provide Project Management for ERP system
+                    selection and implementation to middle-market firms in California.We are a ten person consulting
+                    firm located near Wilshire x Barrington and all staff...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/45182" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/005/00a/1f6/0eb87ad.png"
+             title="San Manuel Band of Mission Indians" alt="San Manuel Band of Mission Indians" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7259829&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Information Technology Positions: VMware Engineer, Data
+                Warehouse Analyst, Senior Database Administrator, Storage Manangement/Disaster Recovery Analyst,
+                Business Intelligence Analyst, IT Sr. Manager a</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/45182" itemprop="name">San Manuel Band of Mission
+                Indians</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 11, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Come work for an organization that appreciates you!!!  
+                    What's in it for you...   San Manuel is a growing, profitable company with opportunities for career
+                    advancement. Competitive salary! Management appreciates and recognizes team members’ accomplishments
+                    Excellent, experienced support staff Medica...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/2859032" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/7/000/1df/241/1bc9c6c.png" title="FILD" alt="FILD"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=6601638&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Information Security Officer - CISSP - CISM -Top Asset
+                Managment Firm</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/2859032" itemprop="name">FILD</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 19, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Are you an Information Security Officer with experience in
+                    the financial services industry (specifically asset management)?  Do you have professional security
+                    certifications, e.g., Certified Information Security Manager (CISM), Certified Information Systems
+                    Security Professional (CISSP)? If so, keep...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/6419" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/058/2b6/0867ae0.png"
+             title="HARMAN International" alt="HARMAN International" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7393015&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Senior IT Risk Manager</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/6419" itemprop="name">HARMAN International</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 19, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Essential Responsibilities: The Senior IT Risk Manager will
+                    perform activities that protect the confidentiality and integrity of HARMAN information systems in
+                    compliance with organization policies, industry standards and government regulations. This
+                    individual will track and monitor ongoing complian...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1073" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/7/000/297/39c/3f989bd.png" title="EY" alt="EY"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=6904433&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Advisory Services IT Risk &amp; Assurance Senior- LA</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1073" itemprop="name">EY</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 16, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Being part of a dynamic, growing organization offers an
+                    exciting career path full of opportunity. Ernst &amp; Young Advisory Services is a billion global
+                    practice, with 18,000 professionals. With an overall Advisory market of $150 billion, there's
+                    tremendous potential for growth - and we're prepared...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/21836" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/000/252/084/18c3911.png" title="CyberCoders"
+             alt="CyberCoders" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7405998&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">CTO - CAD, Architecture, BIM, Revit, Construction,
+                Revit,</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/21836" itemprop="name">CyberCoders</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 20, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Locations: Los Angeles, San Francisco, Chicago, or Detroit
+                    OfficeSalary Range: $150,000 - $175,000 plus great benefitsJob Titles Short: CTOLong: Corporate
+                    Technology LeaderKeyterms: CAD, Architecture, BIM, Revit, Construction, EngineeringCorporate
+                    Technology LeaderWith offices in multiple state thro...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/21836" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/000/252/084/18c3911.png" title="CyberCoders"
+             alt="CyberCoders" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7405784&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">CTO - CAD, Architecture, BIM, Revit, Construction,
+                Revit,</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/21836" itemprop="name">CyberCoders</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 20, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Locations: Los Angeles, San Francisco, Chicago, or Detroit
+                    OfficeSalary Range: $150,000 - $175,000 plus great benefitsJob Titles Short: CTOLong: Corporate
+                    Technology LeaderKeyterms: CAD, Architecture, BIM, Revit, Construction, EngineeringCorporate
+                    Technology LeaderWith offices in multiple state thro...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1550" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/2/000/18c/1ef/2b275f1.png" title="Kaiser Permanente"
+             alt="Kaiser Permanente" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=6871651&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Sr Dir, Pharm Informatics &amp; Sys (RS-1334)</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1550" itemprop="name">Kaiser Permanente</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 11, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Working for an organization with the size and resources of
+                    Kaiser Permanente Southern California means having the potential to positively affect the health and
+                    well-being of entire communities. That's because each of us-from our financial professionals and IT
+                    team members to our RNs and physicians o...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/24150" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/000/0ff/03b/00d3c85.png" title="Ares Management"
+             alt="Ares Management" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=6949656&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Information Security Officer</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/24150" itemprop="name">Ares Management</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Aug 21, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Information Security Officer (ISO) will lead the overall
+                    Security program for the firm, responsible for identifying, evaluating and reporting on information
+                    security risks in a manner that meets compliance and regulatory requirements. The ISO serves as the
+                    process owner of all ongoing activities rel...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/" class="logo-container">
+
+        <img src="http://s.c.lnkd.licdn.com/scds/common/u/images/themes/katy/ghosts/company/ghost_company_60x60_v1.png"
+             alt="Bloomberg" title="Bloomberg" class="logo" height="60" width="60"/>
+
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7169092&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Entertainment Reporter Job</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/" itemprop="name">Bloomberg</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 5, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Entertainment ReporterJob Requisition Number: 37513United
+                    StatesLos Angeles - USAThe Role:Bloomberg News seeks a talented, fearless reporter in its Los
+                    Angeles office to cover Hollywood film studios and the ever-changing business of entertainment. The
+                    reporter will join the U.S. Entertainment team a...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1329914" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/2/000/0df/26c/1a18260.png" title="Beats by Dr. Dre"
+             alt="Beats by Dr. Dre" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7227755&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Corporate Counsel</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1329914" itemprop="name">Beats by Dr. Dre</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 9, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">The Corporate Counsel will be a key partner to the product
+                    development, strategy/business development and information technology functions at Beats as well as
+                    the business in general. This role is primarily responsible for handling all technology agreements
+                    including but not limited to hardware and ...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1044" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/071/3be/1f91afb.png" title="PwC" alt="PwC"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7397222&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Senior Associate Risk Assurance Process Assurance (Los
+                Angeles)</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1044" itemprop="name">PwC</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 20, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Are you interested in the opportunity to work for an
+                    industry-leading firm that services clients that include the Fortune 500, and will give you the
+                    experience and exposure you need to build your career and personal brand? If you are, then
+                    PricewaterhouseCoopers LLP (www.pwc.com/us) is the firm for ...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1044" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/071/3be/1f91afb.png" title="PwC" alt="PwC"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7382303&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Senior Associate Risk Assurance Process Assurance (Los
+                Angeles)</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1044" itemprop="name">PwC</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 19, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Are you interested in the opportunity to work for an
+                    industry-leading firm that services clients that include the Fortune 500, and will give you the
+                    experience and exposure you need to build your career and personal brand? If you are, then
+                    PricewaterhouseCoopers LLP (www.pwc.com/us) is the firm for ...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1044" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/071/3be/1f91afb.png" title="PwC" alt="PwC"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7382299&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Senior Associate Risk Assurance Process Assurance (Los
+                Angeles)</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1044" itemprop="name">PwC</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 19, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Are you interested in the opportunity to work for an
+                    industry-leading firm that services clients that include the Fortune 500, and will give you the
+                    experience and exposure you need to build your career and personal brand? If you are, then
+                    PricewaterhouseCoopers LLP (www.pwc.com/us) is the firm for ...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1044" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/071/3be/1f91afb.png" title="PwC" alt="PwC"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7263939&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Experienced Associate Risk Assurance Process Assurance (Los
+                Angeles)</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1044" itemprop="name">PwC</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 12, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Are you interested in the opportunity to work for an
+                    industry-leading company that services Fortune 500 companies, and will give you the experience and
+                    exposure you need to build your career? If you are, then PricewaterhouseCoopers LLP (www.pwc.com/us)
+                    is the firm for you. PricewaterhouseCoopers LLP...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/444310" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/000/126/3bb/2e0e7a1.png"
+             title="The Walt Disney Studios" alt="The Walt Disney Studios" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7073148&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Manager, Finance and Planning-Studio Technology</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/444310" itemprop="name">The Walt Disney Studios</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Aug 29, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">The Walt Disney Studios has an opening for a Manager position
+                    within our Studio Technology
+                    Finance team. This team is a highly visible department dedicated to providing high‐quality
+                    financial information and services to our business partners within the Studio organization. The
+                    team provides an...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1093" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/19e/2df/0489e2a.png" title="Dell" alt="Dell"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=7063652&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Information Systems Leader - Healthcare</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1093" itemprop="name">Dell</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Aug 29, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Dell Healthcare connects people to the right technology and
+                    processes to accelerate innovation. Dell believes information is the foundation on which healthcare
+                    will move forward. We are committed to helping the world create an information-driven healthcare
+                    system. Dell has 20+ years of experience se...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/9291" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/1/000/192/3fa/322b12d.png" title="Fishnet Security"
+             alt="Fishnet Security" class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=6741460&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Director of Strategic Services - IA</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/9291" itemprop="name">Fishnet Security</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 2, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">Overview: Open to candidates in the Los Angeles area and
+                    north (San Francisco/Sacramento) and Seattle area.The Director of Strategic Services – IA is a
+                    technical sales overlay position, which requires assisting Account Executives in driving Information
+                    Assurance services business. The Director of St...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+<li class="job" itemscope itemtype="http://schema.org/JobPosting">
+
+
+    <a href="http://www.linkedin.com/company/1120" class="logo-container">
+
+        <img src="http://m.c.lnkd.licdn.com/mpr/mpr/shrink_60_60/p/3/000/014/1f0/2e939cc.png" title="CSC" alt="CSC"
+             class="logo"/>
+
+    </a>
+
+    <div class="content">
+        <h3>
+            <a href="http://www.linkedin.com/jobs?viewJob=&amp;jobId=6773541&amp;trk=jobs_search_public_seo_page"
+               class="title" itemprop="title" itemprop="url">Sales / Business Development Workplace Solutions</a>
+        </h3>
+
+        <div itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization">
+            <a class="company" href="http://www.linkedin.com/company/1120" itemprop="name">CSC</a>
+        </div>
+        <div class="details">
+          <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place">
+            <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <span itemprop="addressLocality">Greater Los Angeles Area</span>
+            </span>
+          </span> - <span itemprop="datePosted">Sep 4, 2013</span>
+        </div>
+
+        <dl class="snippet">
+            <dt class="label">Job Detail:</dt>
+            <dd>
+                <p class="abstract" itemprop="description">For more than 50 years, we at CSC have developed smart,
+                    technology-enabled solutions to solve our clients' toughest challenges, demonstrating a commitment
+                    to excellence and a passion for exceeding expectations. Over the past five decades, technology has
+                    radically changed the world we live in. We hav...</p>
+            </dd>
+        </dl>
+
+    </div>
+</li>
+
+</ul>
+
+
+<div class="see-more">
+    <a href="/jsearch?keywords=information+technology&amp;searchLocationType=Y&amp;countryCode=us&amp;postalCode=49&amp;page_num=2&amp;sortCriteria=R&amp;keepFacets=keepFacets&amp;facet_LOCATION=us%3A49"
+       rel="nofollow">
+        See all Information Technology Jobs
+    </a>
+</div>
+
+
+</div>
+<div class="extra">
+
+
+    <div class="sub-module">
+        <h3>Popular Searches</h3>
+        <ul>
+
+            <li>
+                <a href="q-information-technology-jobs" class="learn-more">
+                    Information Technology Jobs
+                </a>
+            </li>
+
+            <li>
+                <a href="l-los-angeles-jobs" class="learn-more">
+                    Los Angeles Jobs
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+
+    <div class="sub-module">
+        <h2>Top Companies for Information Technology, Los Angeles Jobs</h2>
+        <ul>
+
+            <li>
+                <a href="q-information-technology-c-ziprecruiter-l-los-angeles-jobs" class="learn-more">
+                    ZipRecruiter Jobs (75)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-kaiser-permanente-l-los-angeles-jobs" class="learn-more">
+                    Kaiser Permanente Jobs (40)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-cybercoders-l-los-angeles-jobs" class="learn-more">
+                    CyberCoders Jobs (34)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-ey-l-los-angeles-jobs" class="learn-more">
+                    EY Jobs (26)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-demand-media-l-los-angeles-jobs" class="learn-more">
+                    Demand Media Jobs (21)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-kpmg-us-l-los-angeles-jobs" class="learn-more">
+                    KPMG US Jobs (20)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-johnson-controls-l-los-angeles-jobs" class="learn-more">
+                    Johnson Controls Jobs (20)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-sce-l-los-angeles-jobs" class="learn-more">
+                    SCE Jobs (16)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-capgemini-l-los-angeles-jobs" class="learn-more">
+                    Capgemini Jobs (15)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-pwc-l-los-angeles-jobs" class="learn-more">
+                    PwC Jobs (13)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-saic-l-los-angeles-jobs" class="learn-more">
+                    SAIC Jobs (12)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-cornerstone-ondemand-l-los-angeles-jobs" class="learn-more">
+                    Cornerstone OnDemand Jobs (12)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-dell-l-los-angeles-jobs" class="learn-more">
+                    Dell Jobs (11)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-farmers-insurance-l-los-angeles-jobs" class="learn-more">
+                    Farmers Insurance Jobs (11)
+                </a>
+            </li>
+
+            <li>
+                <a href="q-information-technology-c-american-career-college-l-los-angeles-jobs" class="learn-more">
+                    American Career College Jobs (11)
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+
+    <div class="sub-module">
+        <h3>Related Searches</h3>
+        <ul>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=it+manager"><b>it</b> <b>manager</b></a>
+            </li>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=analyst"><b>analyst</b></a>
+            </li>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=web+development"><b>web</b> <b>development</b></a>
+            </li>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=project+manager"><b>project</b> <b>manager</b></a>
+            </li>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=it+director"><b>it</b> <b>director</b></a>
+            </li>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=engineer"><b>engineer</b></a>
+            </li>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=computer"><b>computer</b></a>
+            </li>
+
+            <li class="related-search">
+                <a href="http://www.linkedin.com/jsearch?keywords=logistics"><b>logistics</b></a>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+</div>
+
+<div class="directory">
+    <div class="module">
+        <a href="/job/consumer/guest/index">
+            Jobs Home
+        </a>
+        <a href="http://www.linkedin.com/directory/jobs/">
+            Jobs Directory
+        </a>
+        <a href="/job/consumer/commonPost/displayNewJob">
+            Post a Job on LinkedIn
+        </a>
+    </div>
+</div>
+
+
+<script type="text/javascript"
+        src="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=scripts%2Flib%2Ffiber-1.0.3%2Ffiber&amp;f=scripts%2Fapps%2Fjobs%2Fguest%2FloadAdvancedSearch&amp;f=scripts%2Fshared%2FCheckboxList"></script>
+
+
+<script type="text/javascript">
+    (function () {
+        var bcookie = escape(LI.readCookie('bcookie')),
+                newTrkInfo = 'Information Technology Jobs in Los Angeles,&#39; + document.referrer.substr(0,128),
+        alias_secure = 'https://www.linkedin.com/analytics/noauthtracker?type=leo%2EpageTracking&pageType=full_page&pageKey=JOB%3A%2Fconsumer%2Fsearch%2Fsearch_jsbeacon&trkInfo=REPLACEME',
+                alias_normal = '/analytics/noauthtracker?type=leo%2EpageTracking&pageType=full_page&pageKey=JOB%3A%2Fconsumer%2Fsearch%2Fsearch_jsbeacon&trkInfo=REPLACEME',
+                is_secure = false,
+                url = (is_secure) ? alias_secure : alias_normal;
+
+        url = url.replace("REPLACEME", newTrkInfo);
+
+        if (bcookie) {
+            if (window.$ && $.ajax) {
+                $.ajax(url);
+            } else {
+                YAHOO.util.Connect.asyncRequest('get', url, {});
+            }
+        }
+    })();
+</script>
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-3242811-1']);
+    _gaq.push(['_setDomainName', '.linkedin.com']);
+    _gaq.push(['_trackPageview', 'JOB:/consumer/search/search']);
+    _gaq.push(['_setVar', 'guest']);
+
+    _gaq.push(['b._setAccount', 'UA-3242811-15']);
+    _gaq.push(['b._trackPageview', 'JOB:/consumer/search/search']);
+
+    YEvent.on(window, 'load', function () {
+        YAHOO.util.Get.script('http://www.google-analytics.com/ga.js');
+    });
+</script>
+
+
+</div>
+</div>
+
+
+<script type="text/javascript">LI.Controls.processQueue();</script>
+
+
+<div id="footer">
+    <div class="wrapper">
+        <p id="copyright" class=""><span>LinkedIn Corporation</span> <em>&copy; 2013</em></p>
+        <ul id="nav-legal">
+            <li><a href="/legal/user-agreement?trk=hb_ft_userag">User Agreement</a></li>
+            <li><a href="/legal/privacy-policy?trk=hb_ft_priv">Privacy Policy</a></li>
+            <li>
+
+                <a href="/redir/redirect?url=http%3A%2F%2Flinkedin%2Ecusthelp%2Ecom%2Fapp%2Fanswers%2Fglobal%2Fid%2F34593%2Fft%2Feng%2Floc%2F%27na%27%2Ftrk%2FJOB%3A%2Fconsumer%2Fsearch%2Fsearch%2F&amp;urlhash=Bp_B&amp;trk=help-en"
+                   target="_blank" rel="nofollow">Community Guidelines</a>
+            </li>
+            <li><a href="/legal/cookie-policy?trk=hb_ft_cookie">Cookie Policy</a></li>
+            <li class=""><a href="/legal/copyright-policy?trk=hb_ft_copy">Copyright Policy</a></li>
+
+
+        </ul>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    if (LI && LI.showAllDeferredImg && !LI.imgDeferFoldCheckDone) {
+        LI.showAllDeferredImg(null, false);
+    }
+
+    if (typeof( oUISettings ) !== 'undefined') {
+        oUISettings.saveSettingsURL = "/lite/ui-settings-save?csrfToken=ajax%3A1927336160442255839";
+    }
+
+    if (typeof( WebTracking ) !== 'undefined') {
+        WebTracking.saveWebActionTrackURL = "/lite/web-action-track?csrfToken=ajax%3A1927336160442255839";
+    }
+    if (typeof( SearchWebTracking ) !== 'undefined') {
+        SearchWebTracking.saveSearchWebActionTrackURL = "/wt?csrfToken=ajax%3A1927336160442255839";
+    }
+</script>
+
+
+<script type="text/javascript"
+        src="http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&amp;f=js%2Futil%2FSaveUISetting&amp;f=js%2Futil%2FDialog&amp;f=js%2Futil%2FFrontierAJAXForm&amp;f=js%2Fapps%2FFeedback&amp;f=js%2Futil%2FResponsiveNavEventsSub&amp;f=js%2Fsticky_header&amp;f=js%2Flanguage_switch&amp;f=js%2Fapps%2FQuickHelp2&amp;f=tl%2Fapps%2Fchrome%2Fquickhelp%2Fembed%2Ftour_list&amp;f=tl%2Fapps%2Fchrome%2Fquickhelp%2Fembed%2Fdone_state"></script>
+
+
+<script type="text/javascript">
+    LI.define("RUM.urls");
+    LI.define("RUM.flags");
+    LI.RUM.flags['host-flag'] = "control";
+    LI.RUM.urls['rum-track'] = "/lite/rum-track?csrfToken=ajax%3A1927336160442255839";
+    LI.RUM.urls['boomerang-bw-img'] = "http://s.c.lnkd.licdn.com/scds/common/u/lib/boomerang/0.9.edge.4ab208445a/img/";
+
+
+    LI.RUM.serverStartTime = 1379684773.813 * 1000;
+
+
+    LI.RUM.enabled = true;
+    YEvent.on(window, 'load', function () {
+        YAHOO.util.Get.script(
+
+
+                ["http://s.c.lnkd.licdn.com/scds/concat/common/js?v=build-2000_1_30076-prod&f=lib%2Fboomerang%2Flicense&f=lib%2Fboomerang%2F0.9.edge.4ab208445a%2Fboomerang&f=lib%2Fboomerang%2F0.9.edge.4ab208445a%2Frt&f=lib%2Fboomerang%2F0.9.edge.4ab208445a%2Fnavtiming&f=lib%2Fboomerang%2F0.9.edge.4ab208445a%2Fzzz_last_plugin&f=js%2Frum"]
+
+
+
+
+
+                        [0]);
+    });
+</script>
+
+
+<script id="localChrome"></script>
+
+
+<script type="text/javascript">LI.Controls.processQueue();</script>
+
+
+<script type="text/javascript">
+    LI.define('Tracking.Quantcast');
+    LI.Tracking.Quantcast = function () {
+        _qoptions = { qacct: "p-b3sGjMtCFrexE" };
+        YAHOO.util.Get.script('http://edge.quantserve.com/quant.js');
+    };
+    YEvent.on(window, 'load', LI.Tracking.Quantcast);
+</script>
+<noscript>
+    <a href="http://www.quantcast.com/p-b3sGjMtCFrexE" target="_blank"><img
+            src="http://pixel.quantserve.com/pixel/p-b3sGjMtCFrexE.gif" style="display: none;" height="1" width="1"
+            alt=""/></a>
+</noscript>
+
+
+<script type="text/javascript">
+    LI.define('Tracking.Comscore');
+    LI.Tracking.Comscore = function () {
+        YAHOO.util.Get.script('http://b.scorecardresearch.com/beacon.js', {
+            onSuccess: function () {
+                COMSCORE.beacon({ c1: 2, c2: 6402952, c3: "", c4: "", c5: "", c6: "", c15: "" });
+            }
+        });
+    };
+    YEvent.on(window, 'load', LI.Tracking.Comscore);
+</script>
+<noscript>
+
+    <img src="http://b.scorecardresearch.com/b?c1=2&amp;c2=6402952&amp;c3=&amp;c4=&amp;c5=&amp;c6=&amp;c15=&amp;cv=1.3&amp;cj=1"
+         style="display:none" width="0" height="0" alt=""/>
+
+</noscript>
+
+
+<script type="text/javascript">
+    YEvent.on(window, 'load', function () {
+        (function () {
+            var protocol = 'http:';
+            var d = new Image(1, 1);
+            d.onerror = d.onload = function () {
+                d.onerror = d.onload = null;
+            };
+            d.src = [
+                protocol,
+                "//secure-us.imrworldwide.com/cgi-bin/m?ci=us-603751h&cg=0&cc=1&si=",
+                escape(window.location.href), "&rp=",
+                escape(document.referrer),
+                "&ts=compact&rnd=",
+                (new Date()).getTime()
+            ].join('');
+        })();
+    });
+</script>
+<noscript>
+
+    <img src="http://secure-us.imrworldwide.com/cgi-bin/m?ci=us-603751h&cg=0&cc=1&ts=noscript"
+         width="1" height="1" alt="" style="display:none"/>
+
+</noscript>
+
+
+</body>
+</html>
+
+          
+        
+      
+      
+      
+      
+        
+      
+    
+    
+
+
+
