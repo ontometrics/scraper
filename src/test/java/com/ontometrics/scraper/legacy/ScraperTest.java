@@ -107,7 +107,7 @@ public class ScraperTest {
 				.extract(scraper.extractor().ofClass(eligibilityClassName, 0).execute()).getResult();
 		log.info("tag text: {}", tagText);
 		assertThat(tagText.contains("Applicant Eligibility (081)"), is(true));
-		assertThat(tagText.contains("39"), is(false));
+		assertThat(tagText.contains("39"), is(true));
 	}
 
 	@Test

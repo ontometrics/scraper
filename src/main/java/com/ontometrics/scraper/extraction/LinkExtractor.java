@@ -6,6 +6,7 @@ import java.util.List;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 
+import net.htmlparser.jericho.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,12 +49,18 @@ public class LinkExtractor extends BaseExtractor {
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ontometrics.scraper.extraction.BaseExtractor#section(com.ontometrics .scraper.extraction.HtmlExtractor)
-	 * Note: override here so we can do one chain of calls..
-	 */
+    @Override
+    public BaseExtractor source(Source startingSource) {
+        super.source(startingSource);
+        return this;
+    }
+
+    /*
+         * (non-Javadoc)
+         *
+         * @see com.ontometrics.scraper.extraction.BaseExtractor#section(com.ontometrics .scraper.extraction.HtmlExtractor)
+         * Note: override here so we can do one chain of calls..
+         */
 	@Override
 	public LinkExtractor section(HtmlExtractor htmlExtractor) {
 		super.section(htmlExtractor);

@@ -10,7 +10,13 @@ public class TextExtractor extends BaseExtractor {
 		return this;
 	}
 
-	public String getText() {
+    @Override
+    public BaseExtractor source(Source startingSource) {
+        super.source(startingSource);
+        return this;
+    }
+
+    public String getText() {
 		return getSource().getTextExtractor().toString();
 	}
 

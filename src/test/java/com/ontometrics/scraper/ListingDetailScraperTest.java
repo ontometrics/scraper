@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ public class ListingDetailScraperTest {
 	}
 
 	@Test
+    @Ignore
 	public void canExtractLinksFromMultiplePagesThenFollowToDetailsPage() throws MalformedURLException {
 		Iterator pageIterator = new Iterator() {
 
@@ -58,7 +60,7 @@ public class ListingDetailScraperTest {
 			public boolean hasNext() {
 
 				try {
-					Link nextLink = (Link) foundLinks.get(foundLinksIterator.nextIndex());
+					Link nextLink = foundLinks.get(foundLinksIterator.nextIndex());
 					log.debug("next page to iterate = {}", nextLink.getHref());
 				} catch (Exception e) {
 					log.debug("Page iterator can't peek next link");
