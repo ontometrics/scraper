@@ -1,6 +1,7 @@
 package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.GrantsGovTable;
+import static com.ontometrics.scraper.HtmlSample.LinkedInListingPage;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -82,5 +83,19 @@ public class LinkExtractorTest {
 		log.info("found {} links matching: {}", links.size(), linkPattern);
 
 	}
+
+    @Test
+    public void canExtractLinksOfAGivenClass(){
+        List<Link> links = linkExtractor
+                .source(html().url(LinkedInListingPage.getUrl()))
+                .ofClass("title")
+                .getLinks();
+
+        assertThat(links.size(), greaterThan(0));
+        assertThat(links.size(), greaterThan(1));
+
+        log.info("found {} links for linkedin: {}", links.size(), links);
+
+    }
 
 }

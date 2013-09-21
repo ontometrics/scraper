@@ -10,6 +10,8 @@ import net.htmlparser.jericho.Source;
  * 
  */
 public enum HtmlSample {
+
+    LinkedInListingPage("/testpages/LinkedIn-Jobs-LA.html"),
 	
 	CareerBuilderDetailPage("/testpages/careerbuilder-job-detail-page.html"),
 
