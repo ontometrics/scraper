@@ -2,7 +2,11 @@ package com.ontometrics.scraper.extraction;
 
 import static com.ontometrics.scraper.HtmlSample.ProgramDetailPage;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
+import net.htmlparser.jericho.Source;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,21 @@ public class TextExtractorTest {
 		log.info("text from class: {} is: {}", eligibilityClassName, text);
 
 	}
+
+    @Test
+    public void canGetSourceThenChainWithHtmlExtractor(){
+        Source source = html().url(ProgramDetailPage.getUrl()).getSource();
+
+        log.info("source: {}", source.toString());
+        assertThat(source, notNullValue());
+
+        String text = new TextExtractor().source(html().source(source).ofClass(eligibilityClassName, 1)).getText();
+
+        log.info("text extracted from prefetched source: {}", text);
+
+        assertThat(text, is("Applicant Eligibilty: 39-Anyone/general public/ 52-Libraries/lnformation/Statistics"));
+
+    }
 
 	@Test
 	public void canGetAttributeOfElement() {

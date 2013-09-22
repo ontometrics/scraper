@@ -63,7 +63,14 @@ public class HtmlExtractor extends BaseExtractor {
 		return new HtmlExtractor();
 	}
 
-	/**
+    @Override
+    public HtmlExtractor source(Source startingSource) {
+        this.source = startingSource;
+        super.source(startingSource);
+        return this;
+    }
+
+    /**
 	 * The idea here is that the various static methods that are used to present
 	 * the syntax of the DSL will ultimately enqueue a corresponding command by
 	 * calling this method, so for instance, the method:
@@ -112,8 +119,10 @@ public class HtmlExtractor extends BaseExtractor {
 				}
 				source = new Source(httpUrlConnection);
 			} else {
-				log.debug("Getting source normally.");
-				source = getSourceExtractor().getSource(this.url);
+                if (this.source==null){
+    				log.debug("Getting source normally.");
+	    			source = getSourceExtractor().getSource(this.url);
+                }
 			}
 
 			if (hasManipulators()) {

@@ -98,7 +98,6 @@ public enum HtmlSample {
 		return path;
 	}
 	public URL getUrl() {
-        System.out.println("*********** called getURL.... ");
 		return TestUtil.getFileAsURL(path);
 	}
 

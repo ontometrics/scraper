@@ -91,7 +91,6 @@ public abstract class BaseExtractor {
 	 */
 	public Source getSource() {
         if (extractedSource==null){
-            System.out.println("**** extracting source...");
             StringBuffer accumulatedSource = new StringBuffer();
             for (HtmlExtractor extractor : htmlExtractors) {
                 accumulatedSource.append(extractor.getSource().toString());
