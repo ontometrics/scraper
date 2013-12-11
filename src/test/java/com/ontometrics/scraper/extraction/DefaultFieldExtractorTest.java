@@ -4,8 +4,7 @@ import static com.ontometrics.scraper.HtmlSample.*;
 import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
 import static com.ontometrics.scraper.html.HtmlTable.table;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -272,5 +271,33 @@ public class DefaultFieldExtractorTest {
 
 		return found;
 	}
+
+    @Test
+    public void canGetTagAttributeFields(){
+        Source source = html().url(CareerBuilderDetailPage.getUrl()).getSource();
+
+        List<Field> fields = new DefaultFieldExtractor()
+                .source(source)
+                .add(new DefaultTagAttributeFieldExtractor("meta", "name", "content"))
+                .getFields();
+
+        log.info("found fields in careerbuilder: {}", fields);
+        Field jobTitle = findFieldByLabel(fields, "job-title");
+        assertThat(jobTitle, notNullValue());
+        assertThat(jobTitle.getValue(), equalTo("Senior Developer"));
+
+        Field jobContent = findFieldByLabel(fields, "job-content");
+        assertThat(jobContent, notNullValue());
+        assertThat(jobContent.getValue(), equalTo("Job Content"));
+    }
+
+    private Field findFieldByLabel(List<Field> fields, String label) {
+        for (Field field : fields) {
+            if (label.equals(field.getLabel())) {
+                return field;
+            }
+        }
+        return null;
+    }
 
 }

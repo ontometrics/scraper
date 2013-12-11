@@ -42,7 +42,7 @@ public abstract class BaseExtractor {
 	private Deque<HtmlExtractor> htmlExtractors = new LinkedList<HtmlExtractor>();
 
 	/**
-	 * Provides access to the source from the {@link #htmlExtractor} which derived classes will then perform their
+	 * Provides access to the source from the {@link #htmlExtractors} which derived classes will then perform their
 	 * extractions on.
 	 * 
 	 * @param htmlExtractor
@@ -87,7 +87,7 @@ public abstract class BaseExtractor {
 	/**
 	 * Provides a means of kicking off the {@link Manipulation} chain and harvesting the results.
 	 * 
-	 * @return the manipulated source gotten from the {@link #htmlExtractor}
+	 * @return the manipulated source gotten from the {@link #htmlExtractors}
 	 */
 	public Source getSource() {
         if (extractedSource==null){

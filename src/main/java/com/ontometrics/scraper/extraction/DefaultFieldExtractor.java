@@ -2,8 +2,10 @@ package com.ontometrics.scraper.extraction;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.ontometrics.scraper.TagAttributeFieldExtractor;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Segment;
@@ -39,6 +41,8 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 
 	private List<PairedTags> pairedTagsToGet = new ArrayList<PairedTags>();
 
+    private List<TagAttributeFieldExtractor> tagAttributesToGet = new ArrayList<TagAttributeFieldExtractor>();
+
     @Override
     public Source getSource() {
         return super.getSource();
@@ -63,6 +67,7 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		extractedFields.addAll(extractFieldsFromDLs());
 		extractedFields.addAll(extractDesignatedFields());
 		extractedFields.addAll(extractFieldsFromPairTags());
+        extractedFields.addAll(extractFieldsFromTagAttributes());
 		return extractedFields;
 	}
 
@@ -96,6 +101,30 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		}
 		return extractedFields;
 	}
+
+    /**
+     * Extracts the fields from the tag attributes
+     * @return list of extracted fields
+     */
+    private List<Field> extractFieldsFromTagAttributes() {
+        if (!tagAttributesToGet.isEmpty()) {
+            List<Field> extractedFields = new ArrayList<Field>();
+            Source source = getSource();
+            for (TagAttributeFieldExtractor extractor : this.tagAttributesToGet) {
+                List<Element> elements = source.getAllElements(extractor.getTagName());
+                if (elements != null && !elements.isEmpty()) {
+                    for (Element element : elements) {
+                        Field field = extractor.extractField(element);
+                        if (field != null) {
+                            extractedFields.add(field);
+                        }
+                    }
+                }
+            }
+            return extractedFields;
+        }
+        return Collections.emptyList();
+    }
 
 	private List<Field> extractDesignatedFields() {
 		List<Field> extractedFields = new ArrayList<Field>();
@@ -141,7 +170,12 @@ public class DefaultFieldExtractor extends BaseExtractor implements FieldExtract
 		return this;
 	}
 
-	private List<Field> extractFieldsFromDLs() {
+    public DefaultFieldExtractor add(TagAttributeFieldExtractor tagAttributeFieldExtractor) {
+        this.tagAttributesToGet.add(tagAttributeFieldExtractor);
+        return this;
+    }
+
+    private List<Field> extractFieldsFromDLs() {
 		List<Field> extractedFields = new ArrayList<Field>();
 		List<Element> dls = getSource().getAllElements(HTMLElementName.DL);
 		for (Element dt : dls) {
