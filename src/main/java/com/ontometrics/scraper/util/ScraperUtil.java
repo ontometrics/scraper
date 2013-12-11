@@ -63,8 +63,8 @@ public class ScraperUtil {
 						foundValue = field.getValue();
 
 						// TODO: Need a better method of replacing strange whitespace
-						if (foundValue != null && foundValue.contains("Ê")) {
-							foundValue = foundValue.replace("Ê", "");
+						if (foundValue != null && foundValue.contains("\u00CA")) {
+							foundValue = foundValue.replace("\u00CA", "");
 						}
 
 						break;
