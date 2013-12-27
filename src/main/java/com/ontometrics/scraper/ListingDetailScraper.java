@@ -26,6 +26,7 @@ public class ListingDetailScraper extends RecordScraper {
 	private boolean convertURLs = true;
 
 	public ListingDetailScraper listing(LinkExtractor linkExtractor) throws MalformedURLException {
+        linkExtractor.baseUrl(getBaseUrl());
 		if (iterator != null) {
 			int counter = 0;
 			while (iterator.hasNext() && counter < pages) {

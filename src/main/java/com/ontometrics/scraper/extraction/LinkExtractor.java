@@ -1,5 +1,6 @@
 package com.ontometrics.scraper.extraction;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class LinkExtractor extends BaseExtractor {
 	private String matcher;
 	
 	private String styleClass;
+
+    private URL baseUrl;
 	
 
 	public LinkExtractor ofClass(String styleClass) {
@@ -85,7 +88,7 @@ public class LinkExtractor extends BaseExtractor {
 			String href = linkElement.getAttributeValue("href");
 			String name = linkElement.getAttributeValue("name");
 			if (href != null || name != null) {
-				Link link = new Link.Builder().label(text).href(href).name(name).build();
+				Link link = new Link.Builder().label(text).href(href).name(name).baseUrl(baseUrl).build();
 				log.debug("constructed link: {} from {} must match: {}", new Object[] { link, linkElement, matcher });
 				if (matcher == null || (link.getHref() != null && link.getHref().contains(matcher))) {
 					links.add(link);
@@ -95,5 +98,8 @@ public class LinkExtractor extends BaseExtractor {
 		return links;
 	}
 
+    public void baseUrl(URL baseUrl) {
+        this.baseUrl = baseUrl;
+    }
 }
 

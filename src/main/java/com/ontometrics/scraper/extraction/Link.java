@@ -1,5 +1,8 @@
 package com.ontometrics.scraper.extraction;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class Link implements Field {
 
 	private String label;
@@ -8,10 +11,13 @@ public class Link implements Field {
 	
 	private String name;
 
+    private URL baseUrl;
+
 	public static class Builder {
 		private String label;
 		private String href;
 		private String name;
+        private URL baseUrl;
 
 		public Builder label(String label) {
 			this.label = label;
@@ -27,7 +33,12 @@ public class Link implements Field {
 			this.name = name;
 			return this;
 		}
-		
+
+        public Builder baseUrl(URL baseUrl) {
+            this.baseUrl = baseUrl;
+            return this;
+        }
+
 		public Link build() {
 			return new Link(this);
 		}
@@ -44,6 +55,7 @@ public class Link implements Field {
 		this.label = builder.label;
 		this.href = builder.href;
 		this.name = builder.name;
+        this.baseUrl = builder.baseUrl;
 	}
 
 	public String getLabel() {
@@ -73,5 +85,23 @@ public class Link implements Field {
 		throw new IllegalStateException("cannot add to the href");
 	}
 
+    public String getHrefWithPrependedBaseUrl() throws MalformedURLException {
+        if (baseUrl != null && !isValidUrl(href)) {
+            return new URL(baseUrl, href).toString();
+        }
+        return href;
+    }
+
+    private boolean isValidUrl(String href) {
+        if (href == null) {
+            return false;
+        }
+        try {
+            new URL(href);
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        }
+    }
 
 }
