@@ -11,7 +11,7 @@ public class TextExtractor extends BaseExtractor {
 	}
 
     @Override
-    public BaseExtractor source(Source startingSource) {
+    public TextExtractor source(Source startingSource) {
         super.source(startingSource);
         return this;
     }
