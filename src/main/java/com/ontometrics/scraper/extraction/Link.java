@@ -80,6 +80,11 @@ public class Link implements Field, Serializable {
 		return getHref();
 	}
 
+    public URL toUrl() throws MalformedURLException {
+        return new URL(getHref());
+    }
+
+
 	@Override
 	public String toString() {
 		return "Link [label=" + label + ", href=" + href + "]";
