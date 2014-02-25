@@ -1,11 +1,12 @@
 package com.ontometrics.scraper.extraction;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Link implements Field {
+public class Link implements Field, Serializable {
 
 	private String label;
 
@@ -106,6 +107,10 @@ public class Link implements Field {
         } catch (MalformedURLException e) {
             return false;
         }
+    }
+
+    public void setHref(String href) {
+        this.href = href;
     }
 
     public Link addParam(String name, Object value) {

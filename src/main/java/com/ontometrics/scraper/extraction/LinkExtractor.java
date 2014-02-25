@@ -124,8 +124,8 @@ public class LinkExtractor extends BaseExtractor {
         /**
          *
          * @param link link which was found by LinkExtractor
-         * @param linkElement instance of {@link net.htmlparser.jericho.Element} which represent the link
-         * @param source parent document in which "link" was found
+         * @param linkElement instance of {@link net.htmlparser.jericho.Element} from which link was created
+         * @param source parent document in which "link" was found - {@link Source}
          * @return instance of Link to be added to the list of extracted links or null if this link should not be added
          */
         Link processAddedLink(Link link, Element linkElement, Source source);
