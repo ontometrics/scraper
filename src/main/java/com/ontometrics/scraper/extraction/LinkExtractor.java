@@ -25,7 +25,8 @@ public class LinkExtractor extends BaseExtractor {
 	private String styleClass;
 
     private URL baseUrl;
-	
+
+    private LinkProcessor linkProcessor;
 
 	public LinkExtractor ofClass(String styleClass) {
 		this.styleClass = styleClass;
@@ -75,7 +76,12 @@ public class LinkExtractor extends BaseExtractor {
 		return this;
 	}
 
-	private List<Link> extractLinks() {
+    public LinkExtractor linkProcessor(LinkProcessor linkProcessor) {
+        this.linkProcessor = linkProcessor;
+        return this;
+    }
+
+    private List<Link> extractLinks() {
 		List<Link> links = new ArrayList<Link>();
 		List<Element> as = getSource().getAllElements(HTMLElementName.A);
 		for (Element linkElement : as) {
@@ -91,7 +97,14 @@ public class LinkExtractor extends BaseExtractor {
 				Link link = new Link.Builder().label(text).href(href).name(name).baseUrl(baseUrl).build();
 				log.debug("constructed link: {} from {} must match: {}", new Object[] { link, linkElement, matcher });
 				if (matcher == null || (link.getHref() != null && link.getHref().contains(matcher))) {
-					links.add(link);
+                    if (linkProcessor != null) {
+                        Link processedLink = linkProcessor.processAddedLink(link, linkElement, getSource());
+                        if (processedLink != null) {
+                            links.add(processedLink);
+                        }
+                    } else {
+					    links.add(link);
+                    }
 				}
 			}
 		}
@@ -100,6 +113,22 @@ public class LinkExtractor extends BaseExtractor {
 
     public void baseUrl(URL baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+
+    /**
+     * Add ability to inject link processor which may either transform the link or filter it out if it does not match
+     * certain criteria
+     */
+    public static interface LinkProcessor {
+        /**
+         *
+         * @param link link which was found by LinkExtractor
+         * @param linkElement instance of {@link net.htmlparser.jericho.Element} which represent the link
+         * @param source parent document in which "link" was found
+         * @return instance of Link to be added to the list of extracted links or null if this link should not be added
+         */
+        Link processAddedLink(Link link, Element linkElement, Source source);
     }
 }
 

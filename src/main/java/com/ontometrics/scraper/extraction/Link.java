@@ -2,6 +2,8 @@ package com.ontometrics.scraper.extraction;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Link implements Field {
 
@@ -12,6 +14,8 @@ public class Link implements Field {
 	private String name;
 
     private URL baseUrl;
+
+    private Map<String, Object> params;
 
 	public static class Builder {
 		private String label;
@@ -104,4 +108,15 @@ public class Link implements Field {
         }
     }
 
+    public Link addParam(String name, Object value) {
+        if (this.params == null) {
+            params = new HashMap<String, Object>(1);
+        }
+        params.put(name, value);
+        return this;
+    }
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
 }
