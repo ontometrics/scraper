@@ -151,7 +151,14 @@ public class HtmlExtractor extends BaseExtractor {
 		return source;
 	}
 
-	/**
+    @Override
+    public HtmlExtractor clearCachedSource() {
+        super.clearCachedSource();
+        this.source = null;
+        return this;
+    }
+
+    /**
 	 * Provides means of extracting a specific table.
 	 * 
 	 * @param occurrence

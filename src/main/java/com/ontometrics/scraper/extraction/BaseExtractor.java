@@ -80,6 +80,14 @@ public abstract class BaseExtractor {
 		return this;
 	}
 
+    public BaseExtractor clearCachedSource() {
+        this.extractedSource = null;
+        for (HtmlExtractor htmlExtractor : htmlExtractors) {
+            htmlExtractor.clearCachedSource();
+        }
+        return this;
+    }
+
 	protected HtmlExtractor getCurrentHtmlExtractor() {
 		return this.htmlExtractors.getLast();
 	}
