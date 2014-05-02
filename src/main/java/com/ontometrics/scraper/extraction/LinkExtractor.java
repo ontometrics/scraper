@@ -28,6 +28,8 @@ public class LinkExtractor extends BaseExtractor {
 
     private LinkProcessor linkProcessor;
 
+    private boolean associateHtmlSourceWithLink;
+
 	public LinkExtractor ofClass(String styleClass) {
 		this.styleClass = styleClass;
 		return this;
@@ -81,9 +83,15 @@ public class LinkExtractor extends BaseExtractor {
         return this;
     }
 
+    public LinkExtractor associateHtmlSourceWithLink() {
+        this.associateHtmlSourceWithLink = true;
+        return this;
+    }
+
     private List<Link> extractLinks() {
 		List<Link> links = new ArrayList<Link>();
-		List<Element> as = getSource().getAllElements(HTMLElementName.A);
+        Source source = getSource();
+		List<Element> as = source.getAllElements(HTMLElementName.A);
 		for (Element linkElement : as) {
 			if(styleClass != null && !styleClass.isEmpty()) {
 				String classValue = linkElement.getAttributeValue("class");
@@ -94,7 +102,11 @@ public class LinkExtractor extends BaseExtractor {
 			String href = linkElement.getAttributeValue("href");
 			String name = linkElement.getAttributeValue("name");
 			if (href != null || name != null) {
-				Link link = new Link.Builder().label(text).href(href).name(name).baseUrl(baseUrl).build();
+				Link.Builder linkBuilder = new Link.Builder().label(text).href(href).name(name).baseUrl(baseUrl);
+                if (associateHtmlSourceWithLink) {
+                    linkBuilder.source(source);
+                }
+                Link link = linkBuilder.build();
 				log.debug("constructed link: {} from {} must match: {}", new Object[] { link, linkElement, matcher });
 				if (matcher == null || (link.getHref() != null && link.getHref().contains(matcher))) {
                     if (linkProcessor != null) {

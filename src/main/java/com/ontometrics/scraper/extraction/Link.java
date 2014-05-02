@@ -18,11 +18,15 @@ public class Link implements Field, Serializable {
 
     private Map<String, Object> params;
 
+    //object which identifies source from which Link has been extracted from
+    private Object source;
+
 	public static class Builder {
 		private String label;
 		private String href;
 		private String name;
         private URL baseUrl;
+        private Object source;
 
 		public Builder label(String label) {
 			this.label = label;
@@ -44,7 +48,13 @@ public class Link implements Field, Serializable {
             return this;
         }
 
-		public Link build() {
+        public Builder source(Object source) {
+            this.source = source;
+            return this;
+        }
+
+
+        public Link build() {
 			return new Link(this);
 		}
 	}
@@ -61,6 +71,7 @@ public class Link implements Field, Serializable {
 		this.href = builder.href;
 		this.name = builder.name;
         this.baseUrl = builder.baseUrl;
+        this.source = builder.source;
 	}
 
 	public String getLabel() {
@@ -79,6 +90,10 @@ public class Link implements Field, Serializable {
 	public String getValue() {
 		return getHref();
 	}
+
+    public Object getSource() {
+        return source;
+    }
 
     public URL toUrl() throws MalformedURLException {
         return new URL(getHref());
