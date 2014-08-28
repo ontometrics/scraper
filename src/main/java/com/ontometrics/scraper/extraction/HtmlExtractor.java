@@ -113,7 +113,9 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public void performManipulations() {
 		try {
-            fetchSourceFromUrl();
+            if (this.source == null) {
+                fetchSourceFromUrl();
+            }
 
 			if (hasManipulators()) {
 				manipulators.getFirst().execute(source);
