@@ -7,7 +7,7 @@
 	<packaging>jar</packaging>
 	<name>scraper</name>
 	<version>0.9.9</version>
-	<description></description>
+	<description>Project for scraping content out of pages and/or feeds</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.outputEncoding>UTF-8</project.build.outputEncoding>
