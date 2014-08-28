@@ -1,21 +1,19 @@
 package com.ontometrics.scraper.extraction;
 
+import com.ontometrics.scraper.TagOccurrence;
+import com.ontometrics.scraper.util.IOUtils;
+import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Source;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
-import java.net.HttpURLConnection;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
-
-import net.htmlparser.jericho.HTMLElementName;
-import net.htmlparser.jericho.Source;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.ontometrics.scraper.TagOccurrence;
 
 /**
  * Provides a means of collecting {@link Manipulator}s and performing
@@ -25,6 +23,9 @@ import com.ontometrics.scraper.TagOccurrence;
  * the end, then, when the source is requested, the first {@link Manipulator} is
  * invoked, setting off the chain of operations. Then the resulting source is
  * extracted.
+ *
+ * Extractor is fetching content from {@link URL} using {@link UrlContentProvider}. Default implementation is
+ * {@link UrlConnectionContentProvider}, but it can be changed, see {@link #urlContentProvider(UrlContentProvider)}
  * 
  * @author Rob
  * 
@@ -52,7 +53,10 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	private Deque<Manipulator> manipulators = new LinkedList<Manipulator>();
 
-	private Map<String, String> httpRequestProperties = new HashMap<String, String>();
+    /**
+     * Provider of content {@link java.io.InputStream} for url
+     */
+    private UrlContentProvider urlContentProvider = new UrlConnectionContentProvider.Builder().build();
 
 	public HtmlExtractor from(SourceExtractor sourceExtractor) {
 		this.sourceExtractor = sourceExtractor;
@@ -109,21 +113,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 */
 	public void performManipulations() {
 		try {
-			if (httpRequestProperties.size() > 0) {
-				log.debug("Passing a cookie while getting source.");
-				HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
-
-				Set<String> requestPropertiesKeys = httpRequestProperties.keySet();
-				for (String key : requestPropertiesKeys) {
-					httpUrlConnection.setRequestProperty(key, httpRequestProperties.get(key));
-				}
-				source = new Source(httpUrlConnection);
-			} else {
-                if (this.source==null){
-    				log.debug("Getting source normally.");
-	    			source = getSourceExtractor().getSource(this.url);
-                }
-			}
+            fetchSourceFromUrl();
 
 			if (hasManipulators()) {
 				manipulators.getFirst().execute(source);
@@ -134,7 +124,20 @@ public class HtmlExtractor extends BaseExtractor {
 		}
 	}
 
-	private SourceExtractor getSourceExtractor() {
+    /**
+     * Fetches source from {@link #url} using {@link #urlContentProvider}
+     * @throws IOException if i/o operation(s) fails
+     */
+    private void fetchSourceFromUrl() throws IOException {
+        InputStream is = null;
+        try {
+            source = new Source(is = urlContentProvider.getContent(url));
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+    }
+
+    private SourceExtractor getSourceExtractor() {
 		if (this.sourceExtractor == null) {
 			this.sourceExtractor = new SimpleSourceExtractor();
 		}
@@ -176,7 +179,7 @@ public class HtmlExtractor extends BaseExtractor {
 	/**
 	 * Provides means of extracting a specific table.
 	 * 
-	 * @param occurrence
+	 * @param matching
 	 *            this would refer to the index in the list of all table tags
 	 *            found in the passed html
 	 * @return the table tag and all its contents
@@ -316,13 +319,46 @@ public class HtmlExtractor extends BaseExtractor {
 		return this;
 	}
 
+    /**
+     * Updates {@link UrlContentProvider} for getting content by {@link #url}
+     * @param urlContentProvider url content provider
+     * @return this, for chaining
+     */
+    public HtmlExtractor urlContentProvider(UrlContentProvider urlContentProvider) {
+        this.urlContentProvider = urlContentProvider;
+        return this;
+    }
+
+    @Deprecated
+    /**
+     * Use {@link #urlContentProvider} instead
+     * @throws IllegalStateException if {@link #urlContentProvider} is not an instance of {@link UrlConnectionContentProvider}
+     */
 	public HtmlExtractor addRequestProperty(String key, String value) {
-		httpRequestProperties.put(key, value);
+        UrlContentProvider urlContentProvider = this.urlContentProvider;
+        if (urlContentProvider instanceof UrlConnectionContentProvider) {
+            ((UrlConnectionContentProvider)urlContentProvider).setRequestProperty(key, value);
+        } else {
+            throw new IllegalStateException("Current UrlContentProvider is not an instance of UrlConnectionContentProvider");
+        }
 		return this;
 	}
 
+    @Deprecated
+    /**
+     * Use {@link com.ontometrics.scraper.extraction.UrlConnectionContentProvider#getRequestProperties()} instead
+     *
+     * @return request properties
+     *
+     * @throws IllegalStateException if {@link #urlContentProvider} is not an instance of {@link UrlConnectionContentProvider}
+     */
 	public Map<String, String> getHttpRequestProperties() {
-		return httpRequestProperties;
+        UrlContentProvider urlContentProvider = this.urlContentProvider;
+        if (urlContentProvider instanceof UrlConnectionContentProvider) {
+            return ((UrlConnectionContentProvider)urlContentProvider).getRequestProperties();
+        } else {
+            throw new IllegalStateException("Current UrlContentProvider is not an instance of UrlConnectionContentProvider");
+        }
 	}
 
 	public HtmlExtractor attribute(Object attributeName) {
