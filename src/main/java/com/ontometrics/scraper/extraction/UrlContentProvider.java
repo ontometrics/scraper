@@ -1,0 +1,20 @@
+package com.ontometrics.scraper.extraction;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+/**
+ * Opens {@link InputStream} for resource identified by provided {@link URL}
+ *
+ * UrlContentProvider.java
+ */
+public interface UrlContentProvider {
+    /**
+     * Opens {@link InputStream} for resource identified by provided {@link URL}
+     * @param url url
+     * @return stream
+     * @throws IOException if i/o operation(s) fails
+     */
+    InputStream getContent(URL url) throws IOException;
+}
