@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * {@link UrlContentProvider} implementation which provides {@link InputStream} based on opening of
- * {@link java.net.URLConnection}
+ * {@link URLConnection}
  *
  * UrlConnectionContentProvider.java
  */
@@ -27,7 +27,7 @@ public class UrlConnectionContentProvider implements UrlContentProvider {
 
     @Override
     /**
-     * Opens {@link InputStream} for {@link URL} using {@link java.net.URLConnection}
+     * Opens {@link InputStream} for {@link URL} using {@link URLConnection}
      * adding {@link #requestProperties} to it
      *
      * @param url url
@@ -46,10 +46,22 @@ public class UrlConnectionContentProvider implements UrlContentProvider {
         return urlConnection.getInputStream();
     }
 
+    /**
+     * Puts a request property (http header) which will be used for constructing of {@link URLConnection} during
+     * subsequent calls of {@link URLConnection}
+     *
+     * @param key property key for {@link java.net.URLConnection}
+     * @param value property value
+     */
     public void setRequestProperty(String key, String value) {
         requestProperties.put(key, value);
     }
 
+    /**
+     *
+     * @return map of request properties. Modification of the map affects subsequent call of
+     * {@link #getContent(java.net.URL)}
+     */
     public Map<String, String> getRequestProperties() {
         return requestProperties;
     }

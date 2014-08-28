@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * Opens {@link InputStream} for resource identified by provided {@link URL}
+ * Provider of {@link InputStream} for resource identified by {@link URL}
  *
  * UrlContentProvider.java
  */

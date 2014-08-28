@@ -8,6 +8,10 @@ import java.io.IOException;
  * IOUtils.java
  */
 public class IOUtils {
+    /**
+     * Closes provided closeable quietly swallowing {@link IOException} if close operation fails
+     * @param closeable closeable object
+     */
     public static void closeQuietly(final Closeable closeable) {
         try {
             if (closeable != null) {
