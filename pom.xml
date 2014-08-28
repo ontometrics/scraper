@@ -6,7 +6,7 @@
 	<artifactId>scraper</artifactId>
 	<packaging>jar</packaging>
 	<name>scraper</name>
-	<version>0.9.8</version>
+	<version>0.9.9-SNAPSHOT</version>
 	<description></description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
