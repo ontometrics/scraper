@@ -2,6 +2,7 @@ package com.ontometrics.scraper;
 
 import java.net.URL;
 
+import com.ontometrics.scraper.util.ScraperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,19 +56,7 @@ public class Scraper {
 	}
 
 	protected String convertToAbsoluteUrl(String link) {
-		URL baseUrl = getBaseUrl();
-		StringBuffer absoluteUrlStringBuffer = new StringBuffer(baseUrl.getHost());
-		if(baseUrl.getPort() > 0) {
-			absoluteUrlStringBuffer.append(':').append(getBaseUrl().getPort());
-		}
-		if(!link.startsWith("/") && baseUrl.getPath() != null && !baseUrl.getPath().isEmpty()) {
-			absoluteUrlStringBuffer.append(baseUrl.getPath());
-		}
-		absoluteUrlStringBuffer.append('/').append(link);
-		String absoluteUrlString = baseUrl.getProtocol() + "://" + 
-				absoluteUrlStringBuffer.toString().replaceAll("(/){2,}+", "/");
-		log.debug("absolute url: {}", absoluteUrlString);
-		return absoluteUrlString;
+        return ScraperUtil.convertToAbsoluteUrl(getBaseUrl(), link);
 	}
 
 }
