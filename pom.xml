@@ -6,7 +6,7 @@
 	<artifactId>scraper</artifactId>
 	<packaging>jar</packaging>
 	<name>scraper</name>
-	<version>0.9.10</version>
+	<version>0.9.11</version>
 	<description>Project for scraping content out of pages and/or feeds</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

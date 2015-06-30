@@ -117,7 +117,11 @@ public class Link implements Field, Serializable {
         return href;
     }
 
-    private boolean isValidUrl(String href) {
+	public URL getBaseUrl() {
+		return baseUrl;
+	}
+
+	private boolean isValidUrl(String href) {
         if (href == null) {
             return false;
         }
