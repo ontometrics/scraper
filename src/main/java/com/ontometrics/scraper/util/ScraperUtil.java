@@ -30,7 +30,7 @@ public class ScraperUtil {
 	private static final Logger log = LoggerFactory.getLogger(ScraperUtil.class);
 
 	private ScraperUtil() {
-	};
+	}
 
 	/**
 	 * Get first occurrence of field value
@@ -316,4 +316,22 @@ public class ScraperUtil {
 
 		return result;
 	}
+
+    public static String convertToAbsoluteUrl(URL baseUrl, String link) {
+        if (link.startsWith("http://") || link.startsWith("https://")) {
+            return link;
+        }
+        StringBuilder absoluteUrlStringBuffer = new StringBuilder(baseUrl.getHost());
+        if(baseUrl.getPort() > 0) {
+            absoluteUrlStringBuffer.append(':').append(baseUrl.getPort());
+        }
+        if(!link.startsWith("/") && baseUrl.getPath() != null && !baseUrl.getPath().isEmpty()) {
+            absoluteUrlStringBuffer.append(baseUrl.getPath());
+        }
+        absoluteUrlStringBuffer.append('/').append(link);
+        String absoluteUrlString = baseUrl.getProtocol() + "://" +
+                absoluteUrlStringBuffer.toString().replaceAll("(/){2,}+", "/");
+        log.debug("absolute url: {}", absoluteUrlString);
+        return absoluteUrlString;
+    }
 }
