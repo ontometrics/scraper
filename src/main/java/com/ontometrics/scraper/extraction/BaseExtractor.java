@@ -36,6 +36,8 @@ public abstract class BaseExtractor {
 
     private Source extractedSource = null;
 
+	private boolean swallowSourceFetchErrors = true;
+
 	/**
 	 * Does the work of actually honing in on the source we are interested in.
 	 */
@@ -87,6 +89,19 @@ public abstract class BaseExtractor {
         }
         return this;
     }
+
+	public BaseExtractor swallowSourceFetchErrors(boolean swallowSourceFetchErrors) {
+		this.swallowSourceFetchErrors = swallowSourceFetchErrors;
+		for (HtmlExtractor htmlExtractor : htmlExtractors) {
+			htmlExtractor.swallowSourceFetchErrors(swallowSourceFetchErrors);
+		}
+
+		return this;
+	}
+
+	public boolean isSwallowSourceFetchErrors() {
+		return swallowSourceFetchErrors;
+	}
 
 	protected HtmlExtractor getCurrentHtmlExtractor() {
 		return this.htmlExtractors.getLast();

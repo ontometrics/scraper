@@ -111,7 +111,7 @@ public class HtmlExtractor extends BaseExtractor {
 	 * Call this when it's time to actually perform the operations on the
 	 * source.
 	 */
-	public void performManipulations() {
+	public void performManipulations() throws SourceExtractionException {
 		try {
             if (this.source == null) {
                 fetchSourceFromUrl();
@@ -122,6 +122,9 @@ public class HtmlExtractor extends BaseExtractor {
 				source = manipulators.getLast().getSource();
 			}
 		} catch (IOException e) {
+			if (!isSwallowSourceFetchErrors()) {
+				throw new SourceExtractionException("Could not fetch source from url " + url, e);
+			}
 			log.error("IO Error while performing manipulations", e);
 		}
 	}

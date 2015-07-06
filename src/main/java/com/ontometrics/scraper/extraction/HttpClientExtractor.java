@@ -40,8 +40,7 @@ public class HttpClientExtractor implements SourceExtractor {
 			log.error("Error getting source in session mode: {}", e);
 		}
 
-		Source source = new Source(responseBody);
-		return source;
+		return new Source(responseBody);
 	}
 	
 	public void close() {
