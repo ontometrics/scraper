@@ -86,7 +86,12 @@ public enum HtmlSample {
 	/**
 	 * Page with local anchor tags
 	 */
-	PageWithLocalAnchorLinks("/testpages/toBeConvertedNicholsDocument.html");
+	PageWithLocalAnchorLinks("/testpages/toBeConvertedNicholsDocument.html"),
+
+	/**
+	 * Page on which default field extractor failed with OOM
+	 */
+	OutOfMemoryDiceDetails("/testpages/out_of_memory_dice_details.html");
 
 	private String path;
 

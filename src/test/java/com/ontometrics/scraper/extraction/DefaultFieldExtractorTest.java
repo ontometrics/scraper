@@ -1,26 +1,24 @@
 package com.ontometrics.scraper.extraction;
 
-import static com.ontometrics.scraper.HtmlSample.*;
-import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
-import static com.ontometrics.scraper.html.HtmlTable.table;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import com.ontometrics.scraper.*;
+import com.ontometrics.scraper.util.ScraperUtil;
+import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.HTMLElementName;
+import net.htmlparser.jericho.Source;
+import net.htmlparser.jericho.Tag;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
-import com.ontometrics.scraper.*;
-import net.htmlparser.jericho.Element;
-import net.htmlparser.jericho.HTMLElementName;
-import net.htmlparser.jericho.Source;
-import net.htmlparser.jericho.Tag;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.ontometrics.scraper.util.ScraperUtil;
+import static com.ontometrics.scraper.HtmlSample.*;
+import static com.ontometrics.scraper.extraction.HtmlExtractor.html;
+import static com.ontometrics.scraper.html.HtmlTable.table;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 public class DefaultFieldExtractorTest {
 
@@ -299,5 +297,19 @@ public class DefaultFieldExtractorTest {
         }
         return null;
     }
+
+	@Test
+	/**
+	 * Test that on the page out_of_memory_dice_details.html default field extractor should not fail with OOM error
+	 */
+	public void canExtractFieldsWOOutOfMemoryError() {
+		Source source = html().url(OutOfMemoryDiceDetails.getUrl()).getSource();
+
+		List<Field> fields = new DefaultFieldExtractor()
+				.source(html().source(source))
+				.add(new DefaultTagAttributeFieldExtractor("meta", "name", "content"))
+				.getFields();
+		assertThat(fields, not(empty()));
+	}
 
 }

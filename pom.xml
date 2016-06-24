@@ -121,7 +121,7 @@
 		</repository>
 		<repository>
 			<id>onto nexus repo</id>
-			<url>http://www.ontometrics.com:8080/nexus/content/groups/ontorepogroup/</url>
+			<url>http://ontoserver.ontometrics.com:8082/nexus/content/groups/ontorepogroup</url>
 		</repository>
 	</repositories>
 </project>
