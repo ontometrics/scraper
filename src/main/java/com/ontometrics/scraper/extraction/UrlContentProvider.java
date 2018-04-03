@@ -16,5 +16,5 @@ public interface UrlContentProvider {
      * @return stream
      * @throws IOException if i/o operation(s) fails
      */
-    InputStream getContent(URL url) throws IOException;
+    InputStreamWithEncoding getContent(URL url) throws IOException;
 }

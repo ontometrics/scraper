@@ -34,7 +34,7 @@ public class UrlConnectionContentProvider implements UrlContentProvider {
      * @return stream
      * @throws IOException if i/o operation(s) fails
      */
-    public InputStream getContent(URL url) throws IOException {
+    public InputStreamWithEncoding getContent(URL url) throws IOException {
         URLConnection urlConnection = url.openConnection();
         if (!requestProperties.isEmpty()) {
             log.debug("Passing a cookie for constructing HttpURLConnection.");
@@ -43,7 +43,7 @@ public class UrlConnectionContentProvider implements UrlContentProvider {
             }
         }
 
-        return urlConnection.getInputStream();
+        return new InputStreamWithEncoding(urlConnection.getInputStream(), null);
     }
 
     /**
